@@ -6,11 +6,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
+@RequiredArgsConstructor
 public class TestMember {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,4 +20,9 @@ public class TestMember {
 
   @Column(length = 10)
   private String name;
+
+  public TestMember(String name) {
+    this.name = name;
+  }
+
 }

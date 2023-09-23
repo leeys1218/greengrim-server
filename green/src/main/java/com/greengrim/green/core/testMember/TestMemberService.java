@@ -10,6 +10,10 @@ public class TestMemberService {
 
   private final TestMemberRepository testMemberRepository;
 
+  public TestMember create(String name) {
+    return this.testMemberRepository.save(
+      new TestMember(name));
+  }
   public List<TestMember> getList() {
     return this.testMemberRepository.findAll();
   }
