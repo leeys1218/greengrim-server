@@ -16,7 +16,7 @@ jobs:
 
     steps:
       # Java Spring Gradle
-      - uses: appleboy/ssh-action@master
+      - uses: actions/checkout@v3
         with:
           token: ${{ secrets.SUBMODULE_KEY }}
           submodules: true
