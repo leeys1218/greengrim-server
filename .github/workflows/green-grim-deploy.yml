@@ -55,7 +55,7 @@ jobs:
         with:
           context: ./green
           push: true
-          tags: leeyeonsang/green-grim:latest
+          tags: greengrim0919/green-grim:latest
 
   deploy:
     needs: build
@@ -70,8 +70,8 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: | 
             sudo docker system prune -f
-            sudo docker pull leeyeonsang/green-grim:latest
+            sudo docker pull greengrim0919/green-grim:latest
             sudo docker stop green-grim-server && sudo docker rm green-grim-server
-            sudo docker run -d --name green-grim-server -p 8080:8080 leeyeonsang/green-grim:latest
+            sudo docker run -d --name green-grim-server -p 8080:8080 greengrim0919/green-grim:latest
             sleep 60
-            sudo docker inspect -f {{.State.Pid}} green-grim-serverr | grep -v '^0'
+            sudo docker inspect -f {{.State.Pid}} green-grim-server | grep -v '^0'
