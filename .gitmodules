@@ -1,0 +1,4 @@
+[submodule "green"]
+	path = green
+	url = https://github.com/CapstoneAOZTG/demo-repository.git
+	branch = main
