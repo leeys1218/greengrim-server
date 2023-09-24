@@ -1,5 +1,6 @@
 package com.greengrim.green.core.testMember;
 
+import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,5 +17,10 @@ public class TestMemberService {
   }
   public List<TestMember> getList() {
     return this.testMemberRepository.findAll();
+  }
+
+  @Transactional
+  public void delete(String name) {
+    this.testMemberRepository.deleteTestMemberByName(name);
   }
 }

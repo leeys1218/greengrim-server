@@ -1,10 +1,10 @@
 package com.greengrim.green.core.testMember;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,4 +30,9 @@ public class TestMemberController {
     return this.testMemberService.getList();
   }
 
+  @Operation(summary = "테스트 멤버 제거")
+  @DeleteMapping
+  public void delete(@RequestParam final String name) {
+    this.testMemberService.delete(name);
+  }
 }
