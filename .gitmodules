@@ -1,3 +1,4 @@
-[submodule "green/config"]
-	path = green/config
-	url = https://github.com/CapstoneAOZTG/demo-repository.git
+[submodule "green"]
+	path = green
+	url = https://github.com/CapstoneAOZTG/demo-repository/config.git
+	branch = main
