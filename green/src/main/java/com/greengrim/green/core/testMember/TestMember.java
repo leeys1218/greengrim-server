@@ -21,6 +21,9 @@ public class TestMember {
   @Column(length = 10)
   private String name;
 
+  @Column(length = 200)
+  private String description;
+
   public TestMember(String name) {
     this.name = name;
   }
