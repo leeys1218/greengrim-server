@@ -30,7 +30,7 @@ public class ControllerAdvice {
     public ResponseEntity<ExceptionResponse> handleNoHandlerFoundException(
             NoHandlerFoundException e) {
         System.out.println(e);
-        return convert(GlobalErrorCode.NOT_SUPPORTED_URI_ERROR, HttpStatus.OK);
+        return convert(GlobalErrorCode.NOT_SUPPORTED_URI_ERROR, HttpStatus.NOT_FOUND);
     }
 
     /**
@@ -40,7 +40,7 @@ public class ControllerAdvice {
     public ResponseEntity<ExceptionResponse> handleMethodNotSupportedException(
             HttpRequestMethodNotSupportedException e) {
         System.out.println(e);
-        return convert(GlobalErrorCode.NOT_SUPPORTED_METHOD_ERROR, HttpStatus.OK);
+        return convert(GlobalErrorCode.NOT_SUPPORTED_METHOD_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
     }
 
     /**
@@ -51,7 +51,7 @@ public class ControllerAdvice {
             HttpMediaTypeNotSupportedException e) {
         System.out.println(e);
         return convert(GlobalErrorCode.NOT_SUPPORTED_MEDIA_TYPE_ERROR,
-                HttpStatus.OK);
+                HttpStatus.UNSUPPORTED_MEDIA_TYPE);
     }
 
     /**
@@ -73,6 +73,7 @@ public class ControllerAdvice {
         return convert(GlobalErrorCode.NOT_VALID_ARGUMENT_ERROR, detailMessage);
     }
 
+
     private String extractMessage(List<FieldError> fieldErrors) {
         StringBuilder builder = new StringBuilder();
         fieldErrors.forEach((error) -> builder.append(error.getDefaultMessage()));
@@ -85,6 +86,6 @@ public class ControllerAdvice {
 
     private ResponseEntity<ExceptionResponse> convert(ErrorCode e, String detailMessage) {
         ExceptionResponse exceptionRes = new ExceptionResponse(e.getErrorCode(), detailMessage);
-        return new ResponseEntity<>(exceptionRes, HttpStatus.OK);
+        return new ResponseEntity<>(exceptionRes, HttpStatus.BAD_REQUEST);
     }
 }
