@@ -26,6 +26,8 @@ public class Member extends BaseTime {
     @NotNull
     private String nickName;
 
+    private int point = 0;
+
     private String introduction;
 
     private String profileImgUrl;
@@ -36,6 +38,8 @@ public class Member extends BaseTime {
 
     @NotNull
     private String refreshToken;
+
+    private String deviceToken;
 
     @NotNull
     @Enumerated(EnumType.STRING)
