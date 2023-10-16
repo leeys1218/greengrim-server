@@ -3,7 +3,3 @@
 	url = https://github.com/CapstoneAOZTG/demo-repository.git
 	branch = main
 
-[submodule "green/config"]
-	path = green/config
-	url = git@github.com:CapstoneAOZTG/demo-repository.git
-	branch = main
