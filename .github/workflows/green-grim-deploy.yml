@@ -47,6 +47,7 @@ jobs:
         if: contains(github.ref, 'prod')
         run: |
           sudo docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+          sudo docker tag greengrim0919/greengrim
           sudo docker build -f Dockerfile-prod -t ${{ secrets.DOCKERHUB_REPO }}/green-grim-prod:latest .
           sudo docker push ${{ secrets.DOCKERHUB_REPO }}/green-grim-prod:latest
 
@@ -54,6 +55,7 @@ jobs:
         if: contains(github.ref, 'develop')
         run: |
           sudo docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+          sudo docker tag greengrim0919/greengrim
           sudo docker build -f Dockerfile-dev -t ${{ secrets.DOCKERHUB_REPO }}/green-grim-dev:latest .
           sudo docker push ${{ secrets.DOCKERHUB_REPO }}/green-grim-dev:latest
 
