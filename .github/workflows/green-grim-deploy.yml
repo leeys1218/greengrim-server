@@ -57,7 +57,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: ./green
-          file: -f ./Dockerfile-prod
+          file: ./Dockerfile-prod .
           push: true
           tags: greengrim0919/green-grim-prod:latest
 
@@ -66,7 +66,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: ./green
-          file: -f ./Dockerfile-dev
+          file: ./Dockerfile-dev .
           push: true
           tags: greengrim0919/green-grim-dev:latest
 
