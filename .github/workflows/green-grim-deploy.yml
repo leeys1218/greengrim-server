@@ -55,16 +55,16 @@ jobs:
       - name: Docker - Build and push for prod
         if: contains(github.ref, 'prod')
         run: |
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -f Dockerfile-prod -t ${{ secrets.DOCKER_REPO }}/green-grim-prod:latest
-          docker push ${{ secrets.DOCKER_REPO }}/green-grim-prod:latest
+          docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+          docker build -f Dockerfile-prod -t ${{ secrets.DOCKERHUB_REPO }}/green-grim-prod:latest
+          docker push ${{ secrets.DOCKERHUB_REPO }}/green-grim-prod:latest
 
       - name: Docker - Build and push for dev
         if: contains(github.ref, 'develop')
         run: |
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -f Dockerfile-prod -t ${{ secrets.DOCKER_REPO }}/green-grim-dev:latest
-          docker push ${{ secrets.DOCKER_REPO }}/green-grim-dev:latest
+          docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+          docker build -f Dockerfile-prod -t ${{ secrets.DOCKERHUB_REPO }}/green-grim-dev:latest
+          docker push ${{ secrets.DOCKERHUB_REPO }}/green-grim-dev:latest
 
   deploy:
     needs: build
