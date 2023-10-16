@@ -2,7 +2,9 @@ name: green-grim-deploy-to-ec2
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
+      - develop
 
 permissions:
   contents: read
@@ -50,19 +52,29 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
         
-      - name: Docker - Build and push
+      - name: Docker - Build and push for prod
+        if: contains(github.ref, 'prod')
         uses: docker/build-push-action@v3
         with:
           context: ./green
           push: true
-          tags: greengrim0919/green-grim:latest
+          tags: greengrim0919/green-grim-prod:latest
+
+      - name: Docker - Build and push for dev
+        if: contains(github.ref, 'develop')
+        uses: docker/build-push-action@v3
+        with:
+          context: ./green
+          push: true
+          tags: greengrim0919/green-grim-dev:latest
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
 
     steps:
-      - name: Depoly in AWS ec2 
+      - name: Depoly in AWS ec2 for prod
+        if: contains(github.ref, 'main')
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -70,8 +82,25 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: | 
             sudo docker system prune -f
-            sudo docker pull greengrim0919/green-grim:latest
+            sudo docker pull greengrim0919/green-grim-prod:latest
             sudo docker stop green-grim-server && sudo docker rm green-grim-server
-            sudo docker run -d --name green-grim-server -p 8080:8080 greengrim0919/green-grim:latest
+            sudo docker run -d --name green-grim-server -p 8080:8080 greengrim0919/green-grim-prod:latest
             sleep 60
             sudo docker inspect -f {{.State.Pid}} green-grim-server | grep -v '^0'
+
+      - name: Depoly in AWS ec2 for dev
+        if: contains(github.ref, 'develop')
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: | 
+            sudo docker system prune -f
+            sudo docker pull greengrim0919/green-grim-dev:latest
+            sudo docker stop green-grim-server-dev && sudo docker rm green-grim-server-dev
+            sudo docker run -d --name green-grim-server-dev -p 8080:8080 greengrim0919/green-grim-dev:latest
+            sleep 60
+            sudo docker inspect -f {{.State.Pid}} green-grim-server-dev | grep -v '^0'
+
+            
