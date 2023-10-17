@@ -1,5 +1,5 @@
 # greengrim-server
-greengrim's server repository
+greengrim's server repository.
 
 
 <div align="center">
