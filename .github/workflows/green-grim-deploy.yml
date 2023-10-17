@@ -102,5 +102,3 @@ jobs:
             sudo docker run -d --name green-grim-server-dev -p 8080:8080 greengrim0919/green-grim-dev:latest
             sleep 60
             sudo docker inspect -f {{.State.Pid}} green-grim-server-dev | grep -v '^0'
-
-            
