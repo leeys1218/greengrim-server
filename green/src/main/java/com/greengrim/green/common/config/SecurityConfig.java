@@ -41,6 +41,8 @@ public class SecurityConfig {
                         .requestMatchers("/manager/**").hasRole("MANAGER")
                         .anyRequest().permitAll()
                 )
+                .exceptionHandling((exceptionConfig) ->
+                        exceptionConfig.accessDeniedHandler(customAccessDeniedHandler))
                 .addFilterBefore(new JwtExceptionFilter(),
                         JwtAuthenticationFilter.class);
 
