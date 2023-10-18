@@ -26,7 +26,7 @@ public class RegisterMemberService implements RegisterMemberUseCase {
     public Member register(MemberRequestDto.RegisterMember registerMember) {
         Member member = Member.builder()
                 .email(registerMember.getEmail())
-                .nickName(registerMember.getNickname())
+                .nickName(registerMember.getNickName())
                 .introduction(registerMember.getIntroduction())
                 .profileImgUrl(registerMember.getProfileImgUrl())
                 .refreshToken("")
@@ -51,7 +51,7 @@ public class RegisterMemberService implements RegisterMemberUseCase {
         if (flag) {
             throw new BaseException(MemberErrorCode.DUPLICATE_MEMBER);
         }
-        flag = memberRepository.existsByNickName(registerMember.getNickname());
+        flag = memberRepository.existsByNickName(registerMember.getNickName());
         if (flag) {
             throw new BaseException(MemberErrorCode.DUPLICATE_NICKNAME);
         }
