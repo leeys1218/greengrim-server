@@ -56,6 +56,6 @@ public class PrincipalDetails implements UserDetails {
     }
 
     @Override
-    public boolean isEnabled() { return !member.getStatus(); }
+    public boolean isEnabled() { return !member.isStatus(); }
 }
 
