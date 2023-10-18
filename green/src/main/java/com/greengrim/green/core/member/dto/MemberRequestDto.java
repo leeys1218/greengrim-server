@@ -16,7 +16,7 @@ public class MemberRequestDto {
         @Email(message = "이메일 형식이 아닙니다.")
         private String email;
         @NotBlank(message = "닉네임은 공백일 수 없습니다.")
-        private String nickname;
+        private String nickName;
         private String introduction;
         private String profileImgUrl;
     }
