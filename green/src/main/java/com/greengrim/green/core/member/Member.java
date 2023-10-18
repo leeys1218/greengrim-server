@@ -24,19 +24,23 @@ public class Member extends BaseTime {
     @NotNull
     private String nickName;
 
-    private int point = 0;
+    @NotNull
+    private int point;
 
     private String introduction;
 
     private String profileImgUrl;
 
-    private Boolean status = true;
+    @NotNull
+    private boolean status;
 
-    private Integer reportCnt = 0;
+    @NotNull
+    private Integer reportCnt;
 
     @NotNull
     private String refreshToken;
 
+    @NotNull
     private String deviceToken;
 
     @NotNull

@@ -29,6 +29,9 @@ public class RegisterMemberService implements RegisterMemberUseCase {
                 .nickName(registerMember.getNickName())
                 .introduction(registerMember.getIntroduction())
                 .profileImgUrl(registerMember.getProfileImgUrl())
+                .point(0)
+                .reportCnt(0)
+                .status(true)
                 .refreshToken("")
                 .deviceToken("")
                 .role(Role.ROLE_VISITOR)
@@ -43,7 +46,7 @@ public class RegisterMemberService implements RegisterMemberUseCase {
         Member member = register(registerMember);
         MemberResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(member.getId());
         member.changeRefreshToken(tokenInfo.getRefreshToken());
-        return new MemberResponseDto.TokenInfo("accessToken", "refreshToken");
+        return tokenInfo;
     }
 
     public void checkRegister(MemberRequestDto.RegisterMember registerMember) {
