@@ -43,4 +43,8 @@ public class Member extends BaseTime {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    public void changeRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
 }
