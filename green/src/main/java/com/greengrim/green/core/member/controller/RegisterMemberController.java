@@ -3,6 +3,7 @@ package com.greengrim.green.core.member.controller;
 import com.greengrim.green.core.member.dto.MemberRequestDto;
 import com.greengrim.green.core.member.dto.MemberResponseDto;
 import com.greengrim.green.core.member.usecase.RegisterMemberUseCase;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ public class RegisterMemberController {
      * [POST] 소셜 회원가입
      * /sign-up
      */
+    @Operation(summary = "소셜 회원가입")
     @PostMapping("/sign-up")
     public ResponseEntity<MemberResponseDto.TokenInfo> register(
             @Valid @RequestBody MemberRequestDto.RegisterMember registerMember) {
