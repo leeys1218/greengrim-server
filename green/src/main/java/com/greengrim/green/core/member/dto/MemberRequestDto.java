@@ -20,4 +20,12 @@ public class MemberRequestDto {
         private String introduction;
         private String profileImgUrl;
     }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class LoginMember {
+        @Email(message= "이메일 형식이 아닙니다.")
+        private String email;
+    }
 }
