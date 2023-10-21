@@ -25,8 +25,8 @@ public class RegisterMemberController {
     @Operation(summary = "소셜 회원가입")
     @PostMapping("/sign-up")
     public ResponseEntity<MemberResponseDto.TokenInfo> register(
-            @Valid @RequestBody MemberRequestDto.RegisterMember registerMember) {
-        return new ResponseEntity<>(registerMemberUseCase.registerMember(registerMember),
+            @Valid @RequestBody MemberRequestDto.RegisterMemberReq registerMemberReq) {
+        return new ResponseEntity<>(registerMemberUseCase.registerMember(registerMemberReq),
                 HttpStatus.OK);
     }
 
@@ -37,8 +37,19 @@ public class RegisterMemberController {
     @Operation(summary = "로그인")
     @PostMapping("/login")
     public ResponseEntity<MemberResponseDto.TokenInfo> login(
-            @Valid @RequestBody MemberRequestDto.LoginMember loginMember) {
-        return new ResponseEntity<>(registerMemberUseCase.login(loginMember),
+            @Valid @RequestBody MemberRequestDto.LoginMemberReq loginMemberReq) {
+        return new ResponseEntity<>(registerMemberUseCase.login(loginMemberReq),
+                HttpStatus.OK);
+    }
+
+    /**
+     * [POST] 닉네임 중복 확인
+     * /nick-name
+     */
+    @PostMapping("/nick-name")
+    public ResponseEntity<MemberResponseDto.CheckNickNameRes> checkNickName(
+            @Valid @RequestBody MemberRequestDto.CheckNickNameReq checkNickNameReq) {
+        return new ResponseEntity<>(registerMemberUseCase.checkNickName(checkNickNameReq),
                 HttpStatus.OK);
     }
 }
