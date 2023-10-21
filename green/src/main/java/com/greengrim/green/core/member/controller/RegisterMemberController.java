@@ -29,4 +29,16 @@ public class RegisterMemberController {
         return new ResponseEntity<>(registerMemberUseCase.registerMember(registerMember),
                 HttpStatus.OK);
     }
+
+    /**
+     * [POST] 로그인
+     * /login
+     */
+    @Operation(summary = "로그인")
+    @PostMapping("/login")
+    public ResponseEntity<MemberResponseDto.TokenInfo> login(
+            @Valid @RequestBody MemberRequestDto.LoginMember loginMember) {
+        return new ResponseEntity<>(registerMemberUseCase.login(loginMember),
+                HttpStatus.OK);
+    }
 }

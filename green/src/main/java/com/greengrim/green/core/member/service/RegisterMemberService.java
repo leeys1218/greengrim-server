@@ -59,4 +59,16 @@ public class RegisterMemberService implements RegisterMemberUseCase {
             throw new BaseException(MemberErrorCode.DUPLICATE_NICKNAME);
         }
     }
+
+    @Override
+    public MemberResponseDto.TokenInfo login(MemberRequestDto.LoginMember loginMember) {
+        Member member = memberRepository.findByEmail(loginMember.getEmail()).orElse(null);
+        if (member != null) {
+            MemberResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(member.getId());
+            member.changeRefreshToken(tokenInfo.getRefreshToken());
+            return tokenInfo;
+        } else {
+            throw new BaseException(MemberErrorCode.UN_REGISTERED_MEMBER);
+        }
+    }
 }
