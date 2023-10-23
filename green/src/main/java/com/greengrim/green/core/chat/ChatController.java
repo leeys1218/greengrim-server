@@ -1,12 +1,10 @@
 package com.greengrim.green.core.chat;
 
-import com.greengrim.green.core.chatRoom.ChatRoom;
-import java.util.List;
+import com.greengrim.green.core.chat.dto.ChatMessage;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
@@ -14,15 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/chat")
 public class ChatController {
 
-  private final ChatService chatService;
+  private final SimpMessageSendingOperations messagingTemplate;
 
-  @PostMapping
-  public ChatRoom createRoom(@RequestParam String name) {
-    return chatService.createRoom(name);
-  }
-
-  @GetMapping
-  public List<ChatRoom> findAllRoom() {
-    return chatService.findAllRoom();
+  @MessageMapping("/chat/message")
+  public void message(ChatMessage message) {
+    if(ChatMessage.MessageType.JOIN.equals(message.getType()))
+      message.setMessage(message.getSender() + "님이 입장하셨습니다.");
+    messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
   }
 }
