@@ -1,4 +1,4 @@
-package com.greengrim.green.core.chatRoom.dto;
+package com.greengrim.green.core.chatRoom;
 
 import com.greengrim.green.core.chat.ChatService;
 import com.greengrim.green.core.chat.dto.ChatMessage;

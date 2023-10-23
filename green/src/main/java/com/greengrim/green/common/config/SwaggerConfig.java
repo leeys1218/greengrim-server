@@ -17,7 +17,7 @@ public class SwaggerConfig {
 
   @Bean
   public GroupedOpenApi OpenApi() {
-    String[] paths = {"/api/**"};
+    String[] paths = {"/**"};
 
     return GroupedOpenApi.builder()
         .group("그린그림 API v1")
