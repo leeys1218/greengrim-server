@@ -11,7 +11,7 @@ public class MemberRequestDto {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class RegisterMember {
+    public static class RegisterMemberReq {
 
         @Email(message = "이메일 형식이 아닙니다.")
         private String email;
@@ -19,5 +19,21 @@ public class MemberRequestDto {
         private String nickName;
         private String introduction;
         private String profileImgUrl;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class LoginMemberReq {
+        @Email(message= "이메일 형식이 아닙니다.")
+        private String email;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class CheckNickNameReq {
+        @NotBlank(message = "닉네임은 공백일 수 없습니다.")
+        private String nickName;
     }
 }

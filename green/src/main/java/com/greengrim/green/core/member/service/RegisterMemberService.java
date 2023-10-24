@@ -23,12 +23,12 @@ public class RegisterMemberService implements RegisterMemberUseCase {
         memberRepository.save(member);
     }
 
-    public Member register(MemberRequestDto.RegisterMember registerMember) {
+    public Member register(MemberRequestDto.RegisterMemberReq registerMemberReq) {
         Member member = Member.builder()
-                .email(registerMember.getEmail())
-                .nickName(registerMember.getNickName())
-                .introduction(registerMember.getIntroduction())
-                .profileImgUrl(registerMember.getProfileImgUrl())
+                .email(registerMemberReq.getEmail())
+                .nickName(registerMemberReq.getNickName())
+                .introduction(registerMemberReq.getIntroduction())
+                .profileImgUrl(registerMemberReq.getProfileImgUrl())
                 .point(0)
                 .reportCnt(0)
                 .status(true)
@@ -41,22 +41,40 @@ public class RegisterMemberService implements RegisterMemberUseCase {
     }
 
     @Override
-    public MemberResponseDto.TokenInfo registerMember(MemberRequestDto.RegisterMember registerMember) {
-        checkRegister(registerMember);
-        Member member = register(registerMember);
+    public MemberResponseDto.TokenInfo registerMember(MemberRequestDto.RegisterMemberReq registerMemberReq) {
+        checkRegister(registerMemberReq);
+        Member member = register(registerMemberReq);
         MemberResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(member.getId());
         member.changeRefreshToken(tokenInfo.getRefreshToken());
         return tokenInfo;
     }
 
-    public void checkRegister(MemberRequestDto.RegisterMember registerMember) {
-        Boolean flag = memberRepository.existsByEmail(registerMember.getEmail());
+    public void checkRegister(MemberRequestDto.RegisterMemberReq registerMemberReq) {
+        Boolean flag = memberRepository.existsByEmail(registerMemberReq.getEmail());
         if (flag) {
             throw new BaseException(MemberErrorCode.DUPLICATE_MEMBER);
         }
-        flag = memberRepository.existsByNickName(registerMember.getNickName());
+        flag = memberRepository.existsByNickName(registerMemberReq.getNickName());
         if (flag) {
             throw new BaseException(MemberErrorCode.DUPLICATE_NICKNAME);
         }
+    }
+
+    @Override
+    public MemberResponseDto.TokenInfo login(MemberRequestDto.LoginMemberReq loginMemberReq) {
+        Member member = memberRepository.findByEmail(loginMemberReq.getEmail()).orElse(null);
+        if (member != null) {
+            MemberResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(member.getId());
+            member.changeRefreshToken(tokenInfo.getRefreshToken());
+            return tokenInfo;
+        } else {
+            throw new BaseException(MemberErrorCode.UN_REGISTERED_MEMBER);
+        }
+    }
+
+    @Override
+    public MemberResponseDto.CheckNickNameRes checkNickName(MemberRequestDto.CheckNickNameReq checkNickNameReq) {
+        return new MemberResponseDto.CheckNickNameRes(
+                memberRepository.existsByNickName(checkNickNameReq.getNickName()));
     }
 }
