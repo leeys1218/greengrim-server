@@ -53,6 +53,7 @@ dependencies {
 
 	// Dev
 	implementation 'org.springframework.boot:spring-boot-devtools'
+	implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.4.4'
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
