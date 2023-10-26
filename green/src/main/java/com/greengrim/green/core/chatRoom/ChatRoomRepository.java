@@ -1,32 +1,23 @@
 package com.greengrim.green.core.chatRoom;
 
-import com.greengrim.green.common.redis.RedisSubscriber;
 import jakarta.annotation.PostConstruct;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.listener.ChannelTopic;
-import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor
 @Repository
 public class ChatRoomRepository {
 
-  private final RedisMessageListenerContainer redisMessageListener;
-  private final RedisSubscriber redisSubscriber;
   private static final String CHAT_ROOMS = "CHAT_ROOM";
   private final RedisTemplate<String, Object> redisTemplate;
   private HashOperations<String, String, ChatRoom> opsHashChatRoom;
-  private Map<String, ChannelTopic> topics;
 
   @PostConstruct
   private void init() {
     opsHashChatRoom = redisTemplate.opsForHash();
-    topics = new HashMap<>();
   }
 
   public List<ChatRoom> findAllRoom() {
@@ -43,16 +34,4 @@ public class ChatRoomRepository {
     return chatRoom;
   }
 
-  public void enterChatRoom(String roomId) {
-    ChannelTopic topic = topics.get(roomId);
-    if(topic == null) {
-      topic = new ChannelTopic(roomId);
-      redisMessageListener.addMessageListener(redisSubscriber, topic);
-      topics.put(roomId, topic);
-    }
-  }
-
-  public ChannelTopic getTopic(String roomId) {
-    return topics.get(roomId);
-  }
 }
