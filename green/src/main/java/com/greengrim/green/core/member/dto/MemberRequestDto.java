@@ -36,4 +36,13 @@ public class MemberRequestDto {
         @NotBlank(message = "닉네임은 공백일 수 없습니다.")
         private String nickName;
     }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ModifyProfile {
+        private String nickName;
+        private String introduction;
+        private String profileImgUrl;
+    }
 }
