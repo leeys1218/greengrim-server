@@ -63,4 +63,8 @@ public class Member extends BaseTime {
         this.status = false;
     }
 
+    public boolean existProfileImgUrl() {
+        return this.profileImgUrl != null && !this.profileImgUrl.equals("");
+    }
+
 }

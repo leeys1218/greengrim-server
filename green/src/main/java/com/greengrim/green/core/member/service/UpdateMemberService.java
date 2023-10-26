@@ -7,6 +7,7 @@ import com.greengrim.green.core.member.dto.MemberRequestDto.ModifyProfile;
 import com.greengrim.green.core.member.dto.MemberResponseDto;
 import com.greengrim.green.core.member.repository.MemberRepository;
 import com.greengrim.green.core.member.usecase.UpdateMemberUseCase;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,8 +29,10 @@ public class UpdateMemberService implements UpdateMemberUseCase {
 
     @Override
     public void modifyProfile(Member member, ModifyProfile modifyProfile) {
-        // s3에서 기존 프로필 삭제
-        s3Service.deleteFile(member.getProfileImgUrl());
+        // 프로필이 존재한다면 s3에서 기존 프로필 삭제
+        if(member.existProfileImgUrl()) {
+            s3Service.deleteFile(member.getProfileImgUrl());
+        }
         // Member 엔티티 업로드
         member.modifyMember(modifyProfile.getNickName(),
                 modifyProfile.getIntroduction(),
