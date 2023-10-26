@@ -9,10 +9,12 @@ import com.greengrim.green.core.member.dto.MemberRequestDto;
 import com.greengrim.green.core.member.dto.MemberResponseDto;
 import com.greengrim.green.core.member.repository.MemberRepository;
 import com.greengrim.green.core.member.usecase.RegisterMemberUseCase;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class RegisterMemberService implements RegisterMemberUseCase {
 
