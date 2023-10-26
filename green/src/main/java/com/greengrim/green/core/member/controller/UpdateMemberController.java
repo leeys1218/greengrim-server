@@ -37,7 +37,7 @@ public class UpdateMemberController {
             @CurrentMember Member member,
             @RequestBody ModifyProfile modifyProfile) {
         updateMemberUseCase.modifyProfile(member, modifyProfile);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(200, HttpStatus.OK);
     }
 
     /**
@@ -47,6 +47,6 @@ public class UpdateMemberController {
     public ResponseEntity<Integer> deleteMember(
             @CurrentMember Member member) {
         updateMemberUseCase.deleteMember(member);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(200, HttpStatus.OK);
     }
 }
