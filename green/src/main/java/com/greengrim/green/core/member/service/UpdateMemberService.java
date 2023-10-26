@@ -1,6 +1,7 @@
 package com.greengrim.green.core.member.service;
 
 import com.greengrim.green.common.jwt.JwtTokenProvider;
+import com.greengrim.green.common.s3.S3Service;
 import com.greengrim.green.core.member.Member;
 import com.greengrim.green.core.member.dto.MemberRequestDto.ModifyProfile;
 import com.greengrim.green.core.member.dto.MemberResponseDto;
@@ -15,6 +16,7 @@ public class UpdateMemberService implements UpdateMemberUseCase {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberRepository memberRepository;
+    private final S3Service s3Service;
 
     @Override
     public MemberResponseDto.TokenInfo refreshAccessToken(Member member) {
@@ -26,10 +28,12 @@ public class UpdateMemberService implements UpdateMemberUseCase {
 
     @Override
     public void modifyProfile(Member member, ModifyProfile modifyProfile) {
+        // s3에서 기존 프로필 삭제
+        s3Service.deleteFile(member.getProfileImgUrl());
+        // Member 엔티티 업로드
         member.modifyMember(modifyProfile.getNickName(),
                 modifyProfile.getIntroduction(),
                 modifyProfile.getProfileImgUrl());
-        // TODO: S3에서 기존 프로필 삭제
         memberRepository.save(member);
     }
 }
