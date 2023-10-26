@@ -59,4 +59,8 @@ public class Member extends BaseTime {
         this.profileImgUrl = profileImgUrl;
     }
 
+    public void setStatusFalse() {
+        this.status = false;
+    }
+
 }

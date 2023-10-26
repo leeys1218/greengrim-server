@@ -36,4 +36,11 @@ public class UpdateMemberService implements UpdateMemberUseCase {
                 modifyProfile.getProfileImgUrl());
         memberRepository.save(member);
     }
+
+    @Override
+    public void deleteMember(Member member) {
+        member.setStatusFalse();
+        // TODO: 삭제된 member와 관련된 모든 리소스 삭제
+        memberRepository.save(member);
+    }
 }

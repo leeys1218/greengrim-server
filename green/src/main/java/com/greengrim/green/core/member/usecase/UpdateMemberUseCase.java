@@ -8,4 +8,5 @@ public interface UpdateMemberUseCase {
 
     MemberResponseDto.TokenInfo refreshAccessToken(Member member);
     void modifyProfile(Member member, ModifyProfile modifyProfile);
+    void deleteMember(Member member);
 }
