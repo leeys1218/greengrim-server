@@ -51,4 +51,12 @@ public class Member extends BaseTime {
         this.refreshToken = refreshToken;
     }
 
+    public void modifyMember(String nickName,
+                             String introduction,
+                             String profileImgUrl) {
+        this.nickName = nickName;
+        this.introduction = introduction;
+        this.profileImgUrl = profileImgUrl;
+    }
+
 }

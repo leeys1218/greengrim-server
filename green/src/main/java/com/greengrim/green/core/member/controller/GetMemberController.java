@@ -19,7 +19,7 @@ public class GetMemberController {
     /**
      * [GET] 내 프로필 조회
      */
-    @GetMapping("/visitor/info")
+    @GetMapping("/visitor/profile")
     public ResponseEntity<MemberSimpleInfo> getCurrentMemberInfo(
             @CurrentMember Member member) {
         return new ResponseEntity<>(getMemberUseCase.getMemberInfo(member),
