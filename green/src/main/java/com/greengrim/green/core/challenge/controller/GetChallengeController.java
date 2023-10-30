@@ -40,12 +40,25 @@ public class GetChallengeController {
     @GetMapping("/challenges")
     public ResponseEntity<PageResponseDto<List<ChallengeSimpleInfo>>> getChallengesByCategory(
             @CurrentMember Member member,
-            @RequestParam(value = "category", required = false) Category category,
+            @RequestParam(value = "category") Category category,
             @RequestParam(value = "page") int page,
             @RequestParam(value = "size") int size,
             @RequestParam(value = "sort") String sort) {
         return ResponseEntity.ok(getChallengeService.getChallengesByCategory(
                 member, category, page, size, sort));
+    }
+
+    /**
+     * [GET] 내가 만든 챌린지 목록 조회
+     */
+    @GetMapping("/visitor/challenges")
+    public ResponseEntity<PageResponseDto<List<ChallengeSimpleInfo>>> getMyChallenges(
+            @CurrentMember Member member,
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "size") int size,
+            @RequestParam(value = "sort") String sort) {
+        return ResponseEntity.ok(getChallengeService.getMyChallenges(
+                member, page, size, sort));
     }
 
 }

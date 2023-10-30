@@ -3,6 +3,7 @@ package com.greengrim.green.core.challenge.service;
 import com.greengrim.green.common.entity.dto.PageResponseDto;
 import com.greengrim.green.common.exception.BaseException;
 import com.greengrim.green.common.exception.errorCode.ChallengeErrorCode;
+import com.greengrim.green.common.exception.errorCode.GlobalErrorCode;
 import com.greengrim.green.core.challenge.Category;
 import com.greengrim.green.core.challenge.Challenge;
 import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.ChallengeDetailInfo;
@@ -39,17 +40,24 @@ public class GetChallengeService {
      */
     public PageResponseDto<List<ChallengeSimpleInfo>> getChallengesByCategory(
             Member member, Category category, int page, int size, String sort) {
-        Pageable pageable = null;
-        if (sort.equals("DESC")) { // 최신순
-            pageable = PageRequest.of(page, size, Direction.DESC);
-        } else if (sort.equals("ASC")) { // 오래된순
-            pageable = PageRequest.of(page, size, Direction.ASC);
-        }
-
         List<ChallengeSimpleInfo> challengeSimpleInfoList = new ArrayList<>();
-        Page<Challenge> challenges = challengeRepository.findByCategoryAndStateIsTrue(category, pageable);
+        Page<Challenge> challenges = challengeRepository.findByCategoryAndStateIsTrue(category,  getPageable(page, size, sort));
         challenges.forEach(challenge ->
                         challengeSimpleInfoList.add(new ChallengeSimpleInfo(challenge)));
+
+        return new PageResponseDto<>(challenges.getNumber(), challenges.hasNext(), challengeSimpleInfoList);
+    }
+
+
+    /**
+     * 내가 만든 챌린지 조회
+     */
+    public PageResponseDto<List<ChallengeSimpleInfo>> getMyChallenges(
+            Member member, int page, int size, String sort) {
+        List<ChallengeSimpleInfo> challengeSimpleInfoList = new ArrayList<>();
+        Page<Challenge> challenges = challengeRepository.findByMemberAndStateIsTrue(member, getPageable(page, size, sort));
+        challenges.forEach(challenge ->
+                challengeSimpleInfoList.add(new ChallengeSimpleInfo(challenge)));
 
         return new PageResponseDto<>(challenges.getNumber(), challenges.hasNext(), challengeSimpleInfoList);
     }
@@ -57,6 +65,16 @@ public class GetChallengeService {
     private Challenge findByIdWithValidation(Long id) {
         return challengeRepository.findById(id)
                 .orElseThrow(() -> new BaseException(ChallengeErrorCode.EMPTY_CHALLENGE));
+    }
+
+    private Pageable getPageable(int page, int size, String sort) {
+        if (sort.equals("DESC")) { // 최신순
+            return PageRequest.of(page, size, Direction.DESC);
+        } else if (sort.equals("ASC")) { // 오래된순
+            return PageRequest.of(page, size, Direction.ASC);
+        } else {
+            throw new BaseException(GlobalErrorCode.NOT_VALID_ARGUMENT_ERROR);
+        }
     }
 
 }
