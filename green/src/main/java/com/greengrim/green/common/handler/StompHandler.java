@@ -2,8 +2,8 @@ package com.greengrim.green.common.handler;
 
 import com.greengrim.green.common.jwt.JwtTokenProvider;
 import com.greengrim.green.core.chat.ChatService;
-import com.greengrim.green.core.chat.dto.ChatMessage;
-import com.greengrim.green.core.chat.dto.ChatMessage.MessageType;
+import com.greengrim.green.core.chat.ChatMessage;
+import com.greengrim.green.core.chat.ChatMessage.MessageType;
 import com.greengrim.green.core.chatRoom.ChatRoomRepository;
 import java.security.Principal;
 import java.util.Optional;
@@ -35,29 +35,41 @@ public class StompHandler implements ChannelInterceptor {
       jwtTokenProvider.validateAccessToken(jwtToken);
     }
     else if (StompCommand.SUBSCRIBE == accessor.getCommand()) {
-      String roomId = chatService.getRoomId(Optional.ofNullable(
-          (String) message.getHeaders().get("simpDestination")).orElse("InvalidRoomId"));
+
+      String roomId = chatService.getRoomId(Optional.ofNullable((String) message.getHeaders().get("simpDestination")).orElse("0"));
       String sessionId = (String) message.getHeaders().get("simpSessionId");
 
-      chatRoomRepository.setUserEnterInfo(sessionId, roomId);
-      chatRoomRepository.plusUserCount(roomId);
+      // 챌린지 완성 후 수정 - 챌린지 service에서 getCapacity 보다 크면 던지기
+      // if (chatRoomRepository.getUserCount(Long.valueOf(roomId)
+      //        >  challengeService.getCapacity())
 
-      String name = Optional.ofNullable((Principal) message.getHeaders()
+      // challengeService에서 현재 인원 수  늘리기
+      chatRoomRepository.setUserEnterInfo(sessionId, roomId);
+
+      String Name = Optional.ofNullable((Principal) message.getHeaders()
               .get("simpUser")).map(Principal::getName).orElse("UnknownUser");
+
       chatService.sendChatMessage(ChatMessage.builder()
-          .type(MessageType.ENTER).roomId(roomId).sender(name).build());
-      log.info("SUBSCRIBED {}, {}", name, roomId);
+          .type(MessageType.ENTER)
+          .roomId(Long.valueOf(roomId))
+          .build());
+      log.info("SUBSCRIBED {}, {}", Name, roomId);
     }
     else if (StompCommand.DISCONNECT == accessor.getCommand()) {
       String sessionId = (String) message.getHeaders().get("simpSessionId");
       String roomId = chatRoomRepository.getUserEnterRoomId(sessionId);
 
-      chatRoomRepository.minusUserCount(roomId);
+      // Challenge Service에서 유저 수 줄이기 and 현재 인원 수가 0이라면 redis에서 해당 채널 삭제
+      // challengeService.minusUser()
+      // if(challengeService.current() == 0)
+      //  chatRoomRepository.removeChatRoom(roomId);
 
       String name = Optional.ofNullable((Principal) message.getHeaders()
           .get("simpUser")).map(Principal::getName).orElse("UnknownUser");
       chatService.sendChatMessage(ChatMessage.builder()
-          .type(MessageType.QUIT).roomId(roomId).sender(name).build());
+          .type(MessageType.QUIT)
+          .roomId(Long.valueOf(roomId))
+          .build());
 
       chatRoomRepository.removeUserEnterInfo(sessionId);
       log.info("DISCONNECTED {}, {}", sessionId, roomId);
