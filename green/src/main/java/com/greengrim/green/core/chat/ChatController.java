@@ -22,12 +22,12 @@ public class ChatController {
     chatService.sendChatMessage(message);
   }
 
-  @RequestMapping("member/chat/message/enter")
+  @RequestMapping("visitor/chat/message/enter")
   public void enterMessage(ChatMessage message) {
 
   }
 
-  @RequestMapping("member/chat/message/quit")
+  @RequestMapping("visitor/chat/message/quit")
   public void QuitMessage(ChatMessage message) {
 
   }
