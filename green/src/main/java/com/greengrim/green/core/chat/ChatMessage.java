@@ -1,4 +1,4 @@
-package com.greengrim.green.core.chat.dto;
+package com.greengrim.green.core.chat;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -11,21 +11,19 @@ public class ChatMessage {
   }
 
   @Builder
-  public ChatMessage(MessageType type, String roomId, String sender, String message, long userCount) {
+  public ChatMessage(MessageType type, Long roomId, Long senderId, String message) {
     this.type = type;
     this.roomId = roomId;
-    this.sender = sender;
+    this.senderId = senderId;
     this.message = message;
-    this.userCount = userCount;
   }
 
   public enum MessageType {
       ENTER, QUIT, TALK;
   }
   private MessageType type;
-  private String roomId;
-  private String sender;
+  private Long roomId;
+  private Long senderId;
   private String message;
-  private long userCount;
 
 }
