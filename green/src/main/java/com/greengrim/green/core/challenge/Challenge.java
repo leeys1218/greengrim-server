@@ -44,7 +44,8 @@ public class Challenge extends BaseTime {
     @NotNull
     private int ticketCurrentCount; // 현재 남은 티켓 개수
     @NotNull
-    @Min(2) @Max(6)
+    @Min(2)
+    @Max(6)
     private int weekMinCount;       // 주 최소 인증 횟수
     @NotNull
     @Max(100)
@@ -59,4 +60,24 @@ public class Challenge extends BaseTime {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
+    public String getGoalCountTag() {
+        return "인증 " + this.getGoalCount() + "회";
+    }
+
+    public String getTicketCountTag() {
+        return "티켓 " + (this.ticketTotalCount - this.ticketCurrentCount)
+                + "/" + this.ticketTotalCount;
+    }
+
+    public String getKeywordTag() {
+        return "#키워드 " + this.keyword;
+    }
+
+    public String getWeekMinCountTag() {
+        return "최소 인증 주 " + this.weekMinCount + "회";
+    }
+
+    public String getParticipantCountTag() {
+        return "인원 " + this.headCount + "/" + this.capacity;
+    }
 }
