@@ -1,23 +1,28 @@
 package com.greengrim.green.core.chatRoom;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import java.io.Serializable;
-import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+
 
 @Getter
-@Setter
+@Builder
+@Entity
+@AllArgsConstructor
 public class ChatRoom implements Serializable {
 
   private static final long serialVersionUID = 6494678977089006639L;
-  private String roomId;
-  private String name;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long roomId;
+  private String title;
+  private Long userCount;
 
-  public static ChatRoom create(String name) {
-    ChatRoom chatRoom = new ChatRoom();
-    chatRoom.roomId = UUID.randomUUID().toString();
-    chatRoom.name = name;
-    return chatRoom;
+  public ChatRoom() {
   }
-
 }

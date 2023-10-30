@@ -1,6 +1,5 @@
 package com.greengrim.green.core.chatRoom;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,26 +11,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/chat")
+@RequestMapping("/visitor/chatRooms")
 public class ChatRoomController {
 
-    private final ChatRoomRepository chatRoomRepository;
+    private final ChatRoomRedisRepository chatRoomRedisRepository;
 
-    @GetMapping("/rooms")
+    @PostMapping
     @ResponseBody
-    public List<ChatRoom> room() {
-      return chatRoomRepository.findAllRoom();
+    public ChatRoom createRoom(@RequestParam String title) {
+
+      return chatRoomRedisRepository.createChatRoom(title);
     }
 
-    @PostMapping("/room")
-    @ResponseBody
-    public ChatRoom createRoom(@RequestParam String name) {
-      return chatRoomRepository.createChatRoom(name);
+    @GetMapping("/{roomId}")
+    public ChatRoom roomInfo(@PathVariable Long roomId) {
+      return chatRoomRedisRepository.findRoomById(roomId);
     }
-
-    @GetMapping("/room/enter/{roomId}")
-    public ChatRoom roomInfo(@PathVariable String roomId) {
-      return chatRoomRepository.findRoomById(roomId);
-    }
-
 }
