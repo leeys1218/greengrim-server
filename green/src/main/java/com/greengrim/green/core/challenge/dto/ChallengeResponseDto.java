@@ -47,6 +47,22 @@ public class ChallengeResponseDto {
 
     @Getter
     @RequiredArgsConstructor
+    public static class ChallengeSimpleTags {
+        private Category category;
+        private String ticketCount;
+        private String goalCount;
+        private String keyword;
+
+        public ChallengeSimpleTags(Challenge challenge) {
+            this.category = challenge.getCategory();
+            this.goalCount = challenge.getGoalCountTag();
+            this.ticketCount = challenge.getTicketCountTag();
+            this.keyword = challenge.getKeywordTag();
+        }
+    }
+
+    @Getter
+    @RequiredArgsConstructor
     public static class ChallengeDetailInfo {
         private ChallengeInfo challengeInfo;
         private ChallengeTags challengeTags;
@@ -56,6 +72,16 @@ public class ChallengeResponseDto {
             this.challengeInfo = new ChallengeInfo(challenge);
             this.challengeTags = new ChallengeTags(challenge);
             this.createdAt = calculateTime(challenge.getCreatedAt(), 1);
+        }
+    }
+
+    public static class ChallengeSimpleInfo {
+        private ChallengeInfo challengeInfo;
+        private ChallengeSimpleTags challengeSimpleTags;
+
+        public ChallengeSimpleInfo(Challenge challenge) {
+            this.challengeInfo = new ChallengeInfo(challenge);
+            this.challengeSimpleTags = new ChallengeSimpleTags(challenge);
         }
     }
 }
