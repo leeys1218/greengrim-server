@@ -4,7 +4,7 @@ import com.greengrim.green.common.jwt.JwtTokenProvider;
 import com.greengrim.green.core.chat.ChatService;
 import com.greengrim.green.core.chat.ChatMessage;
 import com.greengrim.green.core.chat.ChatMessage.MessageType;
-import com.greengrim.green.core.chatRoom.ChatRoomRepository;
+import com.greengrim.green.core.chatRoom.ChatRoomRedisRepository;
 import java.security.Principal;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class StompHandler implements ChannelInterceptor {
 
   private final JwtTokenProvider jwtTokenProvider;
   private final ChatService chatService;
-  private final ChatRoomRepository chatRoomRepository;
+  private final ChatRoomRedisRepository chatRoomRedisRepository;
 
   @Override
   public Message<?> preSend(Message<?> message, MessageChannel channel) {
@@ -44,7 +44,7 @@ public class StompHandler implements ChannelInterceptor {
       //        >  challengeService.getCapacity())
 
       // challengeService에서 현재 인원 수  늘리기
-      chatRoomRepository.setUserEnterInfo(sessionId, roomId);
+      chatRoomRedisRepository.setUserEnterInfo(sessionId, roomId);
 
       String Name = Optional.ofNullable((Principal) message.getHeaders()
               .get("simpUser")).map(Principal::getName).orElse("UnknownUser");
@@ -57,7 +57,7 @@ public class StompHandler implements ChannelInterceptor {
     }
     else if (StompCommand.DISCONNECT == accessor.getCommand()) {
       String sessionId = (String) message.getHeaders().get("simpSessionId");
-      String roomId = chatRoomRepository.getUserEnterRoomId(sessionId);
+      String roomId = chatRoomRedisRepository.getUserEnterRoomId(sessionId);
 
       // Challenge Service에서 유저 수 줄이기 and 현재 인원 수가 0이라면 redis에서 해당 채널 삭제
       // challengeService.minusUser()
@@ -71,7 +71,7 @@ public class StompHandler implements ChannelInterceptor {
           .roomId(Long.valueOf(roomId))
           .build());
 
-      chatRoomRepository.removeUserEnterInfo(sessionId);
+      chatRoomRedisRepository.removeUserEnterInfo(sessionId);
       log.info("DISCONNECTED {}, {}", sessionId, roomId);
     }
 

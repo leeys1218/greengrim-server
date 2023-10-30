@@ -14,16 +14,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/visitor/chatRooms")
 public class ChatRoomController {
 
-    private final ChatRoomRepository chatRoomRepository;
+    private final ChatRoomRedisRepository chatRoomRedisRepository;
 
     @PostMapping
     @ResponseBody
     public ChatRoom createRoom(@RequestParam String title) {
-      return chatRoomRepository.createChatRoom(title);
+
+      return chatRoomRedisRepository.createChatRoom(title);
     }
 
     @GetMapping("/{roomId}")
     public ChatRoom roomInfo(@PathVariable Long roomId) {
-      return chatRoomRepository.findRoomById(roomId);
+      return chatRoomRedisRepository.findRoomById(roomId);
     }
 }

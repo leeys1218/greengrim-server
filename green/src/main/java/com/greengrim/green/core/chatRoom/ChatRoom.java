@@ -5,13 +5,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.io.Serializable;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 
 @Getter
-@Setter
+@Builder
 @Entity
+@AllArgsConstructor
 public class ChatRoom implements Serializable {
 
   private static final long serialVersionUID = 6494678977089006639L;
@@ -19,12 +21,8 @@ public class ChatRoom implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long roomId;
   private String title;
-  private long userCount;
+  private Long userCount;
 
-  public static ChatRoom create(String title) {
-    ChatRoom chatRoom = new ChatRoom();
-    chatRoom.title = title;
-    return chatRoom;
+  public ChatRoom() {
   }
-
 }

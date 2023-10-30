@@ -1,7 +1,6 @@
 package com.greengrim.green.core.chat;
 
 import com.greengrim.green.core.chat.ChatMessage.MessageType;
-import com.greengrim.green.core.chatRoom.ChatRoomRepository;
 import com.greengrim.green.core.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
