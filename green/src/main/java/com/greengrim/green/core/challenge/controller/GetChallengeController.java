@@ -63,12 +63,23 @@ public class GetChallengeController {
     }
 
     /**
-     * [GET] 홈 화면 핫 챌린지 5개 조회 -> 최근 인증 많은 순
+     * [GET] 홈 화면 핫 챌린지 5개 조회
      */
     @GetMapping("/home/challenges")
     public ResponseEntity<HomeChallenges> getHotChallenges(
             @CurrentMember Member member) {
         return ResponseEntity.ok(getChallengeService.getHotChallenges(member, 5));
+    }
+
+    /**
+     * [GET] 핫 챌린지 더보기
+     */
+    @GetMapping("/hot-challenges")
+    public ResponseEntity<PageResponseDto<List<ChallengeSimpleInfo>>> getMoreHotChallenges(
+            @CurrentMember Member member,
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "size") int size) {
+        return ResponseEntity.ok(getChallengeService.getMoreHotChallenges(member, page, size));
     }
 
 }
