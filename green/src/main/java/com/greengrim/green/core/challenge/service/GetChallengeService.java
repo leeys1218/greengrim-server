@@ -58,7 +58,7 @@ public class GetChallengeService {
         return makeChallengesSimpleInfoList(challenges);
     }
 
-    private Challenge findByIdWithValidation(Long id) {
+    public Challenge findByIdWithValidation(Long id) {
         return challengeRepository.findById(id)
                 .orElseThrow(() -> new BaseException(ChallengeErrorCode.EMPTY_CHALLENGE));
     }
