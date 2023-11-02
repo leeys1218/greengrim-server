@@ -8,6 +8,8 @@ import com.greengrim.green.core.challenge.Category;
 import com.greengrim.green.core.challenge.Challenge;
 import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.ChallengeDetailInfo;
 import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.ChallengeSimpleInfo;
+import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.HomeChallenges;
+import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.HotChallengeInfo;
 import com.greengrim.green.core.challenge.repository.ChallengeRepository;
 import com.greengrim.green.core.member.Member;
 import java.util.ArrayList;
@@ -48,7 +50,6 @@ public class GetChallengeService {
         return new PageResponseDto<>(challenges.getNumber(), challenges.hasNext(), challengeSimpleInfoList);
     }
 
-
     /**
      * 내가 만든 챌린지 조회
      */
@@ -67,6 +68,7 @@ public class GetChallengeService {
                 .orElseThrow(() -> new BaseException(ChallengeErrorCode.EMPTY_CHALLENGE));
     }
 
+    // TODO: 인원 많은 순, 적은 순 추가
     private Pageable getPageable(int page, int size, String sort) {
         if (sort.equals("DESC")) { // 최신순
             return PageRequest.of(page, size, Direction.DESC);
@@ -77,4 +79,18 @@ public class GetChallengeService {
         }
     }
 
+    /**
+     * 홈 화면 핫 챌린지 조회
+     * TODO: @param member 를 이용해 차단 목록에 있다면 보여주지 않기
+     */
+    public HomeChallenges getHotChallenges(Member member, int size) {
+        PageRequest pageRequest = PageRequest.of(0, size);
+        Page<Challenge> challenges = challengeRepository.findHotChallenges(pageRequest);
+
+        List<HotChallengeInfo> hotChallengeInfoList = new ArrayList<>();
+        challenges.forEach(challenge ->
+                hotChallengeInfoList.add(new HotChallengeInfo(challenge)));
+
+        return new HomeChallenges(hotChallengeInfoList);
+    }
 }
