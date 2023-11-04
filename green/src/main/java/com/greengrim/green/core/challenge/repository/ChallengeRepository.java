@@ -18,4 +18,7 @@ public interface ChallengeRepository extends JpaRepository<Challenge, Long> {
 
     @Query(value = "SELECT c FROM Challenge c WHERE c.member=:member AND c.status=true")
     Page<Challenge> findByMemberAndStateIsTrue(@Param("member")Member member, Pageable pageable);
+
+    @Query(value = "SELECT c FROM Challenge c WHERE c.status=true ORDER BY c.headCount DESC")
+    Page<Challenge> findHotChallenges(Pageable pageable);
 }

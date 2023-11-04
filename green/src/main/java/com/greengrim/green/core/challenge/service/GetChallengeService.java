@@ -8,6 +8,8 @@ import com.greengrim.green.core.challenge.Category;
 import com.greengrim.green.core.challenge.Challenge;
 import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.ChallengeDetailInfo;
 import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.ChallengeSimpleInfo;
+import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.HomeChallenges;
+import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.HotChallengeInfo;
 import com.greengrim.green.core.challenge.repository.ChallengeRepository;
 import com.greengrim.green.core.member.Member;
 import java.util.ArrayList;
@@ -40,33 +42,28 @@ public class GetChallengeService {
      */
     public PageResponseDto<List<ChallengeSimpleInfo>> getChallengesByCategory(
             Member member, Category category, int page, int size, String sort) {
-        List<ChallengeSimpleInfo> challengeSimpleInfoList = new ArrayList<>();
-        Page<Challenge> challenges = challengeRepository.findByCategoryAndStateIsTrue(category,  getPageable(page, size, sort));
-        challenges.forEach(challenge ->
-                        challengeSimpleInfoList.add(new ChallengeSimpleInfo(challenge)));
+        Page<Challenge> challenges = challengeRepository.findByCategoryAndStateIsTrue(
+                category, getPageable(page, size, sort));
 
-        return new PageResponseDto<>(challenges.getNumber(), challenges.hasNext(), challengeSimpleInfoList);
+        return makeChallengesSimpleInfoList(challenges);
     }
-
 
     /**
      * 내가 만든 챌린지 조회
      */
     public PageResponseDto<List<ChallengeSimpleInfo>> getMyChallenges(
             Member member, int page, int size, String sort) {
-        List<ChallengeSimpleInfo> challengeSimpleInfoList = new ArrayList<>();
-        Page<Challenge> challenges = challengeRepository.findByMemberAndStateIsTrue(member, getPageable(page, size, sort));
-        challenges.forEach(challenge ->
-                challengeSimpleInfoList.add(new ChallengeSimpleInfo(challenge)));
-
-        return new PageResponseDto<>(challenges.getNumber(), challenges.hasNext(), challengeSimpleInfoList);
+        Page<Challenge> challenges = challengeRepository.findByMemberAndStateIsTrue(
+                member, getPageable(page, size, sort));
+        return makeChallengesSimpleInfoList(challenges);
     }
 
-    private Challenge findByIdWithValidation(Long id) {
+    public Challenge findByIdWithValidation(Long id) {
         return challengeRepository.findById(id)
                 .orElseThrow(() -> new BaseException(ChallengeErrorCode.EMPTY_CHALLENGE));
     }
 
+    // TODO: 인원 많은 순, 적은 순 추가
     private Pageable getPageable(int page, int size, String sort) {
         if (sort.equals("DESC")) { // 최신순
             return PageRequest.of(page, size, Direction.DESC);
@@ -77,4 +74,36 @@ public class GetChallengeService {
         }
     }
 
+    /**
+     * 홈 화면 핫 챌린지 조회
+     * TODO: @param member 를 이용해 차단 목록에 있다면 보여주지 않기
+     */
+    public HomeChallenges getHotChallenges(Member member, int size) {
+        PageRequest pageRequest = PageRequest.of(0, size);
+        Page<Challenge> challenges = challengeRepository.findHotChallenges(pageRequest);
+
+        List<HotChallengeInfo> hotChallengeInfoList = new ArrayList<>();
+        challenges.forEach(challenge ->
+                hotChallengeInfoList.add(new HotChallengeInfo(challenge)));
+
+        return new HomeChallenges(hotChallengeInfoList);
+    }
+
+    /**
+     * 핫 챌린지 더보기
+     * TODO: @param member 를 이용해 차단 목록에 있다면 보여주지 않기
+     */
+    public PageResponseDto<List<ChallengeSimpleInfo>> getMoreHotChallenges(Member member, int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<Challenge> challenges = challengeRepository.findHotChallenges(pageRequest);
+        return makeChallengesSimpleInfoList(challenges);
+    }
+
+    private PageResponseDto<List<ChallengeSimpleInfo>> makeChallengesSimpleInfoList(Page<Challenge> challenges) {
+        List<ChallengeSimpleInfo> challengeSimpleInfoList = new ArrayList<>();
+        challenges.forEach(challenge ->
+                challengeSimpleInfoList.add(new ChallengeSimpleInfo(challenge)));
+
+        return new PageResponseDto<>(challenges.getNumber(), challenges.hasNext(), challengeSimpleInfoList);
+    }
 }

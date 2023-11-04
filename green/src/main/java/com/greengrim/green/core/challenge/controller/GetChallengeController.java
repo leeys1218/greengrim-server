@@ -5,6 +5,7 @@ import com.greengrim.green.common.entity.dto.PageResponseDto;
 import com.greengrim.green.core.challenge.Category;
 import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.ChallengeDetailInfo;
 import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.ChallengeSimpleInfo;
+import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.HomeChallenges;
 import com.greengrim.green.core.challenge.service.GetChallengeService;
 import com.greengrim.green.core.member.Member;
 import java.util.List;
@@ -59,6 +60,26 @@ public class GetChallengeController {
             @RequestParam(value = "sort") String sort) {
         return ResponseEntity.ok(getChallengeService.getMyChallenges(
                 member, page, size, sort));
+    }
+
+    /**
+     * [GET] 홈 화면 핫 챌린지 5개 조회
+     */
+    @GetMapping("/home/challenges")
+    public ResponseEntity<HomeChallenges> getHotChallenges(
+            @CurrentMember Member member) {
+        return ResponseEntity.ok(getChallengeService.getHotChallenges(member, 5));
+    }
+
+    /**
+     * [GET] 핫 챌린지 더보기
+     */
+    @GetMapping("/hot-challenges")
+    public ResponseEntity<PageResponseDto<List<ChallengeSimpleInfo>>> getMoreHotChallenges(
+            @CurrentMember Member member,
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "size") int size) {
+        return ResponseEntity.ok(getChallengeService.getMoreHotChallenges(member, page, size));
     }
 
 }
