@@ -23,8 +23,9 @@ public class RegisterCertificationController {
      * [POST] 인증 생성
      */
     @PostMapping("/visitor/certifications")
-    public ResponseEntity<Integer> registerChallenge(@CurrentMember Member member,
-                                                     @Valid @RequestBody RegisterCertification registerCertification) {
+    public ResponseEntity<Integer> registerCertification(
+            @CurrentMember Member member,
+            @Valid @RequestBody RegisterCertification registerCertification) {
         registerCertificationService.register(member, registerCertification);
         return new ResponseEntity<>(200, HttpStatus.OK);
     }
