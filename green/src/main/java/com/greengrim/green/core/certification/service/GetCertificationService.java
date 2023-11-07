@@ -46,7 +46,7 @@ public class GetCertificationService {
      * 멤버와 챌린지를 받아서 몇 회차 인증할 차례인지 반환
      */
     public int getRoundByMemberAndChallenge(Member member, Challenge challenge) {
-        return certificationRepository.countsByMemberAndAndChallenge(member, challenge) + 1;
+        return certificationRepository.countsByMemberAndChallenge(member, challenge) + 1;
     }
 
     /**

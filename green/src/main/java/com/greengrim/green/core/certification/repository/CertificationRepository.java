@@ -15,7 +15,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CertificationRepository extends JpaRepository<Certification, Long> {
 
-    int countsByMemberAndAndChallenge(
+    @Query("SELECT COUNT(c) FROM Certification c WHERE c.member= :member AND c.challenge= :challenge")
+    int countsByMemberAndChallenge(
             @Param("member") Member member,
             @Param("challenge") Challenge challenge);
 
