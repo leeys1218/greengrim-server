@@ -62,7 +62,7 @@ public class GetChallengeService {
         return new PageResponseDto<>(challenges.getNumber(), challenges.hasNext(), challengeSimpleInfoList);
     }
 
-    private Challenge findByIdWithValidation(Long id) {
+    public Challenge findByIdWithValidation(Long id) {
         return challengeRepository.findById(id)
                 .orElseThrow(() -> new BaseException(ChallengeErrorCode.EMPTY_CHALLENGE));
     }
