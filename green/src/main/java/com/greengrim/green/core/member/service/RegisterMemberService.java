@@ -32,6 +32,7 @@ public class RegisterMemberService implements RegisterMemberUseCase {
                 .introduction(registerMemberReq.getIntroduction())
                 .profileImgUrl(registerMemberReq.getProfileImgUrl())
                 .point(0)
+                .carbonReduction(0)
                 .reportCnt(0)
                 .status(true)
                 .refreshToken("")

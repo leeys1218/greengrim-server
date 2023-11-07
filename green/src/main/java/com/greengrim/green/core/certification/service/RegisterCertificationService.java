@@ -4,9 +4,9 @@ import com.greengrim.green.core.certification.Certification;
 import com.greengrim.green.core.certification.dto.CertificationRequestDto.RegisterCertification;
 import com.greengrim.green.core.certification.repository.CertificationRepository;
 import com.greengrim.green.core.challenge.Challenge;
-import com.greengrim.green.core.challenge.repository.ChallengeRepository;
 import com.greengrim.green.core.challenge.service.GetChallengeService;
 import com.greengrim.green.core.member.Member;
+import com.greengrim.green.core.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RegisterCertificationService {
 
+    private final MemberRepository memberRepository;
     private final GetChallengeService getChallengeService;
     private final CertificationRepository certificationRepository;
 
@@ -33,6 +34,10 @@ public class RegisterCertificationService {
                 .challenge(challenge)
                 .status(true)
                 .build();
+
+        member.plusPoint(10);   // 10 포인트 추가
+        member.plusCarbonReduction(challenge.getCategory().getCarbonReduction());   // 탄소 저감량 추가
+        memberRepository.save(member);
 
         certificationRepository.save(certification);
     }
