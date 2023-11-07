@@ -27,4 +27,7 @@ public interface CertificationRepository extends JpaRepository<Certification, Lo
 
     @Query("SELECT date_format(c.createdAt, '%Y-%m-%d') FROM Certification c WHERE date_format(c.createdAt, '%Y-%m') = :month and c.member.id = :memberId")
     List<String> findCertificationsByMemberMonth(@Param("month") String month, @Param("memberId") Long memberId);
+
+    @Query("SELECT c FROM Certification c WHERE date_format(c.createdAt, '%Y-%m-%d') = :date and c.challenge.id = :challengeId")
+    Page<Certification> findCertificationsByChallengeDate(@Param("date") String date, @Param("challengeId") Long challengeId, Pageable pageable);
 }

@@ -1,9 +1,11 @@
 package com.greengrim.green.core.certification.service;
 
+import com.greengrim.green.common.entity.dto.PageResponseDto;
 import com.greengrim.green.common.exception.BaseException;
 import com.greengrim.green.common.exception.errorCode.CertificationErrorCode;
 import com.greengrim.green.core.certification.Certification;
 import com.greengrim.green.core.certification.dto.CertificationResponseDto.CertificationDetailInfo;
+import com.greengrim.green.core.certification.dto.CertificationResponseDto.CertificationsByChallengeDate;
 import com.greengrim.green.core.certification.dto.CertificationResponseDto.CertificationsByMonth;
 import com.greengrim.green.core.certification.repository.CertificationRepository;
 import com.greengrim.green.core.challenge.Challenge;
@@ -12,6 +14,8 @@ import com.greengrim.green.core.verification.VerificationService;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -60,5 +64,21 @@ public class GetCertificationService {
             Member member, String month) {
         List<String> date = certificationRepository.findCertificationsByMemberMonth(month, member.getId());
         return new CertificationsByMonth(date);
+    }
+
+    /**
+     * 챌린지 날짜 별 인증 반환
+     */
+    public PageResponseDto<List<CertificationsByChallengeDate>> getCertificationsByChallengeDate(
+            Member member, Long challengeId, String date, int page, int size) {
+        List<CertificationsByChallengeDate> certificationsByChallengeDates = new ArrayList<>();
+
+        Page<Certification> certifications = certificationRepository.findCertificationsByChallengeDate(
+                date, challengeId, PageRequest.of(page, size));
+
+        certifications.forEach(certification ->
+                certificationsByChallengeDates.add(new CertificationsByChallengeDate(certification)));
+
+        return  new PageResponseDto<>(certifications.getNumber(), certifications.hasNext(), certificationsByChallengeDates);
     }
 }

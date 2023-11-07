@@ -6,6 +6,7 @@ import com.greengrim.green.common.entity.dto.PageResponseDto;
 import com.greengrim.green.core.certification.Certification;
 import com.greengrim.green.core.certification.dto.CertificationResponseDto.CertificationDetailInfo;
 import com.greengrim.green.core.certification.dto.CertificationResponseDto.CertificationInfo;
+import com.greengrim.green.core.certification.dto.CertificationResponseDto.CertificationsByChallengeDate;
 import com.greengrim.green.core.certification.dto.CertificationResponseDto.CertificationsByMonth;
 import com.greengrim.green.core.certification.service.GetCertificationService;
 import com.greengrim.green.core.challenge.Category;
@@ -52,6 +53,20 @@ public class GetCertificationController {
     }
 
     /**
+     * [GET] 챌린지 별 인증 목록 조회 - DATE
+     */
+    @GetMapping("/visitor/certifications")
+    public ResponseEntity<PageResponseDto<List<CertificationsByChallengeDate>>> getCertificationsByChallengeDate(
+            @CurrentMember Member member,
+            @RequestParam(value = "challengeId") Long challengeId,
+            @RequestParam(value = "date") String date,
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "size") int size) { // 2023-11-07
+        return ResponseEntity.ok(getCertificationService.getCertificationsByChallengeDate(
+                member, challengeId, date, page, size));
+    }
+
+    /**
      * [GET] 멤버 별 인증 목록 조회 - MONTH
      */
     @GetMapping("/visitor/certifications")
@@ -61,6 +76,8 @@ public class GetCertificationController {
         return ResponseEntity.ok(getCertificationService.getCertificationsByMemberMonth(
                 member, month));
     }
+
+
 
 
 }

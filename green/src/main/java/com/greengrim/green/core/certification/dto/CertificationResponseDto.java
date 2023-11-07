@@ -4,6 +4,7 @@ import static com.greengrim.green.common.entity.Time.calculateTime;
 
 import com.greengrim.green.core.certification.Certification;
 import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.ChallengeInfoForCertification;
+import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.ChallengeTitleInfo;
 import com.greengrim.green.core.member.dto.MemberResponseDto.MemberSimpleInfo;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -50,5 +51,28 @@ public class CertificationResponseDto {
         List<String> date;
     }
 
+    @Getter
+    @AllArgsConstructor
+    public static class CertificationsByChallengeDate {
+        MemberSimpleInfo memberSimpleInfo;
+        CertificationInfo certificationInfo;
+
+        public CertificationsByChallengeDate(Certification certification) {
+            this.memberSimpleInfo = new MemberSimpleInfo(certification.getMember());
+            this.certificationInfo = new CertificationInfo(certification);
+        }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class CertificationsByMemberDate {
+        ChallengeTitleInfo challengeTitleInfo;
+        CertificationInfo certificationInfo;
+
+        public CertificationsByMemberDate(Certification certification) {
+            this.challengeTitleInfo = new ChallengeTitleInfo(certification.getChallenge());
+            this.certificationInfo = new CertificationInfo(certification);
+        }
+    }
 
 }

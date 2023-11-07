@@ -139,12 +139,26 @@ public class ChallengeResponseDto {
     }
 
     @Getter
+    @AllArgsConstructor
+    public static class ChallengeTitleInfo {
+        private String title;
+        private String imgUrl;
+        private Category category;
+
+        public ChallengeTitleInfo(Challenge challenge) {
+            this.title = challenge.getTitle();
+            this.imgUrl = challenge.getImgUrl();
+            this.category = challenge.getCategory();
+        }
+    }
+
+    @Getter
     @RequiredArgsConstructor
     public static class ChallengePreviewInfo {
-        int round;  // 몇 회차 인증할 차례인지
-        String title;
-        Category category;
-        String ticketCount;
+        private int round;  // 몇 회차 인증할 차례인지
+        private String title;
+        private Category category;
+        private String ticketCount;
 
         public ChallengePreviewInfo(Challenge challenge, int round) {
             this.round = round;
