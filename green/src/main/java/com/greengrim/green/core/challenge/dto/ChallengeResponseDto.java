@@ -121,4 +121,20 @@ public class ChallengeResponseDto {
             this.keyword = challenge.getKeywordTag();
         }
     }
+
+    @Getter
+    @RequiredArgsConstructor
+    public static class ChallengeInfoForCertification {
+        private String title;
+        private String description;
+        private Category category;
+        private String ticketCount;
+
+        public ChallengeInfoForCertification(Challenge challenge) {
+            this.title = challenge.getTitle();
+            this.description = challenge.getDescription();
+            this.category = challenge.getCategory();
+            this.ticketCount = challenge.getTicketCountTag();
+        }
+    }
 }
