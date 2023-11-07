@@ -5,6 +5,7 @@ import com.greengrim.green.common.exception.errorCode.CertificationErrorCode;
 import com.greengrim.green.core.certification.Certification;
 import com.greengrim.green.core.certification.dto.CertificationResponseDto.CertificationDetailInfo;
 import com.greengrim.green.core.certification.repository.CertificationRepository;
+import com.greengrim.green.core.challenge.Challenge;
 import com.greengrim.green.core.member.Member;
 import com.greengrim.green.core.verification.VerificationService;
 import lombok.RequiredArgsConstructor;
@@ -31,5 +32,9 @@ public class GetCertificationService {
         }
 
         return new CertificationDetailInfo(certification, isVerified);
+    }
+
+    public int getRoundByMemberAndChallenge(Member member, Challenge challenge) {
+        return certificationRepository.countsByMemberAndAndChallenge(member, challenge) + 1;
     }
 }

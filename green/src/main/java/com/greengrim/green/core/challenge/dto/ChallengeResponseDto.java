@@ -137,4 +137,20 @@ public class ChallengeResponseDto {
             this.ticketCount = challenge.getTicketCountTag();
         }
     }
+
+    @Getter
+    @RequiredArgsConstructor
+    public static class ChallengePreviewInfo {
+        int round;  // 몇 회차 인증할 차례인지
+        String title;
+        Category category;
+        String ticketCount;
+
+        public ChallengePreviewInfo(Challenge challenge, int round) {
+            this.round = round;
+            this.title = challenge.getTitle();
+            this.category = challenge.getCategory();
+            this.ticketCount = challenge.getTicketCountTag();
+        }
+    }
 }
