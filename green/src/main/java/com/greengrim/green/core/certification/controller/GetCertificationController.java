@@ -44,7 +44,7 @@ public class GetCertificationController {
     /**
      * [GET] 챌린지 별 인증 목록 조회 - MONTH
      */
-    @GetMapping("/visitor/certifications")
+    @GetMapping("/certifications/month")
     public ResponseEntity<CertificationsByMonth> getCertificationsByChallengeMonth(
             @CurrentMember Member member,
             @RequestParam(value = "challengeId") Long challengeId,
@@ -56,7 +56,7 @@ public class GetCertificationController {
     /**
      * [GET] 챌린지 별 인증 목록 조회 - DATE
      */
-    @GetMapping("/visitor/certifications")
+    @GetMapping("/certifications/date")
     public ResponseEntity<PageResponseDto<List<CertificationsByChallengeDate>>> getCertificationsByChallengeDate(
             @CurrentMember Member member,
             @RequestParam(value = "challengeId") Long challengeId,
@@ -70,7 +70,7 @@ public class GetCertificationController {
     /**
      * [GET] 멤버 별 인증 목록 조회 - MONTH
      */
-    @GetMapping("/visitor/certifications")
+    @GetMapping("/visitor/certifications/month")
     public ResponseEntity<CertificationsByMonth> getCertificationsByChallengeMonth(
             @CurrentMember Member member,
             @RequestParam(value = "month") String month) { // 2023-01
@@ -81,7 +81,7 @@ public class GetCertificationController {
     /**
      * [GET] 멤버 별 인증 목록 조회 - DATE
      */
-    @GetMapping("/visitor/certifications")
+    @GetMapping("/visitor/certifications/date")
     public ResponseEntity<PageResponseDto<List<CertificationsByMemberDate>>> getCertificationsByChallengeDate(
             @CurrentMember Member member,
             @RequestParam(value = "date") String date,
