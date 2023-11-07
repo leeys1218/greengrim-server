@@ -4,6 +4,8 @@ import static com.greengrim.green.common.entity.Time.calculateTime;
 
 import com.greengrim.green.core.challenge.Category;
 import com.greengrim.green.core.challenge.Challenge;
+import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -75,6 +77,8 @@ public class ChallengeResponseDto {
         }
     }
 
+    @Getter
+    @RequiredArgsConstructor
     public static class ChallengeSimpleInfo {
         private ChallengeInfo challengeInfo;
         private ChallengeSimpleTags challengeSimpleTags;
@@ -82,6 +86,39 @@ public class ChallengeResponseDto {
         public ChallengeSimpleInfo(Challenge challenge) {
             this.challengeInfo = new ChallengeInfo(challenge);
             this.challengeSimpleTags = new ChallengeSimpleTags(challenge);
+        }
+    }
+
+    @Getter
+    @RequiredArgsConstructor
+    public static class HotChallengeInfo {
+        private ChallengeInfo challengeInfo;
+        private HotChallengeTags hotChallengeTags;
+
+        public HotChallengeInfo(Challenge challenge) {
+            this.challengeInfo = new ChallengeInfo(challenge);
+            this.hotChallengeTags = new HotChallengeTags(challenge);
+        }
+    }
+
+    @Getter
+    @RequiredArgsConstructor
+    @AllArgsConstructor
+    public static class HomeChallenges {
+        private List<HotChallengeInfo> hotChallengeInfos;
+    }
+
+    @Getter
+    @RequiredArgsConstructor
+    public static class HotChallengeTags {
+        private Category category;
+        private String ticketCount;
+        private String keyword;
+
+        public HotChallengeTags(Challenge challenge) {
+            this.category = challenge.getCategory();
+            this.ticketCount = challenge.getTicketCountTag();
+            this.keyword = challenge.getKeywordTag();
         }
     }
 }
