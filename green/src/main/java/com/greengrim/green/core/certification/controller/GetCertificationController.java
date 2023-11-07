@@ -7,6 +7,7 @@ import com.greengrim.green.core.certification.Certification;
 import com.greengrim.green.core.certification.dto.CertificationResponseDto.CertificationDetailInfo;
 import com.greengrim.green.core.certification.dto.CertificationResponseDto.CertificationInfo;
 import com.greengrim.green.core.certification.dto.CertificationResponseDto.CertificationsByChallengeDate;
+import com.greengrim.green.core.certification.dto.CertificationResponseDto.CertificationsByMemberDate;
 import com.greengrim.green.core.certification.dto.CertificationResponseDto.CertificationsByMonth;
 import com.greengrim.green.core.certification.service.GetCertificationService;
 import com.greengrim.green.core.challenge.Category;
@@ -77,7 +78,17 @@ public class GetCertificationController {
                 member, month));
     }
 
-
-
+    /**
+     * [GET] 멤버 별 인증 목록 조회 - DATE
+     */
+    @GetMapping("/visitor/certifications")
+    public ResponseEntity<PageResponseDto<List<CertificationsByMemberDate>>> getCertificationsByChallengeDate(
+            @CurrentMember Member member,
+            @RequestParam(value = "date") String date,
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "size") int size) { // 2023-11-07
+        return ResponseEntity.ok(getCertificationService.getCertificationsByMemberDate(
+                member, date, page, size));
+    }
 
 }

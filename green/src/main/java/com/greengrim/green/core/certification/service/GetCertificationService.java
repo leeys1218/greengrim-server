@@ -6,6 +6,7 @@ import com.greengrim.green.common.exception.errorCode.CertificationErrorCode;
 import com.greengrim.green.core.certification.Certification;
 import com.greengrim.green.core.certification.dto.CertificationResponseDto.CertificationDetailInfo;
 import com.greengrim.green.core.certification.dto.CertificationResponseDto.CertificationsByChallengeDate;
+import com.greengrim.green.core.certification.dto.CertificationResponseDto.CertificationsByMemberDate;
 import com.greengrim.green.core.certification.dto.CertificationResponseDto.CertificationsByMonth;
 import com.greengrim.green.core.certification.repository.CertificationRepository;
 import com.greengrim.green.core.challenge.Challenge;
@@ -80,5 +81,21 @@ public class GetCertificationService {
                 certificationsByChallengeDates.add(new CertificationsByChallengeDate(certification)));
 
         return  new PageResponseDto<>(certifications.getNumber(), certifications.hasNext(), certificationsByChallengeDates);
+    }
+
+    /**
+     * 멤버 날짜 별 인증 반환
+     */
+    public PageResponseDto<List<CertificationsByMemberDate>> getCertificationsByMemberDate(
+            Member member, String date, int page, int size) {
+        List<CertificationsByMemberDate> certificationsByMemberDates = new ArrayList<>();
+
+        Page<Certification> certifications = certificationRepository.findCertificationsByMemberDate(
+                date, member.getId(), PageRequest.of(page, size));
+
+        certifications.forEach(certification ->
+                certificationsByMemberDates.add(new CertificationsByMemberDate(certification)));
+
+        return  new PageResponseDto<>(certifications.getNumber(), certifications.hasNext(), certificationsByMemberDates);
     }
 }
