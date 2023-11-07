@@ -25,6 +25,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -58,10 +59,10 @@ public class GetChallengeService {
      * 내가 만든 챌린지 조회
      */
     public PageResponseDto<List<ChallengeSimpleInfo>> getMyChallenges(
-            Member member, int page, int size, SortOption sort) {
+        Member member, int page, int size, SortOption sort) {
         Page<Challenge> challenges = challengeRepository.findByMemberAndStateIsTrue(
                 member, getPageable(page, size, sort));
-        return makeChallengesSimpleInfoList(challenges);
+            return makeChallengesSimpleInfoList(challenges);
     }
 
     public Challenge findByIdWithValidation(Long id) {
@@ -69,13 +70,21 @@ public class GetChallengeService {
                 .orElseThrow(() -> new BaseException(ChallengeErrorCode.EMPTY_CHALLENGE));
     }
 
-    // TODO: 인원 많은 순, 적은 순 추가
+    /**
+     * 페이징 옵션에 따라 챌린지용 Pageable을 생성해주는 함수
+     * TODO: 인원 많은 순, 적은 순 추가
+     */
     private Pageable getPageable(int page, int size, SortOption sort) {
         if (sort == DESC) { // 최신순
-            return PageRequest.of(page, size, Sort.Direction.DESC);
+            return PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
         } else if (sort == ASC) { // 오래된순
-            return PageRequest.of(page, size, Sort.Direction.ASC);
-        } else {
+            return PageRequest.of(page, size, Sort.Direction.ASC, "createdAt");
+        } else if (sort == GREATEST) {
+            return PageRequest.of(page, size, Sort.Direction.DESC, "headCount");
+        } else if (sort == LEAST) {
+            return PageRequest.of(page, size, Direction.ASC, "headCount");
+        }
+        else {
             throw new BaseException(GlobalErrorCode.NOT_VALID_ARGUMENT_ERROR);
         }
     }
@@ -85,8 +94,8 @@ public class GetChallengeService {
      * TODO: @param member 를 이용해 차단 목록에 있다면 보여주지 않기
      */
     public HomeChallenges getHotChallenges(Member member, int size) {
-        PageRequest pageRequest = PageRequest.of(0, size);
-        Page<Challenge> challenges = challengeRepository.findHotChallenges(pageRequest);
+        Pageable pageable = PageRequest.of(0, size);
+        Page<Challenge> challenges = challengeRepository.findHotChallenges(pageable);
 
         List<HotChallengeInfo> hotChallengeInfoList = new ArrayList<>();
         challenges.forEach(challenge ->
@@ -100,8 +109,8 @@ public class GetChallengeService {
      * TODO: @param member 를 이용해 차단 목록에 있다면 보여주지 않기
      */
     public PageResponseDto<List<ChallengeSimpleInfo>> getMoreHotChallenges(Member member, int page, int size) {
-        PageRequest pageRequest = PageRequest.of(page, size);
-        Page<Challenge> challenges = challengeRepository.findHotChallenges(pageRequest);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Challenge> challenges = challengeRepository.findHotChallenges(pageable);
         return makeChallengesSimpleInfoList(challenges);
     }
 
