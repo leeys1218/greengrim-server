@@ -5,6 +5,8 @@ import static com.greengrim.green.common.entity.Time.calculateTime;
 import com.greengrim.green.core.certification.Certification;
 import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.ChallengeInfoForCertification;
 import com.greengrim.green.core.member.dto.MemberResponseDto.MemberSimpleInfo;
+import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -40,6 +42,12 @@ public class CertificationResponseDto {
             this.certificationInfo = new CertificationInfo(certification);
             this.isVerified = isVerified;
         }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class CertificationsByMonth {
+        List<String> date;
     }
 
 

@@ -6,16 +6,19 @@ import com.greengrim.green.common.entity.dto.PageResponseDto;
 import com.greengrim.green.core.certification.Certification;
 import com.greengrim.green.core.certification.dto.CertificationResponseDto.CertificationDetailInfo;
 import com.greengrim.green.core.certification.dto.CertificationResponseDto.CertificationInfo;
+import com.greengrim.green.core.certification.dto.CertificationResponseDto.CertificationsByMonth;
 import com.greengrim.green.core.certification.service.GetCertificationService;
 import com.greengrim.green.core.challenge.Category;
 import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.ChallengeDetailInfo;
 import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.ChallengeSimpleInfo;
 import com.greengrim.green.core.member.Member;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -34,6 +37,18 @@ public class GetCertificationController {
         return new ResponseEntity<>(
                 getCertificationService.getCertificationInfo(member, id),
                 HttpStatus.OK);
+    }
+
+    /**
+     * [GET] 챌린지 별 인증 목록 조회 - MONTH
+     */
+    @GetMapping("/certifications")
+    public ResponseEntity<CertificationsByMonth> getCertificationsByChallengeMonth(
+            @CurrentMember Member member,
+            @RequestParam(value = "challengeId") Long challengeId,
+            @RequestParam(value = "month") String month) { // 2023-01
+        return ResponseEntity.ok(getCertificationService.getCertificationsByChallengeMonth(
+                member, challengeId, month));
     }
 
 
