@@ -121,4 +121,50 @@ public class ChallengeResponseDto {
             this.keyword = challenge.getKeywordTag();
         }
     }
+
+    @Getter
+    @RequiredArgsConstructor
+    public static class ChallengeInfoForCertification {
+        private String title;
+        private String description;
+        private Category category;
+        private String ticketCount;
+
+        public ChallengeInfoForCertification(Challenge challenge) {
+            this.title = challenge.getTitle();
+            this.description = challenge.getDescription();
+            this.category = challenge.getCategory();
+            this.ticketCount = challenge.getTicketCountTag();
+        }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class ChallengeTitleInfo {
+        private String title;
+        private String imgUrl;
+        private Category category;
+
+        public ChallengeTitleInfo(Challenge challenge) {
+            this.title = challenge.getTitle();
+            this.imgUrl = challenge.getImgUrl();
+            this.category = challenge.getCategory();
+        }
+    }
+
+    @Getter
+    @RequiredArgsConstructor
+    public static class ChallengePreviewInfo {
+        private int round;  // 몇 회차 인증할 차례인지
+        private String title;
+        private Category category;
+        private String ticketCount;
+
+        public ChallengePreviewInfo(Challenge challenge, int round) {
+            this.round = round;
+            this.title = challenge.getTitle();
+            this.category = challenge.getCategory();
+            this.ticketCount = challenge.getTicketCountTag();
+        }
+    }
 }

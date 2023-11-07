@@ -2,7 +2,7 @@ package com.greengrim.green.core.member.controller;
 
 import com.greengrim.green.common.auth.CurrentMember;
 import com.greengrim.green.core.member.Member;
-import com.greengrim.green.core.member.dto.MemberResponseDto.MemberSimpleInfo;
+import com.greengrim.green.core.member.dto.MemberResponseDto.MemberInfo;
 import com.greengrim.green.core.member.usecase.GetMemberUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,7 +20,7 @@ public class GetMemberController {
      * [GET] 내 프로필 조회
      */
     @GetMapping("/visitor/profile")
-    public ResponseEntity<MemberSimpleInfo> getCurrentMemberInfo(
+    public ResponseEntity<MemberInfo> getCurrentMemberInfo(
             @CurrentMember Member member) {
         return new ResponseEntity<>(getMemberUseCase.getMemberInfo(member),
                 HttpStatus.OK);

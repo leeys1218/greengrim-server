@@ -27,6 +27,9 @@ public class Member extends BaseTime {
     @NotNull
     private int point;
 
+    @NotNull
+    private double carbonReduction;
+
     private String introduction;
 
     private String profileImgUrl;
@@ -65,6 +68,14 @@ public class Member extends BaseTime {
 
     public boolean existProfileImgUrl() {
         return this.profileImgUrl != null && !this.profileImgUrl.equals("");
+    }
+
+    public void plusPoint(int point) {
+        this.point += point;
+    }
+
+    public void plusCarbonReduction(double carbonReduction) {
+        this.carbonReduction += carbonReduction;
     }
 
 }
