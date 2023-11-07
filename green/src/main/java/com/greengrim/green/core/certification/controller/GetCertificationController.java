@@ -51,5 +51,16 @@ public class GetCertificationController {
                 member, challengeId, month));
     }
 
+    /**
+     * [GET] 멤버 별 인증 목록 조회 - MONTH
+     */
+    @GetMapping("/certifications")
+    public ResponseEntity<CertificationsByMonth> getCertificationsByChallengeMonth(
+            @CurrentMember Member member,
+            @RequestParam(value = "month") String month) { // 2023-01
+        return ResponseEntity.ok(getCertificationService.getCertificationsByMemberMonth(
+                member, month));
+    }
+
 
 }
