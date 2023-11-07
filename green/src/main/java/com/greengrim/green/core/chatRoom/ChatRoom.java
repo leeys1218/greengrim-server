@@ -1,5 +1,6 @@
-package com.greengrim.green.core.chatRoom;
+package com.greengrim.green.core.chatroom;
 
+import com.greengrim.green.common.entity.BaseTime;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,21 +9,26 @@ import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-
+import lombok.RequiredArgsConstructor;
 
 @Getter
 @Builder
 @Entity
 @AllArgsConstructor
-public class ChatRoom implements Serializable {
+@RequiredArgsConstructor
+public class Chatroom extends BaseTime implements Serializable {
 
   private static final long serialVersionUID = 6494678977089006639L;
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long roomId;
-  private String title;
-  private Long userCount;
+  private Long id;
 
-  public ChatRoom() {
+  private String title;
+
+  private boolean status;
+
+  public void setStatus(boolean status) {
+    this.status = status;
   }
 }
