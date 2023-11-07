@@ -1,6 +1,7 @@
 package com.greengrim.green.core.challenge;
 
 import com.greengrim.green.common.entity.BaseTime;
+import com.greengrim.green.core.chatroom.Chatroom;
 import com.greengrim.green.core.member.Member;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -8,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -60,6 +62,9 @@ public class Challenge extends BaseTime {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    private Chatroom chatroom;
+
     public String getGoalCountTag() {
         return "인증 " + this.getGoalCount() + "회";
     }
@@ -79,5 +84,9 @@ public class Challenge extends BaseTime {
 
     public String getParticipantCountTag() {
         return "인원 " + this.headCount + "/" + this.capacity;
+    }
+
+    public void setHeadCount(int headCount) {
+        this.headCount = headCount;
     }
 }

@@ -6,13 +6,13 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 public class ChallengeRequestDto {
 
     @Getter
+    @RequiredArgsConstructor
     @AllArgsConstructor
     public static class RegisterChallenge {
         @NotNull
