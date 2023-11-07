@@ -1,6 +1,7 @@
 package com.greengrim.green.core.challenge.controller;
 
 import com.greengrim.green.common.auth.CurrentMember;
+import com.greengrim.green.common.entity.SortOption;
 import com.greengrim.green.common.entity.dto.PageResponseDto;
 import com.greengrim.green.core.challenge.Category;
 import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.ChallengeDetailInfo;
@@ -44,7 +45,7 @@ public class GetChallengeController {
             @RequestParam(value = "category") Category category,
             @RequestParam(value = "page") int page,
             @RequestParam(value = "size") int size,
-            @RequestParam(value = "sort") String sort) {
+            @RequestParam(value = "sort") SortOption sort) {
         return ResponseEntity.ok(getChallengeService.getChallengesByCategory(
                 member, category, page, size, sort));
     }
@@ -57,7 +58,7 @@ public class GetChallengeController {
             @CurrentMember Member member,
             @RequestParam(value = "page") int page,
             @RequestParam(value = "size") int size,
-            @RequestParam(value = "sort") String sort) {
+            @RequestParam(value = "sort") SortOption sort) {
         return ResponseEntity.ok(getChallengeService.getMyChallenges(
                 member, page, size, sort));
     }

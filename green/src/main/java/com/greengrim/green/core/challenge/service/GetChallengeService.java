@@ -1,5 +1,11 @@
 package com.greengrim.green.core.challenge.service;
 
+import static com.greengrim.green.common.entity.SortOption.ASC;
+import static com.greengrim.green.common.entity.SortOption.DESC;
+import static com.greengrim.green.common.entity.SortOption.GREATEST;
+import static com.greengrim.green.common.entity.SortOption.LEAST;
+
+import com.greengrim.green.common.entity.SortOption;
 import com.greengrim.green.common.entity.dto.PageResponseDto;
 import com.greengrim.green.common.exception.BaseException;
 import com.greengrim.green.common.exception.errorCode.ChallengeErrorCode;
@@ -18,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -41,7 +47,7 @@ public class GetChallengeService {
      * TODO: @param member 를 이용해 차단 목록에 있다면 보여주지 않기
      */
     public PageResponseDto<List<ChallengeSimpleInfo>> getChallengesByCategory(
-            Member member, Category category, int page, int size, String sort) {
+            Member member, Category category, int page, int size, SortOption sort) {
         Page<Challenge> challenges = challengeRepository.findByCategoryAndStateIsTrue(
                 category, getPageable(page, size, sort));
 
@@ -52,7 +58,7 @@ public class GetChallengeService {
      * 내가 만든 챌린지 조회
      */
     public PageResponseDto<List<ChallengeSimpleInfo>> getMyChallenges(
-            Member member, int page, int size, String sort) {
+            Member member, int page, int size, SortOption sort) {
         Page<Challenge> challenges = challengeRepository.findByMemberAndStateIsTrue(
                 member, getPageable(page, size, sort));
         return makeChallengesSimpleInfoList(challenges);
@@ -64,11 +70,11 @@ public class GetChallengeService {
     }
 
     // TODO: 인원 많은 순, 적은 순 추가
-    private Pageable getPageable(int page, int size, String sort) {
-        if (sort.equals("DESC")) { // 최신순
-            return PageRequest.of(page, size, Direction.DESC);
-        } else if (sort.equals("ASC")) { // 오래된순
-            return PageRequest.of(page, size, Direction.ASC);
+    private Pageable getPageable(int page, int size, SortOption sort) {
+        if (sort == DESC) { // 최신순
+            return PageRequest.of(page, size, Sort.Direction.DESC);
+        } else if (sort == ASC) { // 오래된순
+            return PageRequest.of(page, size, Sort.Direction.ASC);
         } else {
             throw new BaseException(GlobalErrorCode.NOT_VALID_ARGUMENT_ERROR);
         }
