@@ -1,7 +1,7 @@
 package com.greengrim.green.core.member.service;
 
 import com.greengrim.green.core.member.Member;
-import com.greengrim.green.core.member.dto.MemberResponseDto.MemberSimpleInfo;
+import com.greengrim.green.core.member.dto.MemberResponseDto.MemberInfo;
 import com.greengrim.green.core.member.repository.MemberRepository;
 import com.greengrim.green.core.member.usecase.GetMemberUseCase;
 import java.util.Optional;
@@ -14,8 +14,8 @@ public class GetMemberService implements GetMemberUseCase {
 
     private final MemberRepository memberRepository;
 
-    public MemberSimpleInfo getMemberInfo(Member member) {
-        return new MemberSimpleInfo(member);
+    public MemberInfo getMemberInfo(Member member) {
+        return new MemberInfo(member);
     }
     public Optional<Member> findMemberById(Long id) {return memberRepository.findById(id); }
 }

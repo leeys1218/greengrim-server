@@ -18,17 +18,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class Chatroom extends BaseTime implements Serializable {
 
-  private static final long serialVersionUID = 6494678977089006639L;
+    private static final long serialVersionUID = 6494678977089006639L;
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  private String title;
+    private String title;
 
-  private boolean status;
+    private boolean status;
 
-  public void setStatus(boolean status) {
-    this.status = status;
-  }
+    public void setStatus(boolean status) {
+      this.status = status;
+    }
 }

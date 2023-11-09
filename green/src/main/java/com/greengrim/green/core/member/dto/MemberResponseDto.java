@@ -23,16 +23,31 @@ public class MemberResponseDto {
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class MemberSimpleInfo {
+    public static class MemberInfo {
         private Long id;
         private String nickName;
         private String introduction;
         private String profileImgUrl;
 
-        public MemberSimpleInfo(Member member) {
+        public MemberInfo(Member member) {
             this.id = member.getId();
             this.nickName = member.getNickName();
             this.introduction = member.getIntroduction();
+            this.profileImgUrl = member.getProfileImgUrl();
+        }
+    }
+    
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class MemberSimpleInfo {
+        private Long id;
+        private String nickName;
+        private String profileImgUrl;
+
+        public MemberSimpleInfo(Member member) {
+            this.id = member.getId();
+            this.nickName = member.getNickName();
             this.profileImgUrl = member.getProfileImgUrl();
         }
     }

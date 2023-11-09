@@ -5,6 +5,7 @@ import com.greengrim.green.common.entity.SortOption;
 import com.greengrim.green.common.entity.dto.PageResponseDto;
 import com.greengrim.green.core.challenge.Category;
 import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.ChallengeDetailInfo;
+import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.ChallengePreviewInfo;
 import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.ChallengeSimpleInfo;
 import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.HomeChallenges;
 import com.greengrim.green.core.challenge.service.GetChallengeService;
@@ -23,6 +24,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class GetChallengeController {
 
     private final GetChallengeService getChallengeService;
+
+    /**
+     * [GET] 인증하기 전 정보 조회
+     */
+    @GetMapping("/certifications/preview/{id}")
+    public ResponseEntity<ChallengePreviewInfo> getChallengePreviewInfo(
+            @CurrentMember Member member,
+            @PathVariable("id") Long id) {
+        return new ResponseEntity<>(
+                getChallengeService.getChallengePreviewInfo(member, id),
+                HttpStatus.OK);
+    }
 
     /**
      * [GET] 챌린지 상세 조회
