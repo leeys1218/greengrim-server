@@ -4,6 +4,7 @@ import com.greengrim.green.core.member.Member;
 import com.greengrim.green.core.member.dto.MemberResponseDto.MemberSimpleInfo;
 import com.greengrim.green.core.member.repository.MemberRepository;
 import com.greengrim.green.core.member.usecase.GetMemberUseCase;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,4 +17,5 @@ public class GetMemberService implements GetMemberUseCase {
     public MemberSimpleInfo getMemberInfo(Member member) {
         return new MemberSimpleInfo(member);
     }
+    public Optional<Member> findMemberById(Long id) {return memberRepository.findById(id); }
 }
