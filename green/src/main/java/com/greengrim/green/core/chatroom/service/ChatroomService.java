@@ -31,11 +31,11 @@ public class ChatroomService{
   /**
    * 내가 속한 채팅방 목록 조회
    */
-  public List<Long> getMyChatrooms (Member member) {
-    List<Long> myChatrooms = new ArrayList<>();
+  public List<ChatroomInfo> getMyChatrooms (Member member) {
+    List<ChatroomInfo> myChatrooms = new ArrayList<>();
     List<Chatparticipant> chatparticipants = chatparticipantService.findByMemberId(member.getId());
     chatparticipants.forEach(chatparticipant ->
-        myChatrooms.add(chatparticipant.getChatroom().getId())
+        myChatrooms.add(new ChatroomInfo(chatparticipant.getChatroom()))
     );
     return myChatrooms;
   }
