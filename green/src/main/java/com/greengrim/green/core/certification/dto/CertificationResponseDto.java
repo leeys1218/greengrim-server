@@ -16,12 +16,14 @@ public class CertificationResponseDto {
     @Getter
     @RequiredArgsConstructor
     public static class CertificationInfo {
-        String title;
-        String description;
-        String imgUrl;
-        String createdAt;
+        private Long id;
+        private String title;
+        private String description;
+        private String imgUrl;
+        private String createdAt;
 
         public CertificationInfo(Certification certification) {
+            this.id = certification.getId();
             this.title = "[" + certification.getRound() + "회차 인증]";
             this.description = certification.getDescription();
             this.imgUrl = certification.getImgUrl();
