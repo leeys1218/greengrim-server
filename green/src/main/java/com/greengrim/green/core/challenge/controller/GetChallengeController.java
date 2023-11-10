@@ -28,7 +28,7 @@ public class GetChallengeController {
     /**
      * [GET] 인증하기 전 정보 조회
      */
-    @GetMapping("/certifications/preview/{id}")
+    @GetMapping("/visitor/challenges/preview/{id}")
     public ResponseEntity<ChallengePreviewInfo> getChallengePreviewInfo(
             @CurrentMember Member member,
             @PathVariable("id") Long id) {
