@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/visitor/challenge")
+@RequestMapping("/visitor/challenges")
 public class EnterChallengeController {
 
   private final EnterChallengeService enterChallengeService;

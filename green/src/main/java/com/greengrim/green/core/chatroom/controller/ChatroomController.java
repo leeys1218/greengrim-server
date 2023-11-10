@@ -1,6 +1,7 @@
 package com.greengrim.green.core.chatroom.controller;
 
 import com.greengrim.green.common.auth.CurrentMember;
+import com.greengrim.green.core.chatroom.dto.ChatroomResponseDto.ChatroomInfo;
 import com.greengrim.green.core.chatroom.service.ChatroomService;
 import com.greengrim.green.core.member.Member;
 import java.util.List;
@@ -23,7 +24,7 @@ public class ChatroomController {
    * [GET] 내가 속한 채팅방 목록 조회
    */
   @GetMapping
-  public ResponseEntity<List<Long>> getMyChatrooms(@CurrentMember Member member) {
+  public ResponseEntity<List<ChatroomInfo>> getMyChatrooms(@CurrentMember Member member) {
     return ResponseEntity.ok(chatroomService.getMyChatrooms(member));
   }
 
