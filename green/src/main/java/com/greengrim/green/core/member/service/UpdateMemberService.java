@@ -44,8 +44,8 @@ public class UpdateMemberService implements UpdateMemberUseCase {
 
     @Override
     public void deleteMember(Member member) {
-        member.setStatusFalse();
+        // member.setStatusFalse();
         // TODO: 삭제된 member와 관련된 모든 리소스 삭제
-        memberRepository.save(member);
+        memberRepository.delete(member);
     }
 }
