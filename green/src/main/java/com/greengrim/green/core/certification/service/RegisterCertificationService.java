@@ -5,6 +5,7 @@ import com.greengrim.green.core.certification.dto.CertificationRequestDto.Regist
 import com.greengrim.green.core.certification.repository.CertificationRepository;
 import com.greengrim.green.core.challenge.Challenge;
 import com.greengrim.green.core.challenge.service.GetChallengeService;
+import com.greengrim.green.core.keyword.KeywordService;
 import com.greengrim.green.core.member.Member;
 import com.greengrim.green.core.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
@@ -16,8 +17,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RegisterCertificationService {
 
-    private final MemberRepository memberRepository;
     private final GetChallengeService getChallengeService;
+    private final KeywordService keywordService;
+
+    private final MemberRepository memberRepository;
     private final CertificationRepository certificationRepository;
 
     public void register(Member member, RegisterCertification registerCertification) {
@@ -35,10 +38,32 @@ public class RegisterCertificationService {
                 .status(true)
                 .build();
 
-        member.plusPoint(challenge.getCategory().getPoint());   // 10 포인트 추가
+        certificationRepository.save(certification);
+
+        // 인증 성공
+        successCertification(member, challenge);
+        // 챌린지 성공했으면 보상 제공
+        successChallenge(challenge, certification);
+    }
+
+    /**
+     * 인증 성공, 포인트와 탄소 저감량 제공
+     */
+    public void successCertification(Member member, Challenge challenge) {
+        member.plusPoint(challenge.getCategory().getPoint());   // 포인트 추가
         member.setCarbonReduction(challenge.getCategory().getCarbonReduction());   // 탄소 저감량 추가
         memberRepository.save(member);
+    }
 
-        certificationRepository.save(certification);
+    /**
+     * 챌린지 성공, 키워드 제공
+     */
+    public void successChallenge(Challenge challenge, Certification certification) {
+        if(challenge.getGoalCount() == certification.getRound()) {
+            // 키워드 획득
+            keywordService.register(certification.getMember().getId(), challenge.getKeyword());
+            // 챌린지 티켓 하나 감소
+            challenge.minusTicketCurrentCount();
+        }
     }
 }

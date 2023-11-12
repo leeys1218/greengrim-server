@@ -53,9 +53,8 @@ public class VerificationService {
         else if(checkCertificationFailOrSuccess(memberId, certification.getId(), true)) {
             certification.setValidationSuccess();
         }
-        else { // 인증 entity 에서 남은 상호 검증 횟수 1 줄이기
-            certification.minusVerificationCount();
-        }
+        // 인증 entity 에서 남은 상호 검증 횟수 1 줄이기
+        certification.minusVerificationCount();
     }
 
     /**

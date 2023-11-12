@@ -89,4 +89,10 @@ public class Challenge extends BaseTime {
     public void setHeadCount(int headCount) {
         this.headCount = headCount;
     }
+
+    public void minusTicketCurrentCount() {
+        if(this.ticketCurrentCount != 0) {
+            this.ticketCurrentCount--;
+        }
+    }
 }
