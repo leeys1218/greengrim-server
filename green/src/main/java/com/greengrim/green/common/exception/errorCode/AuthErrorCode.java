@@ -11,7 +11,7 @@ public enum AuthErrorCode implements ErrorCode {
 
     EMPTY_JWT("AUTH_001", "JWT가 없습니다.", HttpStatus.UNAUTHORIZED),
     INVALID_JWT("AUTH_002", "유효하지 않은 JWT입니다.", HttpStatus.UNAUTHORIZED),
-    EXPIRED_MEMBER_JWT("AUTH_003", "만료된 JWT입니다.", HttpStatus.UNAUTHORIZED),
+    EXPIRED_MEMBER_JWT("AUTH_003", "만료된 JWT입니다.", HttpStatus.GONE),
     UNSUPPORTED_JWT("AUTH_004", "지원하지 않는 JWT입니다.", HttpStatus.UNAUTHORIZED),
     INVALID_ID_TOKEN("AUTH_005", "유효하지 않은 ID TOKEN입니다.", HttpStatus.BAD_REQUEST),
     INVALID_ACCESS_TOKEN("AUTH_006", "유효하지 않은 ACCESS TOKEN입니다.", HttpStatus.BAD_REQUEST),

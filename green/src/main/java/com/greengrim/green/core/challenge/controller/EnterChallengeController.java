@@ -4,6 +4,7 @@ import com.greengrim.green.common.auth.CurrentMember;
 import com.greengrim.green.core.challenge.service.EnterChallengeService;
 import com.greengrim.green.core.chatroom.dto.ChatroomResponseDto.ChatroomInfo;
 import com.greengrim.green.core.member.Member;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,7 @@ public class EnterChallengeController {
   /**
    * [POST] 챌린지 참가 - 채팅방 입장
    */
+  @Operation(summary = "챌린지 참가 - 채팅방 입장")
   @PostMapping("/enter")
   public ResponseEntity<ChatroomInfo> enterChallenge(@CurrentMember Member member, @RequestParam Long id) {
     return ResponseEntity.ok(enterChallengeService.enterChallenge(member, id));
@@ -29,6 +31,7 @@ public class EnterChallengeController {
   /**
    * [POST] 챌린지 포기 - 채팅방 퇴장
    */
+  @Operation(summary = "챌린지 포기 - 채팅방 퇴장")
   @PostMapping("/exit")
   public void exitChallenge(@CurrentMember Member member, @RequestParam Long id) {
     enterChallengeService.exitChallenge(member, id);

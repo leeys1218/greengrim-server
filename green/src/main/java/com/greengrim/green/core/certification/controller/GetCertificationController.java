@@ -14,6 +14,7 @@ import com.greengrim.green.core.challenge.Category;
 import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.ChallengeDetailInfo;
 import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.ChallengeSimpleInfo;
 import com.greengrim.green.core.member.Member;
+import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,6 +33,7 @@ public class GetCertificationController {
     /**
      * [GET] 인증 상세 조회
      */
+    @Operation(summary = "인증 상세 조회")
     @GetMapping("/certifications/{id}")
     public ResponseEntity<CertificationDetailInfo> getCertificationInfo(
             @CurrentMember Member member,
@@ -44,6 +46,7 @@ public class GetCertificationController {
     /**
      * [GET] 챌린지 별 인증 목록 조회 - MONTH
      */
+    @Operation(summary = "챌린지 별 인증 내역 조회 - MONTH")
     @GetMapping("/certifications/month")
     public ResponseEntity<CertificationsByMonth> getCertificationsByChallengeMonth(
             @CurrentMember Member member,
@@ -56,6 +59,7 @@ public class GetCertificationController {
     /**
      * [GET] 챌린지 별 인증 목록 조회 - DATE
      */
+    @Operation(summary = "챌린지 별 인증 내역 조회 - DATE")
     @GetMapping("/certifications/date")
     public ResponseEntity<PageResponseDto<List<CertificationsByChallengeDate>>> getCertificationsByChallengeDate(
             @CurrentMember Member member,
@@ -70,6 +74,7 @@ public class GetCertificationController {
     /**
      * [GET] 멤버 별 인증 목록 조회 - MONTH
      */
+    @Operation(summary = "내 챌린지 인증 내역 조회 - MONTH")
     @GetMapping("/visitor/certifications/month")
     public ResponseEntity<CertificationsByMonth> getCertificationsByChallengeMonth(
             @CurrentMember Member member,
@@ -81,6 +86,7 @@ public class GetCertificationController {
     /**
      * [GET] 멤버 별 인증 목록 조회 - DATE
      */
+    @Operation(summary = "내 챌린지 인증 내역 조회 - DATE")
     @GetMapping("/visitor/certifications/date")
     public ResponseEntity<PageResponseDto<List<CertificationsByMemberDate>>> getCertificationsByChallengeDate(
             @CurrentMember Member member,

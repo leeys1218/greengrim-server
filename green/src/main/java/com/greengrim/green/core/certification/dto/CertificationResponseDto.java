@@ -3,6 +3,7 @@ package com.greengrim.green.core.certification.dto;
 import static com.greengrim.green.common.entity.Time.calculateTime;
 
 import com.greengrim.green.core.certification.Certification;
+import com.greengrim.green.core.certification.VerificationFlag;
 import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.ChallengeInfoForCertification;
 import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.ChallengeTitleInfo;
 import com.greengrim.green.core.member.dto.MemberResponseDto.MemberSimpleInfo;
@@ -37,9 +38,9 @@ public class CertificationResponseDto {
         ChallengeInfoForCertification challengeInfo;
         MemberSimpleInfo memberSimpleInfo;
         CertificationInfo certificationInfo;
-        boolean isVerified;
+        private VerificationFlag isVerified;
 
-        public CertificationDetailInfo(Certification certification, boolean isVerified) {
+        public CertificationDetailInfo(Certification certification, VerificationFlag isVerified) {
             this.memberSimpleInfo = new MemberSimpleInfo(certification.getMember());
             this.challengeInfo = new ChallengeInfoForCertification(certification.getChallenge());
             this.certificationInfo = new CertificationInfo(certification);
