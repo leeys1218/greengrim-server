@@ -10,10 +10,12 @@ import com.greengrim.green.core.challenge.Challenge;
 import com.greengrim.green.core.member.Member;
 import com.greengrim.green.core.member.repository.MemberRepository;
 import com.greengrim.green.core.verification.dto.VerificationRequest.RegisterVerification;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class VerificationService {
 
