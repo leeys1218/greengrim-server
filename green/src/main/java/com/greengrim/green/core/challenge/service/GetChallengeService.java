@@ -18,8 +18,13 @@ import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.ChallengePrev
 import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.ChallengeSimpleInfo;
 import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.HomeChallenges;
 import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.HotChallengeInfo;
+import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.MyChatroom;
 import com.greengrim.green.core.challenge.repository.ChallengeRepository;
+import com.greengrim.green.core.chatparticipant.Chatparticipant;
+import com.greengrim.green.core.chatparticipant.ChatparticipantService;
 import com.greengrim.green.core.member.Member;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +41,7 @@ public class GetChallengeService {
 
     private final GetCertificationService getCertificationService;
     private final ChallengeRepository challengeRepository;
+    private final ChatparticipantService chatparticipantService;
 
     /**
      * 챌린지 상세 조회
@@ -43,7 +49,7 @@ public class GetChallengeService {
      */
     public ChallengeDetailInfo getChallengeDetail(Member member, Long id) {
         Challenge challenge = findByIdWithValidation(id);
-        return new ChallengeDetailInfo(challenge);
+        return new ChallengeDetailInfo(challenge, chatparticipantService.checkParticipantExists(member.getId()));
     }
 
     /**
@@ -132,4 +138,27 @@ public class GetChallengeService {
                 getCertificationService.getRoundByMemberAndChallenge(member, challenge)
         );
     }
+
+    /**
+     * 내가 참가중인 챌린지(채팅방) 조회
+     */
+    public List<MyChatroom> getMyChatrooms(Member member) {
+        List<MyChatroom> myChatrooms = new ArrayList<>();
+
+        List<Chatparticipant> chatparticipants = chatparticipantService.findByMemberId(member.getId());
+        chatparticipants.forEach(chatparticipant -> {
+            Long chatroomId = chatparticipant.getChatroom().getId();
+            Challenge challenge = challengeRepository.findByChatroomId(chatroomId);
+
+            Duration duration = Duration.between(challenge.getCreatedAt(), LocalDateTime.now());
+            String afterDay;
+            long days = duration.toDays();
+
+            if (days == 0) afterDay = "오늘";
+            else afterDay = days + "일 전";
+            myChatrooms.add(new MyChatroom(challenge, afterDay));
+        });
+        return myChatrooms;
+    }
+
 }

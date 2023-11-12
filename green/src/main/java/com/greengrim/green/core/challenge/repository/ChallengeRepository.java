@@ -24,4 +24,6 @@ public interface ChallengeRepository extends JpaRepository<Challenge, Long> {
 
     @Query(value = "SELECT c FROM Challenge c WHERE c.status=true ORDER BY c.headCount DESC")
     Page<Challenge> findHotChallenges(Pageable pageable);
+
+    Challenge findByChatroomId(Long chatroomId);
 }

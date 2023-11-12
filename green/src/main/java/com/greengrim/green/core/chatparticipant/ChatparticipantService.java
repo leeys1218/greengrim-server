@@ -29,5 +29,9 @@ public class ChatparticipantService {
     return chatparticipantRepository.findByMemberId(memberId);
   }
 
+  public boolean checkParticipantExists(Long memberId) {
+    return chatparticipantRepository.existsByMemberId(memberId);
+  }
+
 
 }

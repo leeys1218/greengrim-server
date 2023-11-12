@@ -36,7 +36,7 @@ public class ChatService {
     // ENTER, QUIT 타입일 때
     if(MessageType.ENTER.equals(chatMessage.getType()) ||
         MessageType.QUIT.equals(chatMessage.getType())) {
-      chatMessage.setNickName(null);
+      chatMessage.setNickName("");
       chatMessage.setProfileImg("");
     }
     // ENTER, QUIT 타입이 아닐 때
