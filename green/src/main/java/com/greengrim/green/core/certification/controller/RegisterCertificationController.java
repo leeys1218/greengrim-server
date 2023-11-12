@@ -5,6 +5,7 @@ import com.greengrim.green.core.certification.dto.CertificationRequestDto.Regist
 import com.greengrim.green.core.certification.service.RegisterCertificationService;
 import com.greengrim.green.core.challenge.dto.ChallengeRequestDto;
 import com.greengrim.green.core.member.Member;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +23,9 @@ public class RegisterCertificationController {
     private final RegisterCertificationService registerCertificationService;
 
     /**
-     * [POST] 인증 생성
+     * [POST] 인증하기
      */
+    @Operation(summary = "인증하기")
     @PostMapping("/visitor/certifications")
     public ResponseEntity<Integer> registerCertification(
             @CurrentMember Member member,

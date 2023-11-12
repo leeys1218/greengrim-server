@@ -4,6 +4,7 @@ import com.greengrim.green.common.auth.CurrentMember;
 import com.greengrim.green.core.chatroom.dto.ChatroomResponseDto.ChatroomInfo;
 import com.greengrim.green.core.chatroom.service.ChatroomService;
 import com.greengrim.green.core.member.Member;
+import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ public class ChatroomController {
   /**
    * [GET] 내가 속한 채팅방 목록 조회
    */
+  @Operation(summary = "내가 속한 채팅방 목록 조회")
   @GetMapping
   public ResponseEntity<List<ChatroomInfo>> getMyChatrooms(@CurrentMember Member member) {
     return ResponseEntity.ok(chatroomService.getMyChatrooms(member));
@@ -31,6 +33,7 @@ public class ChatroomController {
   /**
    * [POST] 채팅방 생성
    */
+  @Operation(summary = "채팅방 생성")
   @PostMapping
   public void registerChatroom(@CurrentMember Member member, @RequestParam String title) {
     chatroomService.registerChatroom(member, title);
@@ -40,6 +43,7 @@ public class ChatroomController {
   /**
    * [POST] 채팅방 퇴장
    */
+  @Operation(summary = "채팅방 퇴장")
   @PostMapping("/exit")
   public void exitChatroom(@CurrentMember Member member, @RequestParam Long chatroomId) {
     chatroomService.exitChatroom(member, chatroomId);

@@ -4,6 +4,7 @@ import com.greengrim.green.common.auth.CurrentMember;
 import com.greengrim.green.core.member.Member;
 import com.greengrim.green.core.member.dto.MemberResponseDto.MemberInfo;
 import com.greengrim.green.core.member.usecase.GetMemberUseCase;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ public class GetMemberController {
     /**
      * [GET] 내 프로필 조회
      */
+    @Operation(summary = "내 프로필 조회")
     @GetMapping("/visitor/profile")
     public ResponseEntity<MemberInfo> getCurrentMemberInfo(
             @CurrentMember Member member) {

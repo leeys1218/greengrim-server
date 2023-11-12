@@ -4,6 +4,7 @@ import com.greengrim.green.common.auth.CurrentMember;
 import com.greengrim.green.core.challenge.dto.ChallengeRequestDto.RegisterChallenge;
 import com.greengrim.green.core.challenge.usecase.RegisterChallengeUseCase;
 import com.greengrim.green.core.member.Member;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ public class RegisterChallengeController {
     /**
      * [POST] 챌린지 생성
      */
+    @Operation(summary = "챌린지 생성")
     @PostMapping("/visitor/challenges")
     public ResponseEntity<Integer> registerChallenge(@CurrentMember Member member,
             @Valid @RequestBody RegisterChallenge registerChallenge) {

@@ -4,6 +4,7 @@ import com.greengrim.green.common.auth.CurrentMember;
 import com.greengrim.green.core.certification.dto.CertificationRequestDto;
 import com.greengrim.green.core.member.Member;
 import com.greengrim.green.core.verification.dto.VerificationRequest;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ public class VerificationController {
     /**
      * [POST] 상호 검증하기
      */
+    @Operation(summary = "상호 검증하기 - 출석체크")
     @PostMapping("/visitor/verifications")
     public ResponseEntity<Integer> registerVerification(
             @CurrentMember Member member,

@@ -3,6 +3,7 @@ package com.greengrim.green.core.certification.controller;
 import com.greengrim.green.common.auth.CurrentMember;
 import com.greengrim.green.core.certification.service.UpdateCertificationService;
 import com.greengrim.green.core.member.Member;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ public class UpdateCertificationController {
     /**
      * [DELETE] 인증 삭제하기
      */
+    @Operation(summary = "인증 삭제하기")
     @DeleteMapping("/visitor/certifications/{id}")
     public ResponseEntity<Integer> deleteCertification(
             @CurrentMember Member member,
