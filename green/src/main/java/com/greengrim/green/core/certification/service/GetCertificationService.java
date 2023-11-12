@@ -34,9 +34,9 @@ public class GetCertificationService {
                 .orElseThrow(() -> new BaseException(CertificationErrorCode.EMPTY_CHALLENGE));
 
         // 상호 인증에 참여했는가?
-        boolean isVerified = true; // default 가 true
+        boolean isVerified = false; // default 가 false
         if(member != null) {       // 로그인 했다면 조회해서 넣어줌
-            verificationService.checkVerification(member.getId(), certification.getId());
+            isVerified = verificationService.checkVerification(member.getId(), certification.getId());
         }
 
         return new CertificationDetailInfo(certification, isVerified);
