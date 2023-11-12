@@ -5,7 +5,6 @@ import com.greengrim.green.core.member.Member;
 import com.greengrim.green.core.member.dto.MemberResponseDto.HomeInfo;
 import com.greengrim.green.core.member.dto.MemberResponseDto.MemberInfo;
 import com.greengrim.green.core.member.service.GetMemberService;
-import com.greengrim.green.core.member.usecase.GetMemberUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class GetMemberController {
 
-    private final GetMemberUseCase getMemberUseCase;
     private final GetMemberService getMemberService;
 
     /**
@@ -27,7 +25,7 @@ public class GetMemberController {
     @GetMapping("/visitor/profile")
     public ResponseEntity<MemberInfo> getCurrentMemberInfo(
             @CurrentMember Member member) {
-        return new ResponseEntity<>(getMemberUseCase.getMemberInfo(member),
+        return new ResponseEntity<>(getMemberService.getMemberInfo(member),
                 HttpStatus.OK);
     }
 

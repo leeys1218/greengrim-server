@@ -4,7 +4,7 @@ import com.greengrim.green.common.auth.CurrentMember;
 import com.greengrim.green.core.member.Member;
 import com.greengrim.green.core.member.dto.MemberRequestDto.ModifyProfile;
 import com.greengrim.green.core.member.dto.MemberResponseDto;
-import com.greengrim.green.core.member.usecase.UpdateMemberUseCase;
+import com.greengrim.green.core.member.service.UpdateMemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UpdateMemberController {
 
-    private final UpdateMemberUseCase updateMemberUseCase;
+    private final UpdateMemberService updateMemberService;
 
     /**
      * [PATCH] 로그인 토큰 갱신
@@ -27,7 +27,7 @@ public class UpdateMemberController {
     @PatchMapping("/visitor/refresh")
     public ResponseEntity<MemberResponseDto.TokenInfo> refreshLogin(
             @CurrentMember Member member) {
-        return new ResponseEntity<>(updateMemberUseCase.refreshAccessToken(member),
+        return new ResponseEntity<>(updateMemberService.refreshAccessToken(member),
                 HttpStatus.OK);
     }
 
@@ -39,7 +39,7 @@ public class UpdateMemberController {
     public ResponseEntity<Integer> modifyProfile(
             @CurrentMember Member member,
             @RequestBody ModifyProfile modifyProfile) {
-        updateMemberUseCase.modifyProfile(member, modifyProfile);
+        updateMemberService.modifyProfile(member, modifyProfile);
         return new ResponseEntity<>(200, HttpStatus.OK);
     }
 
@@ -50,7 +50,7 @@ public class UpdateMemberController {
     @DeleteMapping("/visitor/delete")
     public ResponseEntity<Integer> deleteMember(
             @CurrentMember Member member) {
-        updateMemberUseCase.deleteMember(member);
+        updateMemberService.deleteMember(member);
         return new ResponseEntity<>(200, HttpStatus.OK);
     }
 }

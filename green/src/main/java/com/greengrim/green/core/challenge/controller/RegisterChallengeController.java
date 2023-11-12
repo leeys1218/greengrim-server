@@ -2,7 +2,7 @@ package com.greengrim.green.core.challenge.controller;
 
 import com.greengrim.green.common.auth.CurrentMember;
 import com.greengrim.green.core.challenge.dto.ChallengeRequestDto.RegisterChallenge;
-import com.greengrim.green.core.challenge.usecase.RegisterChallengeUseCase;
+import com.greengrim.green.core.challenge.service.RegisterChallengeService;
 import com.greengrim.green.core.member.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class RegisterChallengeController {
 
-    private final RegisterChallengeUseCase registerChallengeUseCase;
+    private final RegisterChallengeService registerChallengeService;
 
     /**
      * [POST] 챌린지 생성
@@ -26,7 +26,7 @@ public class RegisterChallengeController {
     @PostMapping("/visitor/challenges")
     public ResponseEntity<Integer> registerChallenge(@CurrentMember Member member,
             @Valid @RequestBody RegisterChallenge registerChallenge) {
-        registerChallengeUseCase.register(member, registerChallenge);
+        registerChallengeService.register(member, registerChallenge);
         return new ResponseEntity<>(200, HttpStatus.OK);
     }
 }
