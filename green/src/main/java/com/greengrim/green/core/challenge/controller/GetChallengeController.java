@@ -8,6 +8,7 @@ import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.ChallengeDeta
 import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.ChallengePreviewInfo;
 import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.ChallengeSimpleInfo;
 import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.HomeChallenges;
+import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.MyChatroom;
 import com.greengrim.green.core.challenge.service.GetChallengeService;
 import com.greengrim.green.core.member.Member;
 import java.util.List;
@@ -94,6 +95,14 @@ public class GetChallengeController {
             @RequestParam(value = "page") int page,
             @RequestParam(value = "size") int size) {
         return ResponseEntity.ok(getChallengeService.getMoreHotChallenges(member, page, size));
+    }
+
+    /**
+     * [GET] 내 챌린지 채팅방 불러오기
+     */
+    @GetMapping("/visitor/challenges/chatrooms")
+    public ResponseEntity<List<MyChatroom>> getMyChatrooms(@CurrentMember Member member) {
+        return ResponseEntity.ok(getChallengeService.getMyChatrooms(member));
     }
 
 }
