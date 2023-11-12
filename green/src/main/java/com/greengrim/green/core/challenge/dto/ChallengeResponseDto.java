@@ -69,11 +69,13 @@ public class ChallengeResponseDto {
         private ChallengeInfo challengeInfo;
         private ChallengeTags challengeTags;
         private String createdAt;
+        private boolean isEntered;
 
-        public ChallengeDetailInfo(Challenge challenge) {
+        public ChallengeDetailInfo(Challenge challenge, boolean isEntered) {
             this.challengeInfo = new ChallengeInfo(challenge);
             this.challengeTags = new ChallengeTags(challenge);
             this.createdAt = calculateTime(challenge.getCreatedAt(), 1);
+            this.isEntered = isEntered;
         }
     }
 
@@ -165,6 +167,22 @@ public class ChallengeResponseDto {
             this.title = challenge.getTitle();
             this.category = challenge.getCategory();
             this.ticketCount = challenge.getTicketCountTag();
+        }
+    }
+
+    @Getter
+    @RequiredArgsConstructor
+    public static class MyChatroom {
+        private Long id;
+        private String title;
+        private String ImgUrl;
+        private String afterDay;
+
+        public MyChatroom(Challenge challenge, String afterDay) {
+            this.id = challenge.getChatroom().getId();
+            this.title = challenge.getTitle();
+            this.ImgUrl = challenge.getImgUrl();
+            this.afterDay = afterDay;
         }
     }
 }
