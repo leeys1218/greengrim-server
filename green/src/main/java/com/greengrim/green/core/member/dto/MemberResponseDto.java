@@ -51,4 +51,18 @@ public class MemberResponseDto {
             this.profileImgUrl = member.getProfileImgUrl();
         }
     }
+
+    @Getter
+    @AllArgsConstructor
+    public static class HomeInfo {
+        private Long id;
+        private String nickName;
+        private double carbonReduction;
+
+        public HomeInfo(Member member) {
+            this.id = member.getId();
+            this.nickName = member.getNickName();
+            this.carbonReduction = member.getCarbonReduction();
+        }
+    }
 }
