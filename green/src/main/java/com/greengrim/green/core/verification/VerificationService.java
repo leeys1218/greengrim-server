@@ -1,7 +1,10 @@
 package com.greengrim.green.core.verification;
 
+import com.greengrim.green.common.exception.BaseException;
+import com.greengrim.green.common.exception.errorCode.CertificationErrorCode;
 import com.greengrim.green.core.certification.Certification;
 import com.greengrim.green.core.certification.dto.CertificationRequestDto.RegisterCertification;
+import com.greengrim.green.core.certification.repository.CertificationRepository;
 import com.greengrim.green.core.certification.service.GetCertificationService;
 import com.greengrim.green.core.challenge.Challenge;
 import com.greengrim.green.core.member.Member;
@@ -14,13 +17,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class VerificationService {
 
-    private final GetCertificationService getCertificationService;
+    private final CertificationRepository certificationRepository;
     private final VerificationRepository verificationRepository;
     private final MemberRepository memberRepository;
 
     public void register(Member member, RegisterVerification registerVerification) {
-        Certification certification = getCertificationService.findByIdWithValidate(
-                registerVerification.getCertificationId());
+        Certification certification = certificationRepository.findById(registerVerification.getCertificationId())
+                .orElseThrow(() -> new BaseException(CertificationErrorCode.EMPTY_CHALLENGE));
 
         Verification verification = Verification.builder()
                 .memberId(member.getId())

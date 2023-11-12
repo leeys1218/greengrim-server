@@ -108,9 +108,4 @@ public class GetCertificationService {
 
         return  new PageResponseDto<>(certifications.getNumber(), certifications.hasNext(), certificationsByMemberDates);
     }
-
-    public Certification findByIdWithValidate(Long id) {
-        return certificationRepository.findById(id)
-                .orElseThrow(() -> new BaseException(CertificationErrorCode.EMPTY_CHALLENGE));
-    }
 }
