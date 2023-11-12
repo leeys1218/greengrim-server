@@ -51,4 +51,17 @@ public class Certification extends BaseTime {
     @ManyToOne(fetch = FetchType.LAZY)
     private Challenge challenge;
 
+
+    public void setValidationSuccess() {
+        this.validation = 1;
+    }
+
+    public void setValidationFail() {
+        this.validation = 2;
+        this.status = false;
+    }
+
+    public void minusVerificationCount() {
+        this.verificationCount--;
+    }
 }

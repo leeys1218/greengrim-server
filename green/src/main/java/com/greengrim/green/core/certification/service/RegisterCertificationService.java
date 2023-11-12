@@ -35,8 +35,8 @@ public class RegisterCertificationService {
                 .status(true)
                 .build();
 
-        member.plusPoint(10);   // 10 포인트 추가
-        member.plusCarbonReduction(challenge.getCategory().getCarbonReduction());   // 탄소 저감량 추가
+        member.plusPoint(challenge.getCategory().getPoint());   // 10 포인트 추가
+        member.setCarbonReduction(challenge.getCategory().getCarbonReduction());   // 탄소 저감량 추가
         memberRepository.save(member);
 
         certificationRepository.save(certification);
