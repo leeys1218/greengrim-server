@@ -4,6 +4,7 @@ import com.greengrim.green.common.entity.dto.PageResponseDto;
 import com.greengrim.green.common.exception.BaseException;
 import com.greengrim.green.common.exception.errorCode.CertificationErrorCode;
 import com.greengrim.green.core.certification.Certification;
+import com.greengrim.green.core.certification.VerificationFlag;
 import com.greengrim.green.core.certification.dto.CertificationResponseDto.CertificationDetailInfo;
 import com.greengrim.green.core.certification.dto.CertificationResponseDto.CertificationsByChallengeDate;
 import com.greengrim.green.core.certification.dto.CertificationResponseDto.CertificationsByMemberDate;
@@ -33,13 +34,22 @@ public class GetCertificationService {
         Certification certification = certificationRepository.findById(id)
                 .orElseThrow(() -> new BaseException(CertificationErrorCode.EMPTY_CHALLENGE));
 
-        // 상호 인증에 참여했는가?
-        boolean isVerified = false; // default 가 false
-        if(member != null) {       // 로그인 했다면 조회해서 넣어줌
-            isVerified = verificationService.checkVerification(member.getId(), certification.getId());
-        }
+        VerificationFlag isVerified = checkVerificationFlag(member, certification);
 
         return new CertificationDetailInfo(certification, isVerified);
+    }
+
+    private VerificationFlag checkVerificationFlag(Member member, Certification certification) {
+        // 상호 인증에 참여했는가 플래그 값 세팅
+        if(member == null || certification.getValidation() != 0) {
+            return VerificationFlag.DEACTIVATION;
+        }
+        else if(verificationService.checkVerification(member.getId(), certification.getId())) {
+            return VerificationFlag.TRUE;
+        } else if(!verificationService.checkVerification(member.getId(), certification.getId())) {
+            return VerificationFlag.FALSE;
+        }
+        return VerificationFlag.DEACTIVATION;
     }
 
     /**
