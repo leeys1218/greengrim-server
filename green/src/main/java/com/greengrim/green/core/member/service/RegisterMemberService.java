@@ -8,7 +8,6 @@ import com.greengrim.green.core.member.Role;
 import com.greengrim.green.core.member.dto.MemberRequestDto;
 import com.greengrim.green.core.member.dto.MemberResponseDto;
 import com.greengrim.green.core.member.repository.MemberRepository;
-import com.greengrim.green.core.member.usecase.RegisterMemberUseCase;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,7 +15,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class RegisterMemberService implements RegisterMemberUseCase {
+public class RegisterMemberService {
 
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
@@ -43,7 +42,6 @@ public class RegisterMemberService implements RegisterMemberUseCase {
         return member;
     }
 
-    @Override
     public MemberResponseDto.TokenInfo registerMember(MemberRequestDto.RegisterMemberReq registerMemberReq) {
         checkRegister(registerMemberReq);
         Member member = register(registerMemberReq);
@@ -63,7 +61,6 @@ public class RegisterMemberService implements RegisterMemberUseCase {
         }
     }
 
-    @Override
     public MemberResponseDto.TokenInfo login(MemberRequestDto.LoginMemberReq loginMemberReq) {
         Member member = memberRepository.findByEmail(loginMemberReq.getEmail()).orElse(null);
         if (member != null) {
@@ -75,7 +72,6 @@ public class RegisterMemberService implements RegisterMemberUseCase {
         }
     }
 
-    @Override
     public MemberResponseDto.CheckNickNameRes checkNickName(MemberRequestDto.CheckNickNameReq checkNickNameReq) {
         return new MemberResponseDto.CheckNickNameRes(
                 memberRepository.existsByNickName(checkNickNameReq.getNickName()));

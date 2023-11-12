@@ -127,12 +127,14 @@ public class ChallengeResponseDto {
     @Getter
     @RequiredArgsConstructor
     public static class ChallengeInfoForCertification {
+        private Long id;
         private String title;
         private String description;
         private Category category;
         private String ticketCount;
 
         public ChallengeInfoForCertification(Challenge challenge) {
+            this.id = challenge.getId();
             this.title = challenge.getTitle();
             this.description = challenge.getDescription();
             this.category = challenge.getCategory();
@@ -143,11 +145,13 @@ public class ChallengeResponseDto {
     @Getter
     @AllArgsConstructor
     public static class ChallengeTitleInfo {
+        private Long id;
         private String title;
         private String imgUrl;
         private Category category;
 
         public ChallengeTitleInfo(Challenge challenge) {
+            this.id = challenge.getId();
             this.title = challenge.getTitle();
             this.imgUrl = challenge.getImgUrl();
             this.category = challenge.getCategory();

@@ -11,6 +11,7 @@ import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.HomeChallenge
 import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.MyChatroom;
 import com.greengrim.green.core.challenge.service.GetChallengeService;
 import com.greengrim.green.core.member.Member;
+import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,7 +30,8 @@ public class GetChallengeController {
     /**
      * [GET] 인증하기 전 정보 조회
      */
-    @GetMapping("/certifications/preview/{id}")
+    @Operation(summary = "인증하기 전 정보 조회")
+    @GetMapping("/visitor/challenges/preview/{id}")
     public ResponseEntity<ChallengePreviewInfo> getChallengePreviewInfo(
             @CurrentMember Member member,
             @PathVariable("id") Long id) {
@@ -41,6 +43,7 @@ public class GetChallengeController {
     /**
      * [GET] 챌린지 상세 조회
      */
+    @Operation(summary = "챌린지 상세 조회")
     @GetMapping("/challenges/{id}")
     public ResponseEntity<ChallengeDetailInfo> getChallengeInfo(
             @CurrentMember Member member,
@@ -53,6 +56,7 @@ public class GetChallengeController {
     /**
      * [GET] 카테고리 별 챌린지 목록 조회
      */
+    @Operation(summary = "카테고리 별 챌린지 목록 조회")
     @GetMapping("/challenges")
     public ResponseEntity<PageResponseDto<List<ChallengeSimpleInfo>>> getChallengesByCategory(
             @CurrentMember Member member,
@@ -67,6 +71,7 @@ public class GetChallengeController {
     /**
      * [GET] 내가 만든 챌린지 목록 조회
      */
+    @Operation(summary = "내가 만든 챌린지 목록 조회")
     @GetMapping("/visitor/challenges")
     public ResponseEntity<PageResponseDto<List<ChallengeSimpleInfo>>> getMyChallenges(
             @CurrentMember Member member,
@@ -80,6 +85,7 @@ public class GetChallengeController {
     /**
      * [GET] 홈 화면 핫 챌린지 5개 조회
      */
+    @Operation(summary = "홈 화면 핫 챌린지 조회")
     @GetMapping("/home/challenges")
     public ResponseEntity<HomeChallenges> getHotChallenges(
             @CurrentMember Member member) {
@@ -89,6 +95,7 @@ public class GetChallengeController {
     /**
      * [GET] 핫 챌린지 더보기
      */
+    @Operation(summary = "핫 챌린지 더 보기")
     @GetMapping("/hot-challenges")
     public ResponseEntity<PageResponseDto<List<ChallengeSimpleInfo>>> getMoreHotChallenges(
             @CurrentMember Member member,

@@ -2,8 +2,10 @@ package com.greengrim.green.core.member.controller;
 
 import com.greengrim.green.common.auth.CurrentMember;
 import com.greengrim.green.core.member.Member;
+import com.greengrim.green.core.member.dto.MemberResponseDto.HomeInfo;
 import com.greengrim.green.core.member.dto.MemberResponseDto.MemberInfo;
-import com.greengrim.green.core.member.usecase.GetMemberUseCase;
+import com.greengrim.green.core.member.service.GetMemberService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,15 +16,27 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class GetMemberController {
 
-    private final GetMemberUseCase getMemberUseCase;
+    private final GetMemberService getMemberService;
 
     /**
      * [GET] 내 프로필 조회
      */
+    @Operation(summary = "내 프로필 조회")
     @GetMapping("/visitor/profile")
     public ResponseEntity<MemberInfo> getCurrentMemberInfo(
             @CurrentMember Member member) {
-        return new ResponseEntity<>(getMemberUseCase.getMemberInfo(member),
+        return new ResponseEntity<>(getMemberService.getMemberInfo(member),
+                HttpStatus.OK);
+    }
+
+    /**
+     * [GET] 내 탄소 저감량 조회
+     */
+    @Operation(summary = "내 탄소 저감량 조회")
+    @GetMapping("/visitor/home")
+    public ResponseEntity<HomeInfo> getHomeInfo(
+            @CurrentMember Member member) {
+        return new ResponseEntity<>(getMemberService.getHomeInfo(member),
                 HttpStatus.OK);
     }
 }

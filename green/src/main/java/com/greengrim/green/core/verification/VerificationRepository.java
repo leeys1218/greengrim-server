@@ -12,4 +12,11 @@ public interface VerificationRepository extends JpaRepository<Verification, Long
     Optional<Verification> findByMemberIdAndCertificationId(
             @Param("memberId") Long memberId,
             @Param("certificationId") Long certificationId);
+
+    // 올바르지 않다 대답 개수
+    Integer countByMemberIdAndCertificationIdAndResponse(
+            @Param("memberId") Long memberId,
+            @Param("certificationId") Long certificationId,
+            @Param("response") boolean response);
+
 }

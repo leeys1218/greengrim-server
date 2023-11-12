@@ -2,7 +2,7 @@ package com.greengrim.green.core.member.controller;
 
 import com.greengrim.green.core.member.dto.MemberRequestDto;
 import com.greengrim.green.core.member.dto.MemberResponseDto;
-import com.greengrim.green.core.member.usecase.RegisterMemberUseCase;
+import com.greengrim.green.core.member.service.RegisterMemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class RegisterMemberController {
 
-    private final RegisterMemberUseCase registerMemberUseCase;
+    private final RegisterMemberService registerMemberService;
 
     /**
      * [POST] 소셜 회원가입
@@ -26,7 +26,7 @@ public class RegisterMemberController {
     @PostMapping("/sign-up")
     public ResponseEntity<MemberResponseDto.TokenInfo> register(
             @Valid @RequestBody MemberRequestDto.RegisterMemberReq registerMemberReq) {
-        return new ResponseEntity<>(registerMemberUseCase.registerMember(registerMemberReq),
+        return new ResponseEntity<>(registerMemberService.registerMember(registerMemberReq),
                 HttpStatus.OK);
     }
 
@@ -38,7 +38,7 @@ public class RegisterMemberController {
     @PostMapping("/login")
     public ResponseEntity<MemberResponseDto.TokenInfo> login(
             @Valid @RequestBody MemberRequestDto.LoginMemberReq loginMemberReq) {
-        return new ResponseEntity<>(registerMemberUseCase.login(loginMemberReq),
+        return new ResponseEntity<>(registerMemberService.login(loginMemberReq),
                 HttpStatus.OK);
     }
 
@@ -49,7 +49,7 @@ public class RegisterMemberController {
     @PostMapping("/nick-name")
     public ResponseEntity<MemberResponseDto.CheckNickNameRes> checkNickName(
             @Valid @RequestBody MemberRequestDto.CheckNickNameReq checkNickNameReq) {
-        return new ResponseEntity<>(registerMemberUseCase.checkNickName(checkNickNameReq),
+        return new ResponseEntity<>(registerMemberService.checkNickName(checkNickNameReq),
                 HttpStatus.OK);
     }
 }

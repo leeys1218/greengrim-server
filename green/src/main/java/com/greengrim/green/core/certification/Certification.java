@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
@@ -36,10 +37,10 @@ public class Certification extends BaseTime {
     @NotNull
     private int round;                  // 인증 회차
     @NotNull
-    @Size(max = 2)
+    @Max(2)
     private int validation;             // 상호 인증 상태: 0=진행중, 1=성공, 2=실패
     @NotNull
-    @Size(max = 10)
+    @Max(10)
     private int verificationCount;      // 남은 상호 인증 횟수
 
     private boolean status;
@@ -50,4 +51,17 @@ public class Certification extends BaseTime {
     @ManyToOne(fetch = FetchType.LAZY)
     private Challenge challenge;
 
+
+    public void setValidationSuccess() {
+        this.validation = 1;
+    }
+
+    public void setValidationFail() {
+        this.validation = 2;
+        this.status = false;
+    }
+
+    public void minusVerificationCount() {
+        this.verificationCount--;
+    }
 }

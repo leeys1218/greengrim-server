@@ -3,7 +3,7 @@ package com.greengrim.green.core.chat.service;
 import com.greengrim.green.core.chat.ChatMessage;
 import com.greengrim.green.core.chat.ChatMessage.MessageType;
 import com.greengrim.green.core.member.Member;
-import com.greengrim.green.core.member.usecase.GetMemberUseCase;
+import com.greengrim.green.core.member.service.GetMemberService;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -16,7 +16,7 @@ public class ChatService {
 
   private final ChannelTopic channelTopic;
   private final RedisTemplate redisTemplate;
-  private final GetMemberUseCase getMemberUseCase;
+  private final GetMemberService getMemberService;
 
   public String getRoomId(String destination) {
     int lastIndex = destination.lastIndexOf('/');
@@ -41,7 +41,7 @@ public class ChatService {
     }
     // ENTER, QUIT 타입이 아닐 때
     else {
-      Optional<Member> member = getMemberUseCase.findMemberById(chatMessage.getSenderId());
+      Optional<Member> member = getMemberService.findMemberById(chatMessage.getSenderId());
       chatMessage.setNickName(member.get().getNickName());
       chatMessage.setProfileImg(member.get().getProfileImgUrl());
     }

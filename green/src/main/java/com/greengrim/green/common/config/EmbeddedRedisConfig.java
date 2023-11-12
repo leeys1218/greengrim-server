@@ -13,7 +13,6 @@ public class EmbeddedRedisConfig {
 
   @Value("${spring.data.redis.port}")
   private int redisPort;
-
   private RedisServer redisServer;
 
   @PostConstruct

@@ -74,7 +74,14 @@ public class Member extends BaseTime {
         this.point += point;
     }
 
-    public void plusCarbonReduction(double carbonReduction) {
+    public void minusPoint(int point) {
+        this.point -= point;
+        if(this.point < 0) {
+            this.point = 0;
+        }
+    }
+
+    public void setCarbonReduction(double carbonReduction) {
         this.carbonReduction += carbonReduction;
     }
 
