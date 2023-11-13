@@ -3,15 +3,12 @@ package com.greengrim.green.core.chatroom.service;
 import com.greengrim.green.core.chat.ChatMessage;
 import com.greengrim.green.core.chat.ChatMessage.MessageType;
 import com.greengrim.green.core.chat.service.ChatService;
-import com.greengrim.green.core.chatparticipant.Chatparticipant;
 import com.greengrim.green.core.chatparticipant.ChatparticipantService;
 import com.greengrim.green.core.chatroom.Chatroom;
 import com.greengrim.green.core.chatroom.dto.ChatroomResponseDto.ChatroomInfo;
 import com.greengrim.green.core.chatroom.repository.ChatroomRepository;
 import com.greengrim.green.core.member.Member;
 import jakarta.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,19 +24,6 @@ public class ChatroomService{
   private final ChatroomRedisService chatroomRedisService;
   private final ChatparticipantService chatparticipantService;
   private final ChatService chatService;
-
-  /**
-   * 내가 속한 채팅방 목록 조회
-   */
-  public List<ChatroomInfo> getMyChatrooms (Member member) {
-    List<ChatroomInfo> myChatrooms = new ArrayList<>();
-    List<Chatparticipant> chatparticipants = chatparticipantService.findByMemberId(member.getId());
-    chatparticipants.forEach(chatparticipant ->
-        myChatrooms.add(new ChatroomInfo(chatparticipant.getChatroom()))
-    );
-    return myChatrooms;
-  }
-
 
   /**
    * 채팅방 생성

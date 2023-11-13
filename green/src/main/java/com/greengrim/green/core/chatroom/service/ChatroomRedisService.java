@@ -45,13 +45,6 @@ public class ChatroomRedisService {
   }
 
   /**
-   * 멤버가 가지고 있는 전체 채팅방 구독
-   */
-  public void subscribeAll(String sessionId, Long memberId) {
-    List<Chatparticipant> chatparticipants = chatparticipantService.findByMemberId(memberId);
-  }
-
-  /**
    * 멤버가 가지고 있는 전체 채팅방 구독 해제
    */
   public void unsubscribeAll(String sessionId, Long memberId) {

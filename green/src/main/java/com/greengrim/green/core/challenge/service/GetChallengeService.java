@@ -151,9 +151,9 @@ public class GetChallengeService {
             Challenge challenge = challengeRepository.findByChatroomId(chatroomId);
 
             Duration duration = Duration.between(challenge.getCreatedAt(), LocalDateTime.now());
-            String afterDay;
             long days = duration.toDays();
 
+            String afterDay;
             if (days == 0) afterDay = "오늘";
             else afterDay = days + "일 전";
             myChatrooms.add(new MyChatroom(challenge, afterDay));

@@ -105,8 +105,9 @@ public class GetChallengeController {
     }
 
     /**
-     * [GET] 내 챌린지 채팅방 불러오기
+     * [GET] 내 채팅방(챌린지) 조회
      */
+    @Operation(summary = "내 채팅방(챌린지) 조회")
     @GetMapping("/visitor/challenges/chatrooms")
     public ResponseEntity<List<MyChatroom>> getMyChatrooms(@CurrentMember Member member) {
         return ResponseEntity.ok(getChallengeService.getMyChatrooms(member));
