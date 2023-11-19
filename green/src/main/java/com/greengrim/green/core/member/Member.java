@@ -1,6 +1,7 @@
 package com.greengrim.green.core.member;
 
 import com.greengrim.green.common.entity.BaseTime;
+import com.greengrim.green.core.wallet.Wallet;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -49,6 +50,10 @@ public class Member extends BaseTime {
     @NotNull
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToOne
+    @JoinColumn(name = "wallet_id")
+    private Wallet wallet;
 
     public void changeRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
