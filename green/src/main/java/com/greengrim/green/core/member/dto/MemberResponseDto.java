@@ -12,6 +12,7 @@ public class MemberResponseDto {
     public static class TokenInfo {
         private String accessToken;
         private String refreshToken;
+        private Long memberId;
     }
 
     @Getter

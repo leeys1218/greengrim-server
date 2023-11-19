@@ -23,7 +23,7 @@ public class UpdateMemberService  {
         MemberResponseDto.TokenInfo newTokenInfo
                 = jwtTokenProvider.generateToken(member.getId());
         return new MemberResponseDto.TokenInfo(
-                newTokenInfo.getAccessToken(), member.getRefreshToken());
+                newTokenInfo.getAccessToken(), member.getRefreshToken(), member.getId());
     }
 
     public void modifyProfile(Member member, ModifyProfile modifyProfile) {

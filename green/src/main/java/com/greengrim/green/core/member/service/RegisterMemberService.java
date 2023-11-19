@@ -46,6 +46,7 @@ public class RegisterMemberService {
         checkRegister(registerMemberReq);
         Member member = register(registerMemberReq);
         MemberResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(member.getId());
+
         member.changeRefreshToken(tokenInfo.getRefreshToken());
         return tokenInfo;
     }

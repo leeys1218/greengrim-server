@@ -4,6 +4,7 @@ import com.greengrim.green.core.challenge.Challenge;
 import com.greengrim.green.core.challenge.dto.ChallengeRequestDto.RegisterChallenge;
 import com.greengrim.green.core.challenge.repository.ChallengeRepository;
 import com.greengrim.green.core.chatroom.Chatroom;
+import com.greengrim.green.core.chatroom.dto.ChatroomResponseDto.ChatroomInfo;
 import com.greengrim.green.core.chatroom.service.ChatroomService;
 import com.greengrim.green.core.member.Member;
 import jakarta.transaction.Transactional;
@@ -15,11 +16,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RegisterChallengeService {
 
+
+
     private final ChallengeRepository challengeRepository;
 
+    private final EnterChallengeService enterChallengeService;
     private final ChatroomService chatroomService;
 
-    public void register(Member member, RegisterChallenge registerChallenge) {
+    public ChatroomInfo register(Member member, RegisterChallenge registerChallenge) {
 
         Chatroom chatroom = chatroomService.registerChatroom(member, registerChallenge.getTitle()); // 채팅방 생성
 
@@ -41,5 +45,6 @@ public class RegisterChallengeService {
                 .build();
 
         challengeRepository.save(challenge);
+        return enterChallengeService.enterChallenge(member, challenge.getId());
     }
 }
