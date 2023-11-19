@@ -36,16 +36,16 @@ public class VerificationService {
         verificationRepository.save(verification);
 
         // 상호 검증 처리하기
-        verifyCertification(member.getId(), certification);
+        verifyCertification(certification);
     }
 
     /**
      * 상호 검증이 과반수에 도달했을 때 처리하는 함수
      */
-    public void verifyCertification(Long memberId, Certification certification) {
+    public void verifyCertification(Certification certification) {
         // 이 인증에 거짓이라고 답한 사람이 5명 이상이라면, 해당 인증은 실패한 인증이다.
         // (상호 검증 중단, 인증 비활성화 처리, 포인트 뺏기, 탄소 감소량 뺏기)
-        if(checkCertificationFailOrSuccess(memberId, certification.getId(), false)) {
+        if(checkCertificationFailOrSuccess(certification.getId(), false)) {
             // 인증 entity 상호 검증 실패 처리
             certification.setValidationFail();
             Member lier = certification.getMember();
@@ -55,7 +55,7 @@ public class VerificationService {
             lier.setCarbonReduction(-certification.getChallenge().getCategory().getCarbonReduction());
             memberRepository.save(lier);
         } // 진실이라고 답한 사람이 5명 이상이라면, 해당 인증은 성공한 인증이다. (상호 검증 중단)
-        else if(checkCertificationFailOrSuccess(memberId, certification.getId(), true)) {
+        else if(checkCertificationFailOrSuccess(certification.getId(), true)) {
             certification.setValidationSuccess();
         }
         // 인증 entity 에서 남은 상호 검증 횟수 1 줄이기
@@ -73,8 +73,8 @@ public class VerificationService {
     /**
      * 상호 검증이 과반수에 도달했는지 확인하는 함수
      */
-    private boolean checkCertificationFailOrSuccess(Long memberId, Long certificationId, boolean response) {
-        return verificationRepository.countByMemberIdAndCertificationIdAndResponse(
-                memberId, certificationId, response) >= 5;
+    private boolean checkCertificationFailOrSuccess(Long certificationId, boolean response) {
+        return verificationRepository.countByCertificationIdAndResponse(
+                certificationId, response) >= 5;
     }
 }
