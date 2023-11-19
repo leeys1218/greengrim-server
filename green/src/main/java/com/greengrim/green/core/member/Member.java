@@ -52,8 +52,8 @@ public class Member extends BaseTime {
     private Role role;
 
     @OneToOne
-    @JoinColumn(name = "wallet_id")
     private Wallet wallet;
+
 
     public void changeRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
