@@ -2,6 +2,7 @@ package com.greengrim.green.core.transaction;
 
 import com.greengrim.green.common.entity.BaseTime;
 import com.greengrim.green.core.nft.Nft;
+import com.greengrim.green.core.transaction.dto.TransactionRequest.TransactionSetDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -46,4 +47,9 @@ public class Transaction extends BaseTime {
     @ManyToOne(fetch = FetchType.LAZY)
     private Nft nft;
 
+    public void setTransactionSet(TransactionSetDto transactionSet) {
+        this.payTransaction = transactionSet.getPayTransaction();
+        this.payBackTransaction = transactionSet.getPayBackTransaction();
+        this.feeTransaction = transactionSet.getFeeTransaction();
+    }
 }
