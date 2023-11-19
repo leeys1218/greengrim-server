@@ -38,7 +38,7 @@ public class Member extends BaseTime {
     private boolean status;
 
     @NotNull
-    private Integer reportCnt;
+    private Integer reportCount;
 
     @NotNull
     private String refreshToken;
