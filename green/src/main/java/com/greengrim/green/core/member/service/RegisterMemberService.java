@@ -32,7 +32,7 @@ public class RegisterMemberService {
                 .profileImgUrl(registerMemberReq.getProfileImgUrl())
                 .point(0)
                 .carbonReduction(0)
-                .reportCnt(0)
+                .reportCount(0)
                 .status(true)
                 .refreshToken("")
                 .deviceToken("")
