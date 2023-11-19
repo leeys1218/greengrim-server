@@ -20,7 +20,7 @@ public class ChatController {
    */
   @Operation(summary = "메세지 전송")
   @MessageMapping("/chat/message")
-  public void message(ChatMessage message, @Header("token") String token) {
+  public void message(ChatMessage message) {
     chatService.sendChatMessage(message);
   }
 }
