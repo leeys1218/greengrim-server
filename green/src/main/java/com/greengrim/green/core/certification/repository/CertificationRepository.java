@@ -5,11 +5,13 @@ import com.greengrim.green.core.challenge.Challenge;
 import com.greengrim.green.core.member.Member;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -34,4 +36,11 @@ public interface CertificationRepository extends JpaRepository<Certification, Lo
 
     @Query("SELECT c FROM Certification c WHERE date_format(c.createdAt, '%Y-%m-%d') = :date and c.member.id = :memberId")
     Page<Certification> findCertificationsByMemberDate(@Param("date") String date, @Param("memberId") Long memberId, Pageable pageable);
+
+    @Query("SELECT c.id FROM Certification c "
+            + "WHERE c.id NOT IN (SELECT v.certificationId FROM Verification v WHERE v.memberId=:memberId AND v.certificationId=c.id)"
+            + "AND c.validation = 0 AND c.member.id!=:memberId ORDER BY c.verificationCount limit 1")
+    Optional<Long> findCertificationForVerification(@Param("memberId") Long memberId);
+
+
 }
