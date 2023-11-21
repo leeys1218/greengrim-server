@@ -14,13 +14,17 @@ import com.greengrim.green.core.challenge.Category;
 import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.ChallengeDetailInfo;
 import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.ChallengeSimpleInfo;
 import com.greengrim.green.core.member.Member;
+import com.greengrim.green.core.verification.dto.VerificationRequest;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -95,6 +99,19 @@ public class GetCertificationController {
             @RequestParam(value = "size") int size) { // 2023-11-07
         return ResponseEntity.ok(getCertificationService.getCertificationsByMemberDate(
                 member, date, page, size));
+    }
+
+    /**
+     * [GET] 상호 검증할 인증 상세 조회 - 출석체크
+     */
+    @Operation(summary = "상호 검증할 인증 상세 조회 - 출석체크")
+    @GetMapping("/visitor/verifications")
+    public ResponseEntity<CertificationDetailInfo> registerVerification(
+            @CurrentMember Member member) {
+        return new ResponseEntity<>(
+                getCertificationService.getCertificationInfo(
+                        member, getCertificationService.findCertificationForVerification(member))
+                , HttpStatus.OK);
     }
 
 }
