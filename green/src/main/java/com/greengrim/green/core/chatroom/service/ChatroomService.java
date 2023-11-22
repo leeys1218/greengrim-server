@@ -34,7 +34,6 @@ public class ChatroomService{
         .status(true)
         .build();
     chatroomRepository.save(chatroom);
-    chatparticipantService.save(member, chatroom);
     chatroomRedisService.createChatroom(chatroom);
     return chatroom;
   }
