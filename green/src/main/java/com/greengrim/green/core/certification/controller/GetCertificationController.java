@@ -44,10 +44,9 @@ public class GetCertificationController {
     @GetMapping("/certifications/month")
     public ResponseEntity<CertificationsByMonth> getCertificationsByChallengeMonth(
             @CurrentMember Member member,
-            @RequestParam(value = "challengeId") Long challengeId,
-            @RequestParam(value = "month") String month) { // 2023-01
+            @RequestParam(value = "challengeId") Long challengeId) {
         return ResponseEntity.ok(getCertificationService.getCertificationsByChallengeMonth(
-                member, challengeId, month));
+                member, challengeId));
     }
 
     /**
@@ -71,10 +70,8 @@ public class GetCertificationController {
     @Operation(summary = "내 챌린지 인증 내역 조회 - MONTH")
     @GetMapping("/visitor/certifications/month")
     public ResponseEntity<CertificationsByMonth> getCertificationsByChallengeMonth(
-            @CurrentMember Member member,
-            @RequestParam(value = "month") String month) { // 2023-01
-        return ResponseEntity.ok(getCertificationService.getCertificationsByMemberMonth(
-                member, month));
+            @CurrentMember Member member) {
+        return ResponseEntity.ok(getCertificationService.getCertificationsByMemberMonth(member));
     }
 
     /**
