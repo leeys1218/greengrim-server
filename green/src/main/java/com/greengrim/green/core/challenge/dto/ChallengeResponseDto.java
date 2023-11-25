@@ -191,4 +191,19 @@ public class ChallengeResponseDto {
             this.afterDay = afterDay;
         }
     }
+
+    @Getter
+    @RequiredArgsConstructor
+    public static class EnterChallengeResponse {
+
+        private Long challengeId;
+        private Long chatroomId;
+        private String title;
+
+        public EnterChallengeResponse(Challenge challenge) {
+            this.challengeId = challenge.getId();
+            this.chatroomId = challenge.getChatroom().getId();
+            this.title = challenge.getTitle();
+        }
+    }
 }

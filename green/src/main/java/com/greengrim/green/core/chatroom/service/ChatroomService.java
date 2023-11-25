@@ -50,7 +50,7 @@ public class ChatroomService{
   /**
    * 채팅방 입장
    */
-  public ChatroomInfo enterChatroom(Member member, Chatroom chatroom) {
+  public void enterChatroom(Member member, Chatroom chatroom) {
     chatparticipantService.save(member, chatroom);
     chatService.sendChatMessage(ChatMessage.builder()
         .type(MessageType.ENTER)
@@ -59,7 +59,6 @@ public class ChatroomService{
         .message(member.getNickName() + "님이 입장했습니다.")
         .build());
     log.info("SUBSCRIBED {}, {}", member.getNickName(), chatroom.getId());
-    return new ChatroomInfo(chatroom);
   }
 
   /**

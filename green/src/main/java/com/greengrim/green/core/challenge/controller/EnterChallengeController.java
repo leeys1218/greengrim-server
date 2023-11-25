@@ -1,8 +1,8 @@
 package com.greengrim.green.core.challenge.controller;
 
 import com.greengrim.green.common.auth.CurrentMember;
+import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.EnterChallengeResponse;
 import com.greengrim.green.core.challenge.service.EnterChallengeService;
-import com.greengrim.green.core.chatroom.dto.ChatroomResponseDto.ChatroomInfo;
 import com.greengrim.green.core.member.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class EnterChallengeController {
    */
   @Operation(summary = "챌린지 참가 - 채팅방 입장")
   @PostMapping("/enter")
-  public ResponseEntity<ChatroomInfo> enterChallenge(@CurrentMember Member member, @RequestParam Long id) {
+  public ResponseEntity<EnterChallengeResponse> enterChallenge(@CurrentMember Member member, @RequestParam Long id) {
     return ResponseEntity.ok(enterChallengeService.enterChallenge(member, id));
   }
 
