@@ -90,4 +90,12 @@ public class Member extends BaseTime {
         this.carbonReduction += carbonReduction;
     }
 
+    public void changeWallet(Wallet wallet) {
+        this.wallet = wallet;
+    }
+
+    public void changeRole(Role role) {
+        this.role = role;
+    }
+
 }

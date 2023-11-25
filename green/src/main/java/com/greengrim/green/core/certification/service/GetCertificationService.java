@@ -63,18 +63,16 @@ public class GetCertificationService {
     /**
      * 챌린지 월 별 인증 유무를 date 리스트 형식으로 반환
      */
-    public CertificationsByMonth getCertificationsByChallengeMonth(
-            Member member, Long challengeId, String month) {
-        List<String> date = certificationRepository.findCertificationsByChallengeMonth(month, challengeId);
+    public CertificationsByMonth getCertificationsByChallengeMonth(Member member, Long challengeId) {
+        List<String> date = certificationRepository.findCertificationsByChallengeMonth(challengeId);
         return new CertificationsByMonth(date);
     }
 
     /**
      * 멤버 월 별 인증 유무를 date 리스트 형식으로 반환
      */
-    public CertificationsByMonth getCertificationsByMemberMonth(
-            Member member, String month) {
-        List<String> date = certificationRepository.findCertificationsByMemberMonth(month, member.getId());
+    public CertificationsByMonth getCertificationsByMemberMonth(Member member) {
+        List<String> date = certificationRepository.findCertificationsByMemberMonth(member.getId());
         return new CertificationsByMonth(date);
     }
 

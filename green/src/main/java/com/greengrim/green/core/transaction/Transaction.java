@@ -2,7 +2,7 @@ package com.greengrim.green.core.transaction;
 
 import com.greengrim.green.common.entity.BaseTime;
 import com.greengrim.green.core.nft.Nft;
-import com.greengrim.green.core.transaction.dto.TransactionRequest.TransactionSetDto;
+import com.greengrim.green.core.transaction.dto.TransactionRequestDto.TransactionSetDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

@@ -2,7 +2,7 @@ package com.greengrim.green.core.verification;
 
 import com.greengrim.green.common.auth.CurrentMember;
 import com.greengrim.green.core.member.Member;
-import com.greengrim.green.core.verification.dto.VerificationRequest;
+import com.greengrim.green.core.verification.dto.VerificationRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class VerificationController {
     @PostMapping("/visitor/verifications")
     public ResponseEntity<Integer> registerVerification(
             @CurrentMember Member member,
-            @Valid @RequestBody VerificationRequest.RegisterVerification registerVerification) {
+            @Valid @RequestBody VerificationRequestDto.RegisterVerification registerVerification) {
         verificationService.register(member, registerVerification);
         return new ResponseEntity<>(200, HttpStatus.OK);
     }
