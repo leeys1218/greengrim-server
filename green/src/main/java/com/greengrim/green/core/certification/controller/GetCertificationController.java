@@ -1,30 +1,20 @@
 package com.greengrim.green.core.certification.controller;
 
 import com.greengrim.green.common.auth.CurrentMember;
-import com.greengrim.green.common.entity.SortOption;
 import com.greengrim.green.common.entity.dto.PageResponseDto;
-import com.greengrim.green.core.certification.Certification;
 import com.greengrim.green.core.certification.dto.CertificationResponseDto.CertificationDetailInfo;
-import com.greengrim.green.core.certification.dto.CertificationResponseDto.CertificationInfo;
 import com.greengrim.green.core.certification.dto.CertificationResponseDto.CertificationsByChallengeDate;
 import com.greengrim.green.core.certification.dto.CertificationResponseDto.CertificationsByMemberDate;
 import com.greengrim.green.core.certification.dto.CertificationResponseDto.CertificationsByMonth;
 import com.greengrim.green.core.certification.service.GetCertificationService;
-import com.greengrim.green.core.challenge.Category;
-import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.ChallengeDetailInfo;
-import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.ChallengeSimpleInfo;
 import com.greengrim.green.core.member.Member;
-import com.greengrim.green.core.verification.dto.VerificationRequest;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 

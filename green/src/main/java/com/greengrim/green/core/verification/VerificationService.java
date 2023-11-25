@@ -7,7 +7,7 @@ import com.greengrim.green.core.certification.Certification;
 import com.greengrim.green.core.certification.repository.CertificationRepository;
 import com.greengrim.green.core.member.Member;
 import com.greengrim.green.core.member.repository.MemberRepository;
-import com.greengrim.green.core.verification.dto.VerificationRequest.RegisterVerification;
+import com.greengrim.green.core.verification.dto.VerificationRequestDto.RegisterVerification;
 import jakarta.transaction.Transactional;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
