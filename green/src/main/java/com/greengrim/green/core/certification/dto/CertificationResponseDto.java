@@ -34,6 +34,19 @@ public class CertificationResponseDto {
 
     @Getter
     @RequiredArgsConstructor
+    public static class registerCertificationResponse {
+        private Long certId;
+        private String certImg;
+
+        public registerCertificationResponse(Certification certification) {
+            this.certId = certification.getId();
+            this.certImg = certification.getImgUrl();
+        }
+    }
+
+
+    @Getter
+    @RequiredArgsConstructor
     public static class CertificationDetailInfo {
         ChallengeInfoForCertification challengeInfo;
         MemberSimpleInfo memberSimpleInfo;

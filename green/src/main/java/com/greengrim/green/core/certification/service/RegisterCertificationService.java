@@ -2,6 +2,7 @@ package com.greengrim.green.core.certification.service;
 
 import com.greengrim.green.core.certification.Certification;
 import com.greengrim.green.core.certification.dto.CertificationRequestDto.RegisterCertification;
+import com.greengrim.green.core.certification.dto.CertificationResponseDto.registerCertificationResponse;
 import com.greengrim.green.core.certification.repository.CertificationRepository;
 import com.greengrim.green.core.challenge.Challenge;
 import com.greengrim.green.core.challenge.service.GetChallengeService;
@@ -23,7 +24,10 @@ public class RegisterCertificationService {
     private final MemberRepository memberRepository;
     private final CertificationRepository certificationRepository;
 
-    public void register(Member member, RegisterCertification registerCertification) {
+    /**
+     * @Todo: 응답에 챌린지 성공 유무 반환
+     */
+    public registerCertificationResponse register(Member member, RegisterCertification registerCertification) {
         Challenge challenge = getChallengeService.findByIdWithValidation(
                 registerCertification.getChallengeId());
 
@@ -44,6 +48,8 @@ public class RegisterCertificationService {
         successCertification(member, challenge);
         // 챌린지 성공했으면 보상 제공
         successChallenge(challenge, certification);
+
+        return new registerCertificationResponse(certification);
     }
 
     /**
