@@ -45,7 +45,7 @@ public class ChatMessage {
   public void setSentTime() {
     LocalDateTime now = LocalDateTime.now();
 
-    DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 E요일");
+    DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 E요일", Locale.KOREAN);
     DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("a h시 m분", Locale.KOREAN);
 
     this.sentDate = now.format(dateFormatter);
