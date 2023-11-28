@@ -3,6 +3,7 @@ package com.greengrim.green.core.wallet.controller;
 import com.greengrim.green.common.auth.CurrentMember;
 import com.greengrim.green.core.member.Member;
 import com.greengrim.green.core.wallet.dto.WalletRequestDto.CheckPassword;
+import com.greengrim.green.core.wallet.dto.WalletResponseDto.WalletDetailInfo;
 import com.greengrim.green.core.wallet.service.WalletService;
 import jakarta.validation.Valid;
 import java.io.IOException;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,4 +32,14 @@ public class WalletController {
         walletService.registerWallet(member, checkPassword);
         return new ResponseEntity<>(200, HttpStatus.OK);
     }
+
+    /**
+     * [GET] 지갑 정보 가져오기
+     */
+    @GetMapping("/member/wallets")
+    public ResponseEntity<WalletDetailInfo> getWalletDetail(@CurrentMember Member member)
+            throws IOException, ParseException, InterruptedException, java.text.ParseException {
+        return new ResponseEntity<>(walletService.getWalletDetail(member), HttpStatus.OK);
+    }
+
 }

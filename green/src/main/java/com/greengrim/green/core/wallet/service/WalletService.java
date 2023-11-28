@@ -10,6 +10,7 @@ import com.greengrim.green.core.member.service.RegisterMemberService;
 import com.greengrim.green.core.wallet.Wallet;
 import com.greengrim.green.core.wallet.dto.WalletRequestDto.CheckPassword;
 import com.greengrim.green.core.wallet.dto.WalletResponseDto.CheckPasswordInfo;
+import com.greengrim.green.core.wallet.dto.WalletResponseDto.WalletDetailInfo;
 import com.greengrim.green.core.wallet.repository.WalletRepository;
 import jakarta.transaction.Transactional;
 import java.io.IOException;
@@ -64,6 +65,15 @@ public class WalletService {
 
         walletRepository.save(wallet);
         return new CheckPasswordInfo(matched, wallet.getWrongCount());
+    }
+
+    /**
+     * 지갑 정보 조회하기
+     */
+    public WalletDetailInfo getWalletDetail(Member member)
+            throws IOException, ParseException, InterruptedException, java.text.ParseException {
+        Wallet wallet = member.getWallet();
+        return new WalletDetailInfo(wallet.getAddress(), kasService.getKlay(wallet));
     }
 
 }

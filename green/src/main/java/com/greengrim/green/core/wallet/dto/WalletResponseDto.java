@@ -20,6 +20,5 @@ public class WalletResponseDto {
     public static class WalletDetailInfo {
         private String address;
         private double klay;
-        private double green;
     }
 }
