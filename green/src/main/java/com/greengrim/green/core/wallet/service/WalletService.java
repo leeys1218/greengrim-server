@@ -10,6 +10,7 @@ import com.greengrim.green.core.member.service.RegisterMemberService;
 import com.greengrim.green.core.wallet.Wallet;
 import com.greengrim.green.core.wallet.dto.WalletRequestDto.CheckPassword;
 import com.greengrim.green.core.wallet.dto.WalletResponseDto.CheckPasswordInfo;
+import com.greengrim.green.core.wallet.dto.WalletResponseDto.ExistsWalletInfo;
 import com.greengrim.green.core.wallet.dto.WalletResponseDto.WalletDetailInfo;
 import com.greengrim.green.core.wallet.repository.WalletRepository;
 import jakarta.transaction.Transactional;
@@ -65,6 +66,13 @@ public class WalletService {
 
         walletRepository.save(wallet);
         return new CheckPasswordInfo(matched, wallet.getWrongCount());
+    }
+
+    /**
+     * 지갑 존재 유무 조회하기
+     */
+    public ExistsWalletInfo existsWallet(Member member) {
+        return new ExistsWalletInfo(member.getWallet() != null);
     }
 
     /**

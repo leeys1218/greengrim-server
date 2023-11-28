@@ -9,6 +9,13 @@ public class WalletResponseDto {
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
+    public static class ExistsWalletInfo {
+        private boolean existed;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class CheckPasswordInfo {
         private boolean matched;
         private int wrongCount;
