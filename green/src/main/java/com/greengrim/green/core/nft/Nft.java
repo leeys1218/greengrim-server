@@ -41,6 +41,8 @@ public class Nft extends BaseTime {
     private int reportCount;
     @NotNull
     private boolean status;
+    @NotNull
+    private boolean isMarketed;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;

@@ -38,6 +38,7 @@ public class RegisterNftService {
                 .description(registerNft.getDescription())
                 .reportCount(0)
                 .status(true)
+                .isMarketed(false)
                 .member(member)
                 .build();
         nftRepository.save(nft);
