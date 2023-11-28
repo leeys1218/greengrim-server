@@ -2,6 +2,7 @@ package com.greengrim.green.core.certification.controller;
 
 import com.greengrim.green.common.auth.CurrentMember;
 import com.greengrim.green.core.certification.dto.CertificationRequestDto.RegisterCertification;
+import com.greengrim.green.core.certification.dto.CertificationResponseDto.registerCertificationResponse;
 import com.greengrim.green.core.certification.service.RegisterCertificationService;
 import com.greengrim.green.core.challenge.dto.ChallengeRequestDto;
 import com.greengrim.green.core.member.Member;
@@ -27,10 +28,9 @@ public class RegisterCertificationController {
      */
     @Operation(summary = "인증하기")
     @PostMapping("/visitor/certifications")
-    public ResponseEntity<Integer> registerCertification(
+    public ResponseEntity<registerCertificationResponse> registerCertification(
             @CurrentMember Member member,
             @Valid @RequestBody RegisterCertification registerCertification) {
-        registerCertificationService.register(member, registerCertification);
-        return new ResponseEntity<>(200, HttpStatus.OK);
+        return ResponseEntity.ok(registerCertificationService.register(member, registerCertification));
     }
 }

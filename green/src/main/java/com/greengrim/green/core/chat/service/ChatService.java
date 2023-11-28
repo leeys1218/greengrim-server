@@ -28,6 +28,8 @@ public class ChatService {
 
   public void sendChatMessage(ChatMessage chatMessage) {
 
+    chatMessage.setSentTime();
+
     // CERT 타입이 아닐 떄
     if(!MessageType.CERT.equals(chatMessage.getType())) {
       chatMessage.setCertId(null);
