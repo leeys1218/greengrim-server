@@ -49,7 +49,7 @@ public class GetChallengeService {
      */
     public ChallengeDetailInfo getChallengeDetail(Member member, Long id) {
         Challenge challenge = findByIdWithValidation(id);
-        return new ChallengeDetailInfo(challenge, chatparticipantService.checkParticipantExists(member.getId()));
+        return new ChallengeDetailInfo(challenge, chatparticipantService.checkParticipantExists(member.getId(), challenge.getChatroom().getId()));
     }
 
     /**
