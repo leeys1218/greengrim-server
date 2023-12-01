@@ -51,6 +51,9 @@ dependencies {
 	//embedded-redis
 	implementation group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2'
 
+	// Firebase
+	implementation 'com.google.firebase:firebase-admin:9.2.0'
+
 	// Dev
 	implementation 'org.springframework.boot:spring-boot-devtools'
 	implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.4.4'
@@ -76,5 +79,10 @@ processResources.dependsOn('copyGitSubmodule')
 task copyGitSubmodule(type: Copy) {
 	from './config'
 	include '*.yml'
+	include '*.json'
 	into './src/main/resources'
+}
+
+processResources {
+	dependsOn copyGitSubmodule
 }

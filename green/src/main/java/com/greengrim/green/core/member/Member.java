@@ -54,6 +54,8 @@ public class Member extends BaseTime {
     @OneToOne
     private Wallet wallet;
 
+    // not null로 수정하기
+    private String fcmToken;
 
     public void changeRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;

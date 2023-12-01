@@ -1,5 +1,6 @@
 package com.greengrim.green.core.chat.service;
 
+import com.greengrim.green.common.fcm.FcmService;
 import com.greengrim.green.core.chat.ChatMessage;
 import com.greengrim.green.core.chat.ChatMessage.MessageType;
 import com.greengrim.green.core.member.Member;
@@ -16,7 +17,9 @@ public class ChatService {
 
   private final ChannelTopic channelTopic;
   private final RedisTemplate redisTemplate;
+
   private final GetMemberService getMemberService;
+  private final FcmService fcmService;
 
   public String getRoomId(String destination) {
     int lastIndex = destination.lastIndexOf('/');
@@ -37,7 +40,7 @@ public class ChatService {
     }
     // ENTER, QUIT 타입일 때
     if(MessageType.ENTER.equals(chatMessage.getType()) ||
-        MessageType.QUIT.equals(chatMessage.getType())) {
+        MessageType.EXIT.equals(chatMessage.getType())) {
       chatMessage.setNickName("");
       chatMessage.setProfileImg("");
     }
@@ -49,5 +52,6 @@ public class ChatService {
     }
 
     redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessage);
+    fcmService.sendMessageToFcm(chatMessage);
   }
 }

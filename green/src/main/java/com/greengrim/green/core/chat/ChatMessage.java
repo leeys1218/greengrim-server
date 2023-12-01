@@ -12,7 +12,7 @@ import lombok.Setter;
 public class ChatMessage {
 
   public enum MessageType {
-      ENTER, QUIT, TALK, CERT
+    ENTER, TALK, EXIT, CERT
   }
   private MessageType type;
   private Long roomId;
