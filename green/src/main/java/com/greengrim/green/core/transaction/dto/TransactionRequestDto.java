@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-public class TransactionRequest {
+public class TransactionRequestDto {
 
     @Getter
     @NoArgsConstructor

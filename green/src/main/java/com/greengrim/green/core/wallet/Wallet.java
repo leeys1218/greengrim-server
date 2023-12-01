@@ -37,4 +37,12 @@ public class Wallet extends BaseTime {
         this.wrongCount = 0;
     }
 
+    public void initWrongCount() {
+        this.wrongCount = 0;
+    }
+
+    public void plusWrongCount() {
+        this.wrongCount++;
+    }
+
 }

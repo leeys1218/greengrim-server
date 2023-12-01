@@ -5,11 +5,13 @@ import com.greengrim.green.core.challenge.Challenge;
 import com.greengrim.green.core.member.Member;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -20,18 +22,22 @@ public interface CertificationRepository extends JpaRepository<Certification, Lo
             @Param("member") Member member,
             @Param("challenge") Challenge challenge);
 
-    @Query("SELECT c FROM Certification c WHERE date_format(c.createdAt, '%Y-%m-%d')  = :date and c.member.id = :memberId")
-    Page<Certification> findCertificationsByDate(@Param("date") String date, @Param("memberId") Long memberId, Pageable pageable);
+    @Query("SELECT DISTINCT date_format(c.createdAt, '%Y-%m-%d') FROM Certification c WHERE c.challenge.id = :challengeId ORDER BY c.createdAt")
+    List<String> findCertificationsByChallengeMonth(@Param("challengeId") Long challengeId);
 
-    @Query("SELECT date_format(c.createdAt, '%Y-%m-%d') FROM Certification c WHERE date_format(c.createdAt, '%Y-%m') = :month and c.challenge.id = :challengeId")
-    List<String> findCertificationsByChallengeMonth(@Param("month") String month, @Param("challengeId") Long challengeId);
+    @Query("SELECT DISTINCT date_format(c.createdAt, '%Y-%m-%d') FROM Certification c WHERE c.member.id = :memberId ORDER BY c.createdAt")
+    List<String> findCertificationsByMemberMonth(@Param("memberId") Long memberId);
 
-    @Query("SELECT date_format(c.createdAt, '%Y-%m-%d') FROM Certification c WHERE date_format(c.createdAt, '%Y-%m') = :month and c.member.id = :memberId")
-    List<String> findCertificationsByMemberMonth(@Param("month") String month, @Param("memberId") Long memberId);
-
-    @Query("SELECT c FROM Certification c WHERE date_format(c.createdAt, '%Y-%m-%d') = :date and c.challenge.id = :challengeId")
+    @Query("SELECT c FROM Certification c WHERE date_format(c.createdAt, '%Y-%m-%d') = :date and c.challenge.id = :challengeId ORDER BY c.createdAt")
     Page<Certification> findCertificationsByChallengeDate(@Param("date") String date, @Param("challengeId") Long challengeId, Pageable pageable);
 
-    @Query("SELECT c FROM Certification c WHERE date_format(c.createdAt, '%Y-%m-%d') = :date and c.member.id = :memberId")
+    @Query("SELECT c FROM Certification c WHERE date_format(c.createdAt, '%Y-%m-%d') = :date and c.member.id = :memberId ORDER BY c.createdAt")
     Page<Certification> findCertificationsByMemberDate(@Param("date") String date, @Param("memberId") Long memberId, Pageable pageable);
+
+    @Query("SELECT c.id FROM Certification c "
+            + "WHERE c.id NOT IN (SELECT v.certificationId FROM Verification v WHERE v.memberId=:memberId AND v.certificationId=c.id)"
+            + "AND c.validation = 0 AND c.member.id!=:memberId ORDER BY c.verificationCount limit 1")
+    Optional<Long> findCertificationForVerification(@Param("memberId") Long memberId);
+
+
 }

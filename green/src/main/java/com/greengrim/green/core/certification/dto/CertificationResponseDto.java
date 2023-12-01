@@ -7,7 +7,10 @@ import com.greengrim.green.core.certification.VerificationFlag;
 import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.ChallengeInfoForCertification;
 import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.ChallengeTitleInfo;
 import com.greengrim.green.core.member.dto.MemberResponseDto.MemberSimpleInfo;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +34,22 @@ public class CertificationResponseDto {
             this.createdAt = calculateTime(certification.getCreatedAt(), 3);
         }
     }
+
+    @Getter
+    @RequiredArgsConstructor
+    public static class registerCertificationResponse {
+        private Long certId;
+        private String certImg;
+        private String date;
+
+        public registerCertificationResponse(Certification certification) {
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일", Locale.KOREAN);
+            this.certId = certification.getId();
+            this.certImg = certification.getImgUrl();
+            this.date = LocalDateTime.now().format(dateFormatter);
+        }
+    }
+
 
     @Getter
     @RequiredArgsConstructor

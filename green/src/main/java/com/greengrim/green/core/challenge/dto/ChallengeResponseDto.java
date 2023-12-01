@@ -177,16 +177,33 @@ public class ChallengeResponseDto {
     @Getter
     @RequiredArgsConstructor
     public static class MyChatroom {
-        private Long id;
+        private Long challengeId;
+        private Long chatroomId;
         private String title;
         private String ImgUrl;
         private String afterDay;
 
         public MyChatroom(Challenge challenge, String afterDay) {
-            this.id = challenge.getChatroom().getId();
+            this.challengeId = challenge.getId();
+            this.chatroomId = challenge.getChatroom().getId();
             this.title = challenge.getTitle();
             this.ImgUrl = challenge.getImgUrl();
             this.afterDay = afterDay;
+        }
+    }
+
+    @Getter
+    @RequiredArgsConstructor
+    public static class EnterChallengeResponse {
+
+        private Long challengeId;
+        private Long chatroomId;
+        private String title;
+
+        public EnterChallengeResponse(Challenge challenge) {
+            this.challengeId = challenge.getId();
+            this.chatroomId = challenge.getChatroom().getId();
+            this.title = challenge.getTitle();
         }
     }
 }

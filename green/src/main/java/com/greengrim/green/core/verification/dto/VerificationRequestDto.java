@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-public class VerificationRequest {
+public class VerificationRequestDto {
 
     @Getter
     @AllArgsConstructor

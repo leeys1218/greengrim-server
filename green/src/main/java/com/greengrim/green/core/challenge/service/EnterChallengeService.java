@@ -3,8 +3,8 @@ package com.greengrim.green.core.challenge.service;
 import com.greengrim.green.common.exception.BaseException;
 import com.greengrim.green.common.exception.errorCode.ChallengeErrorCode;
 import com.greengrim.green.core.challenge.Challenge;
+import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.EnterChallengeResponse;
 import com.greengrim.green.core.challenge.repository.ChallengeRepository;
-import com.greengrim.green.core.chatroom.dto.ChatroomResponseDto.ChatroomInfo;
 import com.greengrim.green.core.chatroom.service.ChatroomService;
 import com.greengrim.green.core.member.Member;
 import lombok.RequiredArgsConstructor;
@@ -23,14 +23,15 @@ public class EnterChallengeService {
   /**
    * 챌린지 참가 - 채팅방 입장
    */
-  public ChatroomInfo enterChallenge(Member member, Long id) {
+  public EnterChallengeResponse enterChallenge(Member member, Long id) {
     Challenge challenge = getChallengeService.findByIdWithValidation(id);
     if (challenge.getCapacity() == challenge.getHeadCount())
       throw new BaseException(ChallengeErrorCode.OVER_CAPACITY_CHALLENGE);
 
     challenge.setHeadCount(challenge.getHeadCount() + 1);
     challengeRepository.save(challenge);
-    return chatroomService.enterChatroom(member, challenge.getChatroom());
+    chatroomService.enterChatroom(member, challenge.getChatroom());
+    return new EnterChallengeResponse(challenge);
   }
 
   /**
@@ -45,5 +46,4 @@ public class EnterChallengeService {
     if(challenge.getHeadCount() == 0)
       chatroomService.removeChatroom(challenge.getChatroom());
   }
-
 }

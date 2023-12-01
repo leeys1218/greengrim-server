@@ -2,8 +2,8 @@ package com.greengrim.green.core.challenge.controller;
 
 import com.greengrim.green.common.auth.CurrentMember;
 import com.greengrim.green.core.challenge.dto.ChallengeRequestDto.RegisterChallenge;
+import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.EnterChallengeResponse;
 import com.greengrim.green.core.challenge.service.RegisterChallengeService;
-import com.greengrim.green.core.chatroom.dto.ChatroomResponseDto.ChatroomInfo;
 import com.greengrim.green.core.member.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -24,7 +24,7 @@ public class RegisterChallengeController {
      */
     @Operation(summary = "챌린지 생성")
     @PostMapping("/visitor/challenges")
-    public ResponseEntity<ChatroomInfo> registerChallenge(@CurrentMember Member member,
+    public ResponseEntity<EnterChallengeResponse> registerChallenge(@CurrentMember Member member,
             @Valid @RequestBody RegisterChallenge registerChallenge) {
         return ResponseEntity.ok(registerChallengeService.register(member, registerChallenge));
     }

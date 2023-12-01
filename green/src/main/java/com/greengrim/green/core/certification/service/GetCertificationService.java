@@ -3,6 +3,7 @@ package com.greengrim.green.core.certification.service;
 import com.greengrim.green.common.entity.dto.PageResponseDto;
 import com.greengrim.green.common.exception.BaseException;
 import com.greengrim.green.common.exception.errorCode.CertificationErrorCode;
+import com.greengrim.green.common.exception.errorCode.VerificationErrorCode;
 import com.greengrim.green.core.certification.Certification;
 import com.greengrim.green.core.certification.VerificationFlag;
 import com.greengrim.green.core.certification.dto.CertificationResponseDto.CertificationDetailInfo;
@@ -62,18 +63,16 @@ public class GetCertificationService {
     /**
      * 챌린지 월 별 인증 유무를 date 리스트 형식으로 반환
      */
-    public CertificationsByMonth getCertificationsByChallengeMonth(
-            Member member, Long challengeId, String month) {
-        List<String> date = certificationRepository.findCertificationsByChallengeMonth(month, challengeId);
+    public CertificationsByMonth getCertificationsByChallengeMonth(Member member, Long challengeId) {
+        List<String> date = certificationRepository.findCertificationsByChallengeMonth(challengeId);
         return new CertificationsByMonth(date);
     }
 
     /**
      * 멤버 월 별 인증 유무를 date 리스트 형식으로 반환
      */
-    public CertificationsByMonth getCertificationsByMemberMonth(
-            Member member, String month) {
-        List<String> date = certificationRepository.findCertificationsByMemberMonth(month, member.getId());
+    public CertificationsByMonth getCertificationsByMemberMonth(Member member) {
+        List<String> date = certificationRepository.findCertificationsByMemberMonth(member.getId());
         return new CertificationsByMonth(date);
     }
 
@@ -107,5 +106,16 @@ public class GetCertificationService {
                 certificationsByMemberDates.add(new CertificationsByMemberDate(certification)));
 
         return  new PageResponseDto<>(certifications.getNumber(), certifications.hasNext(), certificationsByMemberDates);
+    }
+
+    /**
+     * 출석체크 할 인증의 id를 반환
+     * 조건 1. certification.validation = 0
+     * 조건 2. certification.verificationCount 가 작은 순
+     * 조건 3. 이미 참여했거나 내 인증은 제외
+     */
+    public Long findCertificationForVerification(Member member) {
+        return certificationRepository.findCertificationForVerification(member.getId())
+                .orElseThrow(() -> new BaseException(VerificationErrorCode.NOT_EXIST_VERIFICATION));
     }
 }

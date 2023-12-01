@@ -1,18 +1,12 @@
 package com.greengrim.green.core.certification.controller;
 
 import com.greengrim.green.common.auth.CurrentMember;
-import com.greengrim.green.common.entity.SortOption;
 import com.greengrim.green.common.entity.dto.PageResponseDto;
-import com.greengrim.green.core.certification.Certification;
 import com.greengrim.green.core.certification.dto.CertificationResponseDto.CertificationDetailInfo;
-import com.greengrim.green.core.certification.dto.CertificationResponseDto.CertificationInfo;
 import com.greengrim.green.core.certification.dto.CertificationResponseDto.CertificationsByChallengeDate;
 import com.greengrim.green.core.certification.dto.CertificationResponseDto.CertificationsByMemberDate;
 import com.greengrim.green.core.certification.dto.CertificationResponseDto.CertificationsByMonth;
 import com.greengrim.green.core.certification.service.GetCertificationService;
-import com.greengrim.green.core.challenge.Category;
-import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.ChallengeDetailInfo;
-import com.greengrim.green.core.challenge.dto.ChallengeResponseDto.ChallengeSimpleInfo;
 import com.greengrim.green.core.member.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
@@ -50,10 +44,9 @@ public class GetCertificationController {
     @GetMapping("/certifications/month")
     public ResponseEntity<CertificationsByMonth> getCertificationsByChallengeMonth(
             @CurrentMember Member member,
-            @RequestParam(value = "challengeId") Long challengeId,
-            @RequestParam(value = "month") String month) { // 2023-01
+            @RequestParam(value = "challengeId") Long challengeId) {
         return ResponseEntity.ok(getCertificationService.getCertificationsByChallengeMonth(
-                member, challengeId, month));
+                member, challengeId));
     }
 
     /**
@@ -77,10 +70,8 @@ public class GetCertificationController {
     @Operation(summary = "내 챌린지 인증 내역 조회 - MONTH")
     @GetMapping("/visitor/certifications/month")
     public ResponseEntity<CertificationsByMonth> getCertificationsByChallengeMonth(
-            @CurrentMember Member member,
-            @RequestParam(value = "month") String month) { // 2023-01
-        return ResponseEntity.ok(getCertificationService.getCertificationsByMemberMonth(
-                member, month));
+            @CurrentMember Member member) {
+        return ResponseEntity.ok(getCertificationService.getCertificationsByMemberMonth(member));
     }
 
     /**
@@ -95,6 +86,19 @@ public class GetCertificationController {
             @RequestParam(value = "size") int size) { // 2023-11-07
         return ResponseEntity.ok(getCertificationService.getCertificationsByMemberDate(
                 member, date, page, size));
+    }
+
+    /**
+     * [GET] 상호 검증할 인증 상세 조회 - 출석체크
+     */
+    @Operation(summary = "상호 검증할 인증 상세 조회 - 출석체크")
+    @GetMapping("/visitor/verifications")
+    public ResponseEntity<CertificationDetailInfo> registerVerification(
+            @CurrentMember Member member) {
+        return new ResponseEntity<>(
+                getCertificationService.getCertificationInfo(
+                        member, getCertificationService.findCertificationForVerification(member))
+                , HttpStatus.OK);
     }
 
 }
