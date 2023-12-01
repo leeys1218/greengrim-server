@@ -5,7 +5,6 @@ import com.greengrim.green.core.chat.ChatMessage.MessageType;
 import com.greengrim.green.core.chat.service.ChatService;
 import com.greengrim.green.core.chatparticipant.ChatparticipantService;
 import com.greengrim.green.core.chatroom.Chatroom;
-import com.greengrim.green.core.chatroom.dto.ChatroomResponseDto.ChatroomInfo;
 import com.greengrim.green.core.chatroom.repository.ChatroomRepository;
 import com.greengrim.green.core.member.Member;
 import jakarta.transaction.Transactional;
@@ -67,7 +66,7 @@ public class ChatroomService{
   public void exitChatroom(Member member, Long chatroomId) {
     chatparticipantService.remove(member.getId(), chatroomId);
     chatService.sendChatMessage(ChatMessage.builder()
-        .type(MessageType.QUIT)
+        .type(MessageType.EXIT)
         .roomId(chatroomId)
         .senderId(member.getId())
         .message(member.getNickName() + "님이 퇴장했습니다.")
