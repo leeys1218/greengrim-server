@@ -20,6 +20,10 @@ public class NftManager {
 
     private Long count;
 
+    public NftManager(Long count) {
+        this.count = count;
+    }
+
     public void upCount() {
         this.count++;
     }
