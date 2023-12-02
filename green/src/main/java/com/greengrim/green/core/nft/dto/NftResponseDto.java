@@ -47,15 +47,14 @@ public class NftResponseDto {
         private boolean isMine;
         private boolean isMarketed;
 
-        public NftDetailInfo(Member member, Nft nft, String price,
-                             boolean isMine, boolean isMarketed) {
-            memberSimpleInfo = new MemberSimpleInfo(member);
+        public NftDetailInfo(Nft nft, String price, boolean isMine) {
+            memberSimpleInfo = new MemberSimpleInfo(nft.getMember());
             nftInfo = new NftInfo(nft);
             this.contracts = nft.getContracts();
             this.tokenId = nft.getNftId();
             this.price = price;
             this.isMine = isMine;
-            this.isMarketed = isMarketed;
+            this.isMarketed = nft.isMarketed();
 
         }
     }

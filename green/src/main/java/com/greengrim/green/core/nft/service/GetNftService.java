@@ -21,13 +21,12 @@ public class GetNftService {
                 .orElseThrow(() -> new BaseException(NftErrorCode.EMPTY_NFT));
 
         String price = getPrice(nft);
-        return new NftDetailInfo(
-                nft.getMember(),
-                nft,
-                price,
-                checkIsMine(member.getId(), nft.getMember().getId()),
-                nft.isMarketed()    // 변동 가능성 있는 부분
-                );
+
+        boolean isMine = false;
+        if(member!= null) { // 로그인 했다면
+            isMine = checkIsMine(member.getId(), nft.getMember().getId());
+        }
+        return new NftDetailInfo(nft, price, isMine);
     }
 
     private String getPrice(Nft nft) {
