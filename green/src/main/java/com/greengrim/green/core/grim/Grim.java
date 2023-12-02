@@ -1,50 +1,33 @@
-package com.greengrim.green.core.nft;
+package com.greengrim.green.core.grim;
 
 import com.greengrim.green.common.entity.BaseTime;
 import com.greengrim.green.core.member.Member;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Builder
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Nft extends BaseTime {
+@Getter
+@Entity
+public class Grim extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @NotNull
-    private String nftId;
-    @NotNull
+    @Size(min = 1, max = 30)
     private String title;
     @NotNull
-    private String description;
-    @NotNull
-    private String contracts;
-    @NotNull
-    private String txHash;
-    @NotNull
     private String imgUrl;
-    @NotNull
-    private int reportCount;
-    @NotNull
-    private boolean status;
-    @NotNull
-    private boolean isMarketed;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Member member;
-
 }

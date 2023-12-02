@@ -2,7 +2,10 @@ package com.greengrim.green.common.kas;
 
 import com.greengrim.green.common.exception.BaseException;
 import com.greengrim.green.common.exception.ErrorCode;
+import com.greengrim.green.common.exception.errorCode.NftErrorCode;
 import com.greengrim.green.common.exception.errorCode.WalletErrorCode;
+import com.greengrim.green.core.nft.dto.NftRequestDto.RegisterNft;
+import com.greengrim.green.core.wallet.Wallet;
 import java.io.IOException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -10,12 +13,14 @@ import java.net.http.HttpResponse;
 import java.text.ParseException;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
 public class KasService {
+
+    private final ParseService parseService;
     private final KasProperties kasProperties;
 
     private String checkResponse(HttpResponse<String> response, String parameter,
@@ -24,7 +29,7 @@ public class KasService {
         if (response.statusCode() != 200) {
             throw new BaseException(errorCode);
         }
-        JSONObject jsonObject = parseBody(response);
+        JSONObject jsonObject = parseService.parseBody(response);
         if (jsonObject.get(parameter) == null) {
             throw new BaseException(errorCode);
         }
@@ -59,10 +64,72 @@ public class KasService {
                 WalletErrorCode.FAILED_CREATE_WALLET);
     }
 
-    private JSONObject parseBody(HttpResponse<String> response) throws org.json.simple.parser.ParseException {
-        JSONParser parser = new JSONParser();
-        Object obj = parser.parse(response.body());
-        return (JSONObject) obj;
+    /**
+     * 지갑 Klay Balance 조회
+     */
+    public double getKlay(Wallet wallet)
+            throws IOException, org.json.simple.parser.ParseException, InterruptedException, ParseException {
+        String url = "https://node-api.klaytnapi.com/v1/klaytn";
+        HttpRequest.BodyPublisher body = HttpRequest.BodyPublishers.ofString(
+                "{\n  " +
+                        "\"id\": 1,\n  " +
+                        "\"jsonrpc\": \"2.0\",\n " +
+                        " \"method\": \"klay_getBalance\",\n  " +
+                        "\"params\": [ \"" + wallet.getAddress() + "\",\"latest\"]\n" +
+                        "}"
+        );
+        String balance = useKasApi(url, "POST", body, "result", WalletErrorCode.FAILED_GET_KLAY);
+        return Double.parseDouble(parseService.pebToDecimal(balance));
+    }
+
+    /**
+     * TODO: 로직 정하기 1)프론트에서 에셋 생성 2)백에서 에셋 생성
+     * 에셋 업로드
+     */
+    public String uploadAsset(MultipartFile file)
+            throws IOException, ParseException, org.json.simple.parser.ParseException, InterruptedException {
+        String url = "https://metadata-api.klaytnapi.com/v1/metadata/asset";
+        // TODO: from-data 로 전송하도록 바꾸기
+        HttpRequest.BodyPublisher body = HttpRequest.BodyPublishers.ofString(
+                "{\n  " +
+                        "\"file\": \"" + file + "\n" +
+                        "}"
+        );
+        return useKasApi(url, "POST", body, "uri", NftErrorCode.FAILED_CREATE_ASSET);
+    }
+
+    /**
+     * 메타 데이터 생성
+     */
+    public String uploadMetadata(RegisterNft registerNft)
+            throws IOException, org.json.simple.parser.ParseException, InterruptedException, ParseException {
+        String url = "https://metadata-api.klaytnapi.com/v1/metadata";
+        HttpRequest.BodyPublisher body = HttpRequest.BodyPublishers.ofString(
+                "{\n  " +
+                        "\"metadata\": {\n    " +
+                        "\"name\": \"" + registerNft.getTitle() + "\",\n    " +
+                        "\"description\": \"" + registerNft.getDescription() + "\",\n    " +
+                        "\"image\": \"" + registerNft.getAsset() + "\"" +
+                        "\n  }\n" +
+                        "}");
+        return useKasApi(url, "POST", body, "uri", NftErrorCode.FAILED_CREATE_METADATA);
+    }
+
+    /**
+     * NFT 민팅
+     */
+    public String createNft(String walletAddress, String nftId, String metadataUri)
+            throws IOException, org.json.simple.parser.ParseException, InterruptedException, ParseException {
+        String url = "https://kip17-api.klaytnapi.com/v2/contract/" + kasProperties.getNftContract()
+                + "/token";
+        HttpRequest.BodyPublisher body = HttpRequest.BodyPublishers.ofString(
+                "{\n  " +
+                        "\"to\": \"" + walletAddress + "\",\n  " +
+                        "\"id\": \"" + nftId + "\",\n  " +
+                        "\"uri\": \"" + metadataUri + "\"\n" +
+                        "}"
+        );
+        return useKasApi(url, "POST", body, "transactionHash", NftErrorCode.FAILED_CREATE_NFT);
     }
 
 }
