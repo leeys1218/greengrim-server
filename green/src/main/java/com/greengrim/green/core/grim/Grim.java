@@ -27,6 +27,8 @@ public class Grim extends BaseTime {
     private String title;
     @NotNull
     private String imgUrl;
+    @NotNull
+    private boolean status;
 
     @ManyToOne
     private Member member;
