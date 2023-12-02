@@ -36,6 +36,7 @@ public class RegisterMemberService {
                 .status(true)
                 .refreshToken("")
                 .deviceToken("")
+                .fcmToken(registerMemberReq.getFcmToken())
                 .role(Role.ROLE_VISITOR)
                 .build();
         save(member);
@@ -67,6 +68,7 @@ public class RegisterMemberService {
         if (member != null) {
             MemberResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(member.getId());
             member.changeRefreshToken(tokenInfo.getRefreshToken());
+            member.changeFcmToken(loginMemberReq.getFcmToken());
             return tokenInfo;
         } else {
             throw new BaseException(MemberErrorCode.UN_REGISTERED_MEMBER);

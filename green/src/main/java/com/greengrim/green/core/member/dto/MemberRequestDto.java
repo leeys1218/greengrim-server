@@ -19,6 +19,7 @@ public class MemberRequestDto {
         private String nickName;
         private String introduction;
         private String profileImgUrl;
+        private String fcmToken;
     }
 
     @Getter
@@ -27,6 +28,7 @@ public class MemberRequestDto {
     public static class LoginMemberReq {
         @Email(message= "이메일 형식이 아닙니다.")
         private String email;
+        private String fcmToken;
     }
 
     @Getter
