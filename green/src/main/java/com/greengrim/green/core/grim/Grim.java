@@ -32,4 +32,8 @@ public class Grim extends BaseTime {
 
     @ManyToOne
     private Member member;
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }
