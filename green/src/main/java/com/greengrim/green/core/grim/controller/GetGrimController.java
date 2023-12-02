@@ -33,4 +33,17 @@ public class GetGrimController {
             @RequestParam(value = "sort") SortOption sortOption) {
         return ResponseEntity.ok(getGrimService.getGrims(member, page, size, sortOption));
     }
+
+    /**
+     * [GET] 내 그림 목록 조회
+     */
+    @Operation(summary = "내 그림 목록 조회")
+    @GetMapping("/visitor/grims")
+    public ResponseEntity<PageResponseDto<List<GrimInfo>>> getMyGrims(
+            @CurrentMember Member member,
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "size") int size,
+            @RequestParam(value = "sort") SortOption sortOption) {
+        return ResponseEntity.ok(getGrimService.getMyGrims(member, page, size, sortOption));
+    }
 }

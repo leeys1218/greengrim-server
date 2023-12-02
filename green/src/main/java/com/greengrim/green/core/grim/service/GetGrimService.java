@@ -27,12 +27,19 @@ public class GetGrimService {
     private final GrimRepository grimRepository;
 
     public PageResponseDto<List<GrimInfo>> getGrims(Member member, int page, int size, SortOption sortOption) {
-        List<GrimInfo> grimInfos = new ArrayList<>();
-
+        // TODO: 차단 목록 제외하기
         Page<Grim> grims = grimRepository.findAllStatusIsTrue(getPageable(page, size, sortOption));
+        return pagingGrim(grims);
+    }
 
+    public PageResponseDto<List<GrimInfo>> getMyGrims(Member member, int page, int size, SortOption sortOption) {
+        Page<Grim> grims = grimRepository.findByMemberStatusIsTrue(member, getPageable(page, size, sortOption));
+        return pagingGrim(grims);
+    }
+
+    private PageResponseDto<List<GrimInfo>> pagingGrim(Page<Grim> grims) {
+        List<GrimInfo> grimInfos = new ArrayList<>();
         grims.forEach(grim -> grimInfos.add(new GrimInfo(grim)));
-
         return new PageResponseDto<>(grims.getNumber(), grims.hasNext(), grimInfos);
     }
 
