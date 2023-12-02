@@ -54,12 +54,13 @@ public class Member extends BaseTime {
     @OneToOne
     private Wallet wallet;
 
-    // not null로 수정하기
+    @NotNull
     private String fcmToken;
 
     public void changeRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }
+    public void changeFcmToken(String fcmToken) { this.fcmToken = fcmToken; }
 
     public void modifyMember(String nickName,
                              String introduction,
