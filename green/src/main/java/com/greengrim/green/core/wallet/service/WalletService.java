@@ -57,7 +57,7 @@ public class WalletService {
         }
 
         boolean matched = false;
-        if (bcryptService.isMatch(wallet.getPassword(), password)) {
+        if (bcryptService.isMatch(password, wallet.getPassword())) {
             wallet.initWrongCount();
             matched = true;
         } else {

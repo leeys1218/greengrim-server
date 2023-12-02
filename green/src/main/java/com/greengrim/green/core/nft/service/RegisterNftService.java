@@ -53,7 +53,7 @@ public class RegisterNftService {
         // MetaData 업로드하고 imgUrl 받아오기
         String imgUrl = kasService.uploadMetadata(registerNft);
         // GreenGrim 토큰으로 발행된 NFT는 모두 순서를 정해서 번호를 해야함! 우리는 그냥 10진수로 하자
-        String nftId = String.valueOf(nftManagerService.getNftIdAndPlusOne());
+        String nftId = "0x" + Long.toHexString(nftManagerService.getNftIdAndPlusOne());
         // Minting 하고 txHash 받아오기
         String txHash = kasService.createNft(wallet.getAddress(), nftId, imgUrl);
         // NFT 객체 생성하기
