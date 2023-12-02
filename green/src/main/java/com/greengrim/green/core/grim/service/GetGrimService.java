@@ -7,12 +7,16 @@ import com.greengrim.green.common.entity.SortOption;
 import com.greengrim.green.common.entity.dto.PageResponseDto;
 import com.greengrim.green.common.exception.BaseException;
 import com.greengrim.green.common.exception.errorCode.GlobalErrorCode;
+import com.greengrim.green.common.exception.errorCode.GrimErrorCode;
+import com.greengrim.green.common.exception.errorCode.NftErrorCode;
 import com.greengrim.green.core.grim.Grim;
+import com.greengrim.green.core.grim.dto.GrimResponseDto.GrimDetailInfo;
 import com.greengrim.green.core.grim.dto.GrimResponseDto.GrimInfo;
 import com.greengrim.green.core.grim.repository.GrimRepository;
 import com.greengrim.green.core.member.Member;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -37,6 +41,16 @@ public class GetGrimService {
         return pagingGrim(grims);
     }
 
+    public GrimDetailInfo getGrimDetailInfo(Member member, Long id) {
+        Grim grim = grimRepository.findByIdAndStatusIsTrue(id)
+                .orElseThrow(() -> new BaseException(GrimErrorCode.EMPTY_GRIM));
+        boolean isMine = false;
+        if(member!= null) { // 로그인 했다면
+            isMine = checkIsMine(member.getId(), grim.getMember().getId());
+        }
+        return new GrimDetailInfo(grim, isMine);
+    }
+
     private PageResponseDto<List<GrimInfo>> pagingGrim(Page<Grim> grims) {
         List<GrimInfo> grimInfos = new ArrayList<>();
         grims.forEach(grim -> grimInfos.add(new GrimInfo(grim)));
@@ -51,5 +65,9 @@ public class GetGrimService {
         } else {
             throw new BaseException(GlobalErrorCode.NOT_VALID_ARGUMENT_ERROR);
         }
+    }
+
+    private boolean checkIsMine(Long memberId, Long ownerId) {
+        return Objects.equals(memberId, ownerId);
     }
 }
