@@ -52,6 +52,6 @@ public class ChatService {
     }
 
     redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessage);
-    fcmService.sendMessageToFcm(chatMessage);
+    fcmService.sendChatMessage(chatMessage);
   }
 }
