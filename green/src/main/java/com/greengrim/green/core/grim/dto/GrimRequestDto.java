@@ -11,4 +11,13 @@ public class GrimRequestDto {
         private Long id;
         private String title;
     }
+
+    @Getter
+    @AllArgsConstructor
+    public static class RegisterGrimInfo {
+        private String noun;
+        private String verb;
+        private String style;
+    }
+
 }
