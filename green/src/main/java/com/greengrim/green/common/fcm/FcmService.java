@@ -53,6 +53,7 @@ public class FcmService {
 
   public void sendGrimGenerationSuccess(GrimInfo grimInfo, String token) {
     Message message = Message.builder()
+        .putData("type", "SUCCESS")
         .putData("grimId", String.valueOf(grimInfo.getId()))
         .putData("grimImgUrl", grimInfo.getImgUrl())
         .putData("grimTitle", grimInfo.getTitle())
@@ -67,7 +68,7 @@ public class FcmService {
 
   public void sendGrimGenerationFail(String token) {
     Message message = Message.builder()
-        .putData("grimTitle", "그림 생성에 실패했습니다.")
+        .putData("type", "FAIL")
         .setToken(token)
         .build();
 

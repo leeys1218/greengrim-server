@@ -62,7 +62,8 @@ public class RegisterGrimService {
         result -> {
           System.out.println("Success: " + result);
           member.minusPoint(500);
-          fcmService.sendGrimGenerationSuccess(register(member, result), member.getFcmToken());
+          String imgUrl = result.replace("\"", "");
+          fcmService.sendGrimGenerationSuccess(register(member, imgUrl), member.getFcmToken());
         },
         error -> {
           System.err.println("Error: " + error.getMessage());
