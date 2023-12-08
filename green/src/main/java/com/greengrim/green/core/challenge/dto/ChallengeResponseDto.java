@@ -70,12 +70,14 @@ public class ChallengeResponseDto {
         private ChallengeTags challengeTags;
         private String createdAt;
         private boolean isEntered;
+        private boolean isMine;
 
-        public ChallengeDetailInfo(Challenge challenge, boolean isEntered) {
+        public ChallengeDetailInfo(Challenge challenge, boolean isEntered, boolean isMine) {
             this.challengeInfo = new ChallengeInfo(challenge);
             this.challengeTags = new ChallengeTags(challenge);
             this.createdAt = calculateTime(challenge.getCreatedAt(), 1);
             this.isEntered = isEntered;
+            this.isMine = isMine;
         }
     }
 

@@ -16,6 +16,7 @@ import com.greengrim.green.core.member.Member;
 import com.greengrim.green.core.verification.VerificationService;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -36,8 +37,8 @@ public class GetCertificationService {
                 .orElseThrow(() -> new BaseException(CertificationErrorCode.EMPTY_CHALLENGE));
 
         VerificationFlag isVerified = checkVerificationFlag(member, certification);
-
-        return new CertificationDetailInfo(certification, isVerified);
+        boolean isMine = checkIsMine(member.getId(), certification.getMember().getId());
+        return new CertificationDetailInfo(certification, isVerified, isMine);
     }
 
     private VerificationFlag checkVerificationFlag(Member member, Certification certification) {
@@ -51,6 +52,10 @@ public class GetCertificationService {
             return VerificationFlag.FALSE;
         }
         return VerificationFlag.DEACTIVATION;
+    }
+
+    private boolean checkIsMine(Long memberId, Long ownerId) {
+        return Objects.equals(memberId, ownerId);
     }
 
     /**
