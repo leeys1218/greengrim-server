@@ -58,12 +58,14 @@ public class CertificationResponseDto {
         MemberSimpleInfo memberSimpleInfo;
         CertificationInfo certificationInfo;
         private VerificationFlag isVerified;
+        private boolean isMine;
 
-        public CertificationDetailInfo(Certification certification, VerificationFlag isVerified) {
+        public CertificationDetailInfo(Certification certification, VerificationFlag isVerified, boolean isMine) {
             this.memberSimpleInfo = new MemberSimpleInfo(certification.getMember());
             this.challengeInfo = new ChallengeInfoForCertification(certification.getChallenge());
             this.certificationInfo = new CertificationInfo(certification);
             this.isVerified = isVerified;
+            this.isMine = isMine;
         }
     }
 
