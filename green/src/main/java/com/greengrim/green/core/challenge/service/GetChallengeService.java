@@ -1,15 +1,11 @@
 package com.greengrim.green.core.challenge.service;
 
-import static com.greengrim.green.common.entity.SortOption.ASC;
-import static com.greengrim.green.common.entity.SortOption.DESC;
-import static com.greengrim.green.common.entity.SortOption.GREATEST;
-import static com.greengrim.green.common.entity.SortOption.LEAST;
+import static com.greengrim.green.common.util.UtilService.getPageable;
 
 import com.greengrim.green.common.entity.SortOption;
 import com.greengrim.green.common.entity.dto.PageResponseDto;
 import com.greengrim.green.common.exception.BaseException;
 import com.greengrim.green.common.exception.errorCode.ChallengeErrorCode;
-import com.greengrim.green.common.exception.errorCode.GlobalErrorCode;
 import com.greengrim.green.core.certification.service.GetCertificationService;
 import com.greengrim.green.core.challenge.Category;
 import com.greengrim.green.core.challenge.Challenge;
@@ -32,8 +28,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -84,25 +78,6 @@ public class GetChallengeService {
 
     private boolean checkIsMine(Long memberId, Long ownerId) {
         return Objects.equals(memberId, ownerId);
-    }
-
-    /**
-     * 페이징 옵션에 따라 챌린지용 Pageable을 생성해주는 함수
-     * TODO: 인원 많은 순, 적은 순 추가
-     */
-    private Pageable getPageable(int page, int size, SortOption sort) {
-        if (sort == DESC) { // 최신순
-            return PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
-        } else if (sort == ASC) { // 오래된순
-            return PageRequest.of(page, size, Sort.Direction.ASC, "createdAt");
-        } else if (sort == GREATEST) {
-            return PageRequest.of(page, size, Sort.Direction.DESC, "headCount");
-        } else if (sort == LEAST) {
-            return PageRequest.of(page, size, Direction.ASC, "headCount");
-        }
-        else {
-            throw new BaseException(GlobalErrorCode.NOT_VALID_ARGUMENT_ERROR);
-        }
     }
 
     /**

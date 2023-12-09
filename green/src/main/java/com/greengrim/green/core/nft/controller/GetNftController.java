@@ -1,6 +1,7 @@
 package com.greengrim.green.core.nft.controller;
 
 import com.greengrim.green.common.auth.CurrentMember;
+import com.greengrim.green.common.entity.SortOption;
 import com.greengrim.green.common.entity.dto.PageResponseDto;
 import com.greengrim.green.core.member.Member;
 import com.greengrim.green.core.nft.dto.NftResponseDto.HomeNftInfo;
@@ -43,7 +44,7 @@ public class GetNftController {
     @GetMapping("/home/nfts")
     public ResponseEntity<HomeNfts> getHotNfts(
             @CurrentMember Member member) {
-        return ResponseEntity.ok(getNftService.getHomeNfts(member, 5));
+        return ResponseEntity.ok(getNftService.getHomeNfts(member, 0,5, SortOption.DESC));
     }
 
     /**
@@ -54,8 +55,9 @@ public class GetNftController {
     public ResponseEntity<PageResponseDto<List<HomeNftInfo>>> getMoreHotNfts(
             @CurrentMember Member member,
             @RequestParam(value = "page") int page,
-            @RequestParam(value = "size") int size) {
-        return ResponseEntity.ok(getNftService.getMoreHotNfts(member, page, size));
+            @RequestParam(value = "size") int size,
+            @RequestParam(value = "sort") SortOption sort) {
+        return ResponseEntity.ok(getNftService.getMoreHotNfts(member, page, size, sort));
     }
 
     /**
@@ -66,7 +68,8 @@ public class GetNftController {
     public ResponseEntity<PageResponseDto<List<HomeNftInfo>>> getMoreHotChallenges(
             @CurrentMember Member member,
             @RequestParam(value = "page") int page,
-            @RequestParam(value = "size") int size) {
-        return ResponseEntity.ok(getNftService.getMyHotNfts(member, page, size));
+            @RequestParam(value = "size") int size,
+            @RequestParam(value = "sort") SortOption sort) {
+        return ResponseEntity.ok(getNftService.getMyHotNfts(member, page, size, sort));
     }
 }

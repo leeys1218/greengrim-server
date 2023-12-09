@@ -15,9 +15,9 @@ public interface NftRepository extends JpaRepository<Nft, Long> {
 
     Optional<Nft> findByIdAndStatusTrue(Long id);
 
-    @Query(value = "SELECT n FROM Nft n WHERE n.status=true ORDER BY n.createdAt DESC")
+    @Query(value = "SELECT n FROM Nft n WHERE n.status=true")
     Page<Nft> findHomeNfts(Pageable pageable);
 
-    @Query(value = "SELECT n FROM Nft n WHERE n.status=true AND n.member=:member ORDER BY n.createdAt DESC")
+    @Query(value = "SELECT n FROM Nft n WHERE n.status=true AND n.member=:member")
     Page<Nft> findMyNfts(@Param("member") Member member, Pageable pageable);
 }
