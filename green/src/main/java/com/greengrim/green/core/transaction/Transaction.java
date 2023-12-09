@@ -34,19 +34,13 @@ public class Transaction extends BaseTime {
 
     @NotNull
     private Long buyerId;
-    @NotNull
     private Long sellerId;
 
-    @NotNull
     private Double payAmount;
-    @NotNull
     private Double payBackAmount;
 
-    @NotNull
     private String payTransaction;
-    @NotNull
     private String payBackTransaction;
-    @NotNull
     private String feeTransaction;
 
 

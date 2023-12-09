@@ -26,7 +26,7 @@ public class RegisterMarketController {
     /**
      * 마켓에 NFT 등록하기 Api
      */
-    @PostMapping("/member/market")
+    @PostMapping("/member/markets")
     public ResponseEntity<Integer> registerMarket(@CurrentMember Member member,
                                                   @RequestBody RegisterNftToMarket registerNftToMarket)
             throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, InvalidKeySpecException, BadPaddingException, InvalidKeyException {

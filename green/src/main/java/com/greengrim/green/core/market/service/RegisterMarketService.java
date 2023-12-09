@@ -13,12 +13,6 @@ import com.greengrim.green.core.nft.repository.NftRepository;
 import com.greengrim.green.core.wallet.Wallet;
 import com.greengrim.green.core.wallet.service.WalletService;
 import jakarta.transaction.Transactional;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -49,6 +43,7 @@ public class RegisterMarketService {
                 .price(registerNft.getPrice())
                 .nft(nft)
                 .member(member)
+                .status(true)
                 .build();
         save(market);
         nft.setMarket(market);
