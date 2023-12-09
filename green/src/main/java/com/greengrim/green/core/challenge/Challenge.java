@@ -2,6 +2,7 @@ package com.greengrim.green.core.challenge;
 
 import com.greengrim.green.common.entity.BaseTime;
 import com.greengrim.green.core.chatroom.Chatroom;
+import com.greengrim.green.core.keyword.Keyword;
 import com.greengrim.green.core.member.Member;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -55,8 +56,10 @@ public class Challenge extends BaseTime {
     @NotNull
     @Max(100)
     private int headCount;          // 현재 인원
-    @NotNull
-    private String keyword;
+
+    @ManyToOne
+    private Keyword keyword;
+
     private boolean status;
 
     @ManyToOne(fetch = FetchType.LAZY)
