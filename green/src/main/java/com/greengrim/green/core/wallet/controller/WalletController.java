@@ -7,6 +7,7 @@ import com.greengrim.green.core.wallet.dto.WalletRequestDto.CheckPassword;
 import com.greengrim.green.core.wallet.dto.WalletResponseDto.ExistsWalletInfo;
 import com.greengrim.green.core.wallet.dto.WalletResponseDto.WalletDetailInfo;
 import com.greengrim.green.core.wallet.service.WalletService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import java.io.IOException;
 import java.security.InvalidKeyException;
@@ -33,6 +34,7 @@ public class WalletController {
     /**
      * [POST] 지갑 발급하기
      */
+    @Operation(summary = "지갑 발급하기")
     @PostMapping("/visitor/wallets")
     public ResponseEntity<Integer> registerWallet(
             @Valid @RequestBody CheckPassword checkPassword, @CurrentMember Member member)
@@ -44,6 +46,7 @@ public class WalletController {
     /**
      * [GET] 지갑 정보 가져오기
      */
+    @Operation(summary = "지갑 정보 가져오기")
     @GetMapping("/member/wallets")
     public ResponseEntity<WalletDetailInfo> getWalletDetail(@CurrentMember Member member)
             throws IOException, ParseException, InterruptedException, java.text.ParseException {
@@ -53,6 +56,7 @@ public class WalletController {
     /**
      * [GET] 지갑 존재 여부 가져오기
      */
+    @Operation(summary = "지갑 존재 여부 가져오기")
     @GetMapping("/visitor/wallets")
     public ResponseEntity<ExistsWalletInfo> existsWallet(@CurrentMember Member member) {
         return new ResponseEntity<>(walletService.existsWallet(member), HttpStatus.OK);

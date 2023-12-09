@@ -4,6 +4,7 @@ import com.greengrim.green.common.auth.CurrentMember;
 import com.greengrim.green.core.grim.dto.GrimRequestDto.RegisterGrimInfo;
 import com.greengrim.green.core.grim.service.RegisterGrimService;
 import com.greengrim.green.core.member.Member;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +19,7 @@ public class RegisterGrimController {
   /**
    * [POST] 그림 생성
    */
+  @Operation(summary = "그림 생성")
   @PostMapping("/visitor/grims")
   public void generateGrim(
       @CurrentMember Member member,
