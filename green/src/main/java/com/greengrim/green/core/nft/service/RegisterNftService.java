@@ -49,9 +49,9 @@ public class RegisterNftService {
                 .description(registerNft.getDescription())
                 .reportCount(0)
                 .status(true)
-                .isMarketed(false)
                 .member(member)
                 .grim(grim)
+                .market(null)
                 .build();
         nftRepository.save(nft);
         return nft;

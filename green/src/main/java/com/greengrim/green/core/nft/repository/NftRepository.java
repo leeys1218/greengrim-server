@@ -15,6 +15,9 @@ public interface NftRepository extends JpaRepository<Nft, Long> {
 
     Optional<Nft> findByIdAndStatusTrue(Long id);
 
+    @Query(value = "SELECT n FROM Nft n LEFT JOIN FETCH n.market WHERE n.id =:id AND n.member =:member AND n.status = true")
+    Optional<Nft> findByIdAndMemberAndStatusTrue(@Param("member") Member member, Long id);
+
     @Query(value = "SELECT n FROM Nft n WHERE n.status=true")
     Page<Nft> findHomeNfts(Pageable pageable);
 
