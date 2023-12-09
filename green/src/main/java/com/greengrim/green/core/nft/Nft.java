@@ -52,8 +52,9 @@ public class Nft extends BaseTime {
     @OneToOne(fetch = FetchType.LAZY)
     private Grim grim;
 
-    public void setStatusFalse() {
+    public void delete() {
         this.status = false;
+        this.grim = null;
     }
 
 }

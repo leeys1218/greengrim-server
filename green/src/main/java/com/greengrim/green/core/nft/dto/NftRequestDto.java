@@ -13,11 +13,13 @@ public class NftRequestDto {
     public static class RegisterNft {
         @NotBlank(message = "비밀번호가 일치하지 않습니다.")
         private String password;
-        @NotBlank(message = "제목은 빈값일 수 없습니다.")
+        @NotBlank(message = "그림 ID는 빈 값일 수 없습니다.")
+        private Long grimId;
+        @NotBlank(message = "제목은 빈 값일 수 없습니다.")
         private String title;
-        @NotBlank(message = "설명은 빈값일 수 없습니다.")
+        @NotBlank(message = "설명은 빈 값일 수 없습니다.")
         private String description;
-        @NotBlank(message = "에셋은 빈값일 수 없습니다.")
+        @NotBlank(message = "에셋은 빈 값일 수 없습니다.")
         private String asset;
     }
 }

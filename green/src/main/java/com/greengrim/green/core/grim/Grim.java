@@ -43,4 +43,8 @@ public class Grim extends BaseTime {
     public void setTitle(String title) {
         this.title = title;
     }
+
+    public void setNft(Nft nft) {
+        this.nft = nft;
+    }
 }

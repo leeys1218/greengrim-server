@@ -33,6 +33,7 @@ public class RegisterGrimService {
                 .imgUrl(imgUrl)
                 .status(true)
                 .member(member)
+                .nft(null)
                 .build();
         save(grim);
         return new GrimInfo(grim);

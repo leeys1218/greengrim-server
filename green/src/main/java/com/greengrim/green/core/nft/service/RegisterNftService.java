@@ -1,8 +1,12 @@
 package com.greengrim.green.core.nft.service;
 
-import com.greengrim.green.common.kas.KasProperties;
-import com.greengrim.green.common.kas.KasService;
-import com.greengrim.green.common.kas.NftManager.NftManagerService;
+import com.greengrim.green.common.exception.BaseException;
+import com.greengrim.green.common.exception.errorCode.GrimErrorCode;
+import com.greengrim.green.core.grim.Grim;
+import com.greengrim.green.core.grim.repository.GrimRepository;
+import com.greengrim.green.core.wallet.kas.KasProperties;
+import com.greengrim.green.core.wallet.kas.KasService;
+import com.greengrim.green.core.wallet.kas.NftManager.NftManagerService;
 import com.greengrim.green.core.member.Member;
 import com.greengrim.green.core.nft.Nft;
 import com.greengrim.green.core.nft.dto.NftRequestDto.RegisterNft;
@@ -26,9 +30,10 @@ public class RegisterNftService {
     private final WalletService walletService;
     private final NftManagerService nftManagerService;
     private final NftRepository nftRepository;
+    private final GrimRepository grimRepository;
 
     public Nft register(Member member, RegisterNft registerNft, String nftId,
-                        String contracts, String txHash, String imgUrl) {
+                        String contracts, String txHash, String imgUrl, Grim grim) {
         Nft nft = Nft.builder()
                 .nftId(nftId)
                 .contracts(contracts)
@@ -40,6 +45,7 @@ public class RegisterNftService {
                 .status(true)
                 .isMarketed(false)
                 .member(member)
+                .grim(grim)
                 .build();
         nftRepository.save(nft);
         return nft;
@@ -47,9 +53,13 @@ public class RegisterNftService {
 
     public NftId registerNft(Member member, RegisterNft registerNft)
             throws IOException, ParseException, java.text.ParseException, InterruptedException {
+        Grim grim = grimRepository.findByIdAndStatusIsTrue(registerNft.getGrimId())
+                .orElseThrow(() -> new BaseException(GrimErrorCode.EMPTY_GRIM));
+
         Wallet wallet = member.getWallet();
-        // 비밀번호 맞는지 확인
+        // 비밀번호 맞는지 확인 및 지갑 사용 처리
         walletService.checkPayPassword(wallet, registerNft.getPassword());
+        walletService.useWallet(wallet);
         // MetaData 업로드하고 imgUrl 받아오기
         String imgUrl = kasService.uploadMetadata(registerNft);
         // GreenGrim 토큰으로 발행된 NFT는 모두 순서를 정해서 번호를 해야함! 우리는 그냥 10진수로 하자
@@ -62,8 +72,10 @@ public class RegisterNftService {
                 nftId,
                 kasProperties.getNftContractAddress(),
                 txHash,
-                imgUrl
+                registerNft.getAsset(),
+                grim
         );
+        grim.setNft(nft);
         // TODO: Transaction 추가
         return new NftId(nft.getId());
     }
