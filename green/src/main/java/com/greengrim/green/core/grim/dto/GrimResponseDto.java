@@ -11,6 +11,20 @@ public class GrimResponseDto {
 
     @Getter
     @AllArgsConstructor
+    public static class GrimSimpleInfo {
+        private final Long id;
+        private final String imgUrl;
+        private final String title;
+
+        public GrimSimpleInfo(Grim grim) {
+            this.id = grim.getId();
+            this.imgUrl = grim.getImgUrl();
+            this.title = grim.getTitle();
+        }
+    }
+
+    @Getter
+    @AllArgsConstructor
     public static class GrimInfo {
         private final Long id;
         private final String imgUrl;

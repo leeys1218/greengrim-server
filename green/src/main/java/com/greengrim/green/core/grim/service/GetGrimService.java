@@ -11,12 +11,15 @@ import com.greengrim.green.common.util.UtilService;
 import com.greengrim.green.core.grim.Grim;
 import com.greengrim.green.core.grim.dto.GrimResponseDto.GrimDetailInfo;
 import com.greengrim.green.core.grim.dto.GrimResponseDto.GrimInfo;
+import com.greengrim.green.core.grim.dto.GrimResponseDto.GrimSimpleInfo;
 import com.greengrim.green.core.grim.repository.GrimRepository;
 import com.greengrim.green.core.member.Member;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -34,6 +37,13 @@ public class GetGrimService {
     public PageResponseDto<List<GrimInfo>> getMyGrims(Member member, int page, int size, SortOption sortOption) {
         Page<Grim> grims = grimRepository.findByMemberStatusIsTrue(member, getPageable(page, size, sortOption));
         return pagingGrim(grims);
+    }
+
+    public PageResponseDto<List<GrimSimpleInfo>> getMyGrimsForNft(Member member, int page, int size, SortOption sortOption) {
+        Page<Grim> grims = grimRepository.findByMemberStatusIsTrue(member, getPageable(page, size, sortOption));
+        List<GrimSimpleInfo> grimSimpleInfos = new ArrayList<>();
+        grims.forEach(grim -> grimSimpleInfos.add(new GrimSimpleInfo(grim)));
+        return new PageResponseDto<>(grims.getNumber(), grims.hasNext(), grimSimpleInfos);
     }
 
     public GrimDetailInfo getGrimDetailInfo(Member member, Long id) {

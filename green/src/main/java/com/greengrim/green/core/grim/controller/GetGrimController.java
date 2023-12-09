@@ -5,6 +5,7 @@ import com.greengrim.green.common.entity.SortOption;
 import com.greengrim.green.common.entity.dto.PageResponseDto;
 import com.greengrim.green.core.grim.dto.GrimResponseDto.GrimDetailInfo;
 import com.greengrim.green.core.grim.dto.GrimResponseDto.GrimInfo;
+import com.greengrim.green.core.grim.dto.GrimResponseDto.GrimSimpleInfo;
 import com.greengrim.green.core.grim.service.GetGrimService;
 import com.greengrim.green.core.member.Member;
 import com.greengrim.green.core.nft.dto.NftResponseDto.NftDetailInfo;
@@ -61,5 +62,17 @@ public class GetGrimController {
             @PathVariable("id") Long id) {
         return new ResponseEntity<>(getGrimService.getGrimDetailInfo(member, id),
                 HttpStatus.OK);
+    }
+
+    /**
+     * [GET] NFT 생성 전 내 그림 목록 조회
+     */
+    @Operation(summary = "NFT 생성 전 내 그림 목록 조회 ")
+    @GetMapping("/visitor/grims/nfts")
+    public ResponseEntity<PageResponseDto<List<GrimSimpleInfo>>> getMyGrimsForNft(
+            @CurrentMember Member member,
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "size") int size) {
+        return ResponseEntity.ok(getGrimService.getMyGrimsForNft(member, page, size, SortOption.DESC));
     }
 }
