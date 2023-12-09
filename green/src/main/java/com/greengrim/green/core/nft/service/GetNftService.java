@@ -1,7 +1,6 @@
 package com.greengrim.green.core.nft.service;
 
 import static com.greengrim.green.common.kas.KasConstants.PURCHASE_FEE;
-import static com.greengrim.green.common.kas.ParseService.priceDoubleToString;
 import static com.greengrim.green.common.util.UtilService.checkIsMine;
 import static com.greengrim.green.common.util.UtilService.getPageable;
 
@@ -41,7 +40,7 @@ public class GetNftService {
         String price = getPrice(nft);
 
         boolean isMine = false;
-        if(member!= null) { // 로그인 했다면
+        if (member != null) { // 로그인 했다면
             isMine = checkIsMine(member.getId(), nft.getMember().getId());
         }
         return new NftDetailInfo(nft, price, isMine);
@@ -81,7 +80,7 @@ public class GetNftService {
     public NftAndMemberInfo getNftInfoBeforeSale(Member member, Long id) {
         Nft nft = nftRepository.findByIdAndStatusTrue(id)
                 .orElseThrow(() -> new BaseException(NftErrorCode.EMPTY_NFT));
-        if(!checkIsMine(member.getId(), nft.getMember().getId())) {
+        if (!checkIsMine(member.getId(), nft.getMember().getId())) {
             throw new BaseException(NftErrorCode.NO_AUTHORIZATION);
         }
         return new NftAndMemberInfo(nft);
@@ -94,7 +93,7 @@ public class GetNftService {
             throws IOException, ParseException, java.text.ParseException, InterruptedException {
         Nft nft = nftRepository.findByIdAndStatusTrue(id)
                 .orElseThrow(() -> new BaseException(NftErrorCode.EMPTY_NFT));
-        if(checkIsMine(member.getId(), nft.getMember().getId())) {
+        if (checkIsMine(member.getId(), nft.getMember().getId())) {
             throw new BaseException(MarketErrorCode.UNABLE_PURCHASE);
         }
 
@@ -109,7 +108,7 @@ public class GetNftService {
                 priceDoubleToString(total),
                 priceDoubleToString(balance),
                 priceDoubleToString(balanceAfterPurchase)
-                );
+        );
     }
 
     private PageResponseDto<List<HomeNftInfo>> makeNftsInfoList(Page<Nft> nfts) {
@@ -121,10 +120,14 @@ public class GetNftService {
     }
 
     private String getPrice(Nft nft) {
-        if(!nft.isMarketed()) {
+        if (!nft.isMarketed()) {
             return "NOT SALE";
         } else {
             return priceDoubleToString(nft.getMarket().getPrice());
         }
+    }
+
+    private String priceDoubleToString(double price) {
+        return String.format("%.6f", Double.valueOf(price * 1000000).longValue() / 1000000f);
     }
 }
