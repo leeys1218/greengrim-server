@@ -27,6 +27,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -49,7 +50,9 @@ public class GetChallengeService {
      */
     public ChallengeDetailInfo getChallengeDetail(Member member, Long id) {
         Challenge challenge = findByIdWithValidation(id);
-        return new ChallengeDetailInfo(challenge, chatparticipantService.checkParticipantExists(member.getId(), challenge.getChatroom().getId()));
+        boolean isMine = checkIsMine(member.getId(), challenge.getMember().getId());
+        return new ChallengeDetailInfo(challenge, chatparticipantService.checkParticipantExists(member.getId(),
+            challenge.getChatroom().getId()), isMine);
     }
 
     /**
@@ -77,6 +80,10 @@ public class GetChallengeService {
     public Challenge findByIdWithValidation(Long id) {
         return challengeRepository.findById(id)
                 .orElseThrow(() -> new BaseException(ChallengeErrorCode.EMPTY_CHALLENGE));
+    }
+
+    private boolean checkIsMine(Long memberId, Long ownerId) {
+        return Objects.equals(memberId, ownerId);
     }
 
     /**
