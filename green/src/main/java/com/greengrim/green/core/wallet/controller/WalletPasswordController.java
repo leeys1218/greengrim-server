@@ -5,6 +5,7 @@ import com.greengrim.green.core.member.Member;
 import com.greengrim.green.core.wallet.dto.WalletRequestDto;
 import com.greengrim.green.core.wallet.dto.WalletResponseDto.CheckPasswordInfo;
 import com.greengrim.green.core.wallet.service.WalletPasswordService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,7 @@ public class WalletPasswordController {
     /**
      * [POST] 비밀번호 확인
      */
+    @Operation(summary = "비밀번호 확인")
     @PostMapping("/member/wallets/password")
     public ResponseEntity<CheckPasswordInfo> checkPwd(
             @CurrentMember Member member,

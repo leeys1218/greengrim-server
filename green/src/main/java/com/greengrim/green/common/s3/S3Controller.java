@@ -1,6 +1,7 @@
 package com.greengrim.green.common.s3;
 
 import com.greengrim.green.common.s3.dto.S3Result;
+import io.swagger.v3.oas.annotations.Operation;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ public class S3Controller {
 
     private final S3Service s3Service;
 
+    @Operation(summary = "S3에 파일 업로드하기")
     @PostMapping("/file")
     public ResponseEntity<S3Result> uploadFiles(
             @RequestPart(value = "image", required = false) MultipartFile multipartFile) {
