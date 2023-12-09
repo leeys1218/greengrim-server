@@ -1,12 +1,11 @@
 package com.greengrim.green.core.nft.service;
 
-import static com.greengrim.green.common.entity.SortOption.ASC;
-import static com.greengrim.green.common.entity.SortOption.DESC;
+import static com.greengrim.green.common.util.UtilService.checkIsMine;
+import static com.greengrim.green.common.util.UtilService.getPageable;
 
 import com.greengrim.green.common.entity.SortOption;
 import com.greengrim.green.common.entity.dto.PageResponseDto;
 import com.greengrim.green.common.exception.BaseException;
-import com.greengrim.green.common.exception.errorCode.GlobalErrorCode;
 import com.greengrim.green.common.exception.errorCode.NftErrorCode;
 import com.greengrim.green.core.member.Member;
 import com.greengrim.green.core.nft.Nft;
@@ -16,12 +15,8 @@ import com.greengrim.green.core.nft.dto.NftResponseDto.NftDetailInfo;
 import com.greengrim.green.core.nft.repository.NftRepository;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -86,19 +81,5 @@ public class GetNftService {
             // TODO: Market Entity 추가 이후에, 가격을 double -> String으로 변환하는 로직 추가
             return "가격 여기에";
         }
-    }
-
-    private Pageable getPageable(int page, int size, SortOption sort) {
-        if (sort == DESC) { // 최신순
-            return PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
-        } else if (sort == ASC) { // 오래된순
-            return PageRequest.of(page, size, Sort.Direction.ASC, "createdAt");
-        } else {
-            throw new BaseException(GlobalErrorCode.NOT_VALID_ARGUMENT_ERROR);
-        }
-    }
-
-    private boolean checkIsMine(Long memberId, Long ownerId) {
-        return Objects.equals(memberId, ownerId);
     }
 }
