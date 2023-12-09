@@ -19,64 +19,66 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class RegisterGrimService {
 
-  private final WebClient webClient;
-  private final GrimRepository grimRepository;
-  private final FcmService fcmService;
+    private final WebClient webClient;
+    private final GrimRepository grimRepository;
+    private final FcmService fcmService;
 
-  public void save(Grim grim) { grimRepository.save(grim); }
-
-  public GrimInfo register(Member member, String imgUrl) {
-    Grim grim = Grim.builder()
-        .title("untitled")
-        .imgUrl(imgUrl)
-        .status(true)
-        .member(member)
-        .build();
-    save(grim);
-    return new GrimInfo(grim);
-  }
-
-  public void generateGrim(Member member, RegisterGrimInfo registerGrimInfo) {
-
-    if(!checkGreenPoint(member)) {
-      throw new BaseException(GrimErrorCode.NOT_ENOUGH_POINT);
+    public void save(Grim grim) {
+        grimRepository.save(grim);
     }
 
-    String prompt = registerGrimInfo.getStyle() + registerGrimInfo.getNoun() + registerGrimInfo.getVerb();
-    Mono<String> resultMono = webClient.post()
-        .uri("/txt2img")
-        .contentType(MediaType.APPLICATION_JSON)
-        .bodyValue(Map.of(
-            "prompt", prompt,
-            "guidance_scale", 7.5,
-            "height", 512,
-            "width", 512,
-            "num_inference_steps", 50,
-            "safety_check", true,
-            "seed", 1
-        ))
-        .retrieve()
-        .bodyToMono(String.class);
+    public GrimInfo register(Member member, String imgUrl) {
+        Grim grim = Grim.builder()
+                .title("untitled")
+                .imgUrl(imgUrl)
+                .status(true)
+                .member(member)
+                .build();
+        save(grim);
+        return new GrimInfo(grim);
+    }
 
-    resultMono.subscribe(
-        result -> {
-          System.out.println("Success: " + result);
-          member.minusPoint(500);
-          String imgUrl = result.replace("\"", "");
-          fcmService.sendGrimGenerationSuccess(register(member, imgUrl), member.getFcmToken());
-        },
-        error -> {
-          System.err.println("Error: " + error.getMessage());
-          fcmService.sendGrimGenerationFail(member.getFcmToken());
+    public void generateGrim(Member member, RegisterGrimInfo registerGrimInfo) {
+
+        if (!checkGreenPoint(member)) {
+            throw new BaseException(GrimErrorCode.NOT_ENOUGH_POINT);
         }
-    );
-  }
 
-  public boolean checkGreenPoint(Member member) {
-    if(member.getPoint() < 500) {
-      return false;
+        String prompt = registerGrimInfo.getStyle() + registerGrimInfo.getNoun() + registerGrimInfo.getVerb();
+        Mono<String> resultMono = webClient.post()
+                .uri("/txt2img")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(Map.of(
+                        "prompt", prompt,
+                        "guidance_scale", 7.5,
+                        "height", 512,
+                        "width", 512,
+                        "num_inference_steps", 50,
+                        "safety_check", true,
+                        "seed", 1
+                ))
+                .retrieve()
+                .bodyToMono(String.class);
+
+        resultMono.subscribe(
+                result -> {
+                    System.out.println("Success: " + result);
+                    member.minusPoint(500);
+                    String imgUrl = result.replace("\"", "");
+                    fcmService.sendGrimGenerationSuccess(register(member, imgUrl), member.getFcmToken());
+                },
+                error -> {
+                    System.err.println("Error: " + error.getMessage());
+                    fcmService.sendGrimGenerationFail(member.getFcmToken());
+                }
+        );
     }
-    return true;
-  }
+
+    public boolean checkGreenPoint(Member member) {
+        if (member.getPoint() < 500) {
+            return false;
+        }
+        return true;
+    }
 
 }
