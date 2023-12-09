@@ -1,5 +1,7 @@
 package com.greengrim.green.core.nft.service;
 
+import static com.greengrim.green.common.kas.KasConstants.MINTING_FEE;
+
 import com.greengrim.green.common.exception.BaseException;
 import com.greengrim.green.common.exception.errorCode.GrimErrorCode;
 import com.greengrim.green.core.grim.Grim;
@@ -12,6 +14,9 @@ import com.greengrim.green.core.nft.Nft;
 import com.greengrim.green.core.nft.dto.NftRequestDto.RegisterNft;
 import com.greengrim.green.core.nft.dto.NftResponseDto.NftId;
 import com.greengrim.green.core.nft.repository.NftRepository;
+import com.greengrim.green.core.transaction.dto.TransactionRequestDto.MintingTransactionDto;
+import com.greengrim.green.core.transaction.dto.TransactionRequestDto.TransactionSetDto;
+import com.greengrim.green.core.transaction.service.RegisterTransactionService;
 import com.greengrim.green.core.wallet.Wallet;
 import com.greengrim.green.core.wallet.service.WalletService;
 import jakarta.transaction.Transactional;
@@ -31,6 +36,7 @@ public class RegisterNftService {
     private final NftManagerService nftManagerService;
     private final NftRepository nftRepository;
     private final GrimRepository grimRepository;
+    private final RegisterTransactionService registerTransactionService;
 
     public Nft register(Member member, RegisterNft registerNft, String nftId,
                         String contracts, String txHash, String imgUrl, Grim grim) {
@@ -60,6 +66,13 @@ public class RegisterNftService {
         // 비밀번호 맞는지 확인 및 지갑 사용 처리
         walletService.checkPayPassword(wallet, registerNft.getPassword());
         walletService.useWallet(wallet);
+
+        // TODO: 수수료 납부 설정하기
+        String sendFee = "";
+        if (MINTING_FEE != 0D) {
+            kasService.sendKlayToFeeAccount(wallet, MINTING_FEE);
+        }
+
         // MetaData 업로드하고 imgUrl 받아오기
         String imgUrl = kasService.uploadMetadata(registerNft);
         // GreenGrim 토큰으로 발행된 NFT는 모두 순서를 정해서 번호를 해야함! 우리는 그냥 10진수로 하자
@@ -76,7 +89,11 @@ public class RegisterNftService {
                 grim
         );
         grim.setNft(nft);
-        // TODO: Transaction 추가
+
+        registerTransactionService.saveMintingTransaction(
+                new MintingTransactionDto(member.getId(), nft,
+                        new TransactionSetDto("", txHash, sendFee)));
+
         return new NftId(nft.getId());
     }
 }

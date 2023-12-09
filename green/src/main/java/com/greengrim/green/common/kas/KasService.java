@@ -126,6 +126,14 @@ public class KasService {
         return sendKlay(sendAddress, receiveAddress, coin);
     }
 
+    /**
+     * 클레이 수수료 전송
+     */
+    public String sendKlayToFeeAccount(Wallet sender, double coin)
+            throws IOException, org.json.simple.parser.ParseException, InterruptedException, ParseException {
+        return sendKlay(sender.getAddress(), kasProperties.getFeeAccount(), coin);
+    }
+
     private String checkResponse(HttpResponse<String> response, String parameter,
                                  ErrorCode errorCode)
             throws BaseException, ParseException, org.json.simple.parser.ParseException {
@@ -138,6 +146,7 @@ public class KasService {
         }
         return (String) jsonObject.get(parameter);
     }
+
 
     private String useKasApi(String query, String method, HttpRequest.BodyPublisher body,
                              String parameter, ErrorCode errorCode)
