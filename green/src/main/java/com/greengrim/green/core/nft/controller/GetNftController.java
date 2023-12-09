@@ -2,6 +2,7 @@ package com.greengrim.green.core.nft.controller;
 
 import com.greengrim.green.common.auth.CurrentMember;
 import com.greengrim.green.core.member.Member;
+import com.greengrim.green.core.nft.dto.NftResponseDto.HomeNfts;
 import com.greengrim.green.core.nft.dto.NftResponseDto.NftDetailInfo;
 import com.greengrim.green.core.nft.service.GetNftService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,5 +30,15 @@ public class GetNftController {
         return new ResponseEntity<>(
                 getNftService.getNftDetailInfo(member, id),
                 HttpStatus.OK);
+    }
+
+    /**
+     * [GET] 홈 화면 NFT 5개 조회
+     */
+    @Operation(summary = "홈 화면 NFT 조회")
+    @GetMapping("/home/nfts")
+    public ResponseEntity<HomeNfts> getHotChallenges(
+            @CurrentMember Member member) {
+        return ResponseEntity.ok(getNftService.getHomeNfts(member, 5));
     }
 }
