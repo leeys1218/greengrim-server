@@ -7,6 +7,7 @@ import com.greengrim.green.core.member.Member;
 import com.greengrim.green.core.nft.dto.NftResponseDto.HomeNftInfo;
 import com.greengrim.green.core.nft.dto.NftResponseDto.HomeNfts;
 import com.greengrim.green.core.nft.dto.NftResponseDto.NftDetailInfo;
+import com.greengrim.green.core.nft.dto.NftResponseDto.NftInfoBeforeSale;
 import com.greengrim.green.core.nft.service.GetNftService;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
@@ -71,5 +72,13 @@ public class GetNftController {
             @RequestParam(value = "size") int size,
             @RequestParam(value = "sort") SortOption sort) {
         return ResponseEntity.ok(getNftService.getMyHotNfts(member, page, size, sort));
+    }
+
+    @Operation(summary = "NFT 판매 전 정보 조회")
+    @GetMapping("/member/nfts/{id}/sales")
+    public ResponseEntity<NftInfoBeforeSale> getNftInfoBeforeSale(
+            @CurrentMember Member member,
+            @PathVariable(value = "id") Long id) {
+        return ResponseEntity.ok(getNftService.getNftInfoBeforeSale(member, id));
     }
 }

@@ -94,4 +94,17 @@ public class NftResponseDto {
         }
     }
 
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class NftInfoBeforeSale {
+        private NftSimpleInfo nftSimpleInfo;
+        private MemberSimpleInfo memberSimpleInfo;
+
+        public NftInfoBeforeSale(Nft nft) {
+            this.nftSimpleInfo = new NftSimpleInfo(nft);
+            this.memberSimpleInfo = new MemberSimpleInfo(nft.getMember());
+        }
+    }
+
 }

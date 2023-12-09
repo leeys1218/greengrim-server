@@ -12,6 +12,7 @@ import com.greengrim.green.core.nft.Nft;
 import com.greengrim.green.core.nft.dto.NftResponseDto.HomeNftInfo;
 import com.greengrim.green.core.nft.dto.NftResponseDto.HomeNfts;
 import com.greengrim.green.core.nft.dto.NftResponseDto.NftDetailInfo;
+import com.greengrim.green.core.nft.dto.NftResponseDto.NftInfoBeforeSale;
 import com.greengrim.green.core.nft.repository.NftRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +65,15 @@ public class GetNftService {
     public PageResponseDto<List<HomeNftInfo>> getMyHotNfts(Member member, int page, int size, SortOption sortOption) {
         Page<Nft> nfts = nftRepository.findMyNfts(member, getPageable(page, size, sortOption));
         return makeNftsInfoList(nfts);
+    }
+
+    public NftInfoBeforeSale getNftInfoBeforeSale(Member member, Long id) {
+        Nft nft = nftRepository.findByIdAndStatusTrue(id)
+                .orElseThrow(() -> new BaseException(NftErrorCode.EMPTY_NFT));
+        if(!checkIsMine(member.getId(), nft.getMember().getId())) {
+            throw new BaseException(NftErrorCode.NO_AUTHORIZATION);
+        }
+        return new NftInfoBeforeSale(nft);
     }
 
     private PageResponseDto<List<HomeNftInfo>> makeNftsInfoList(Page<Nft> nfts) {
