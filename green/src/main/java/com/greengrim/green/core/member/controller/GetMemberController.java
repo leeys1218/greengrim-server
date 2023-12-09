@@ -4,6 +4,7 @@ import com.greengrim.green.common.auth.CurrentMember;
 import com.greengrim.green.core.member.Member;
 import com.greengrim.green.core.member.dto.MemberResponseDto.HomeInfo;
 import com.greengrim.green.core.member.dto.MemberResponseDto.MemberInfo;
+import com.greengrim.green.core.member.dto.MemberResponseDto.MyInfo;
 import com.greengrim.green.core.member.service.GetMemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,17 @@ public class GetMemberController {
     public ResponseEntity<HomeInfo> getHomeInfo(
             @CurrentMember Member member) {
         return new ResponseEntity<>(getMemberService.getHomeInfo(member),
+                HttpStatus.OK);
+    }
+
+    /**
+     * [GET] 더보기 조회
+     */
+    @Operation(summary = "더보기 조회")
+    @GetMapping("/visitor/my")
+    public ResponseEntity<MyInfo> getMyDetailInfo(
+            @CurrentMember Member member) {
+        return new ResponseEntity<>(getMemberService.getMyDetailInfo(member),
                 HttpStatus.OK);
     }
 }

@@ -66,4 +66,20 @@ public class MemberResponseDto {
             this.carbonReduction = member.getCarbonReduction();
         }
     }
+
+    @Getter
+    @AllArgsConstructor
+    public static class MyInfo {
+        private MemberInfo memberInfo;
+        private String email;
+        private int point;
+        private boolean isWallet;
+
+        public MyInfo(Member member) {
+            this.memberInfo = new MemberInfo(member);
+            this.email = member.getEmail();
+            this.point = member.getPoint();
+            this.isWallet = (member.getWallet() != null);
+        }
+    }
 }

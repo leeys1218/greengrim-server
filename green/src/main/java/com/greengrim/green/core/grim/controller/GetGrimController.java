@@ -52,9 +52,9 @@ public class GetGrimController {
     }
 
     /**
-     * [GET] NFT 상세 조회
+     * [GET] 그림 상세 조회
      */
-    @Operation(summary = "NFT 상세 조회")
+    @Operation(summary = "그림 상세 조회")
     @GetMapping("/grims/{id}")
     public ResponseEntity<GrimDetailInfo> getGrimDetailInfo(
             @CurrentMember Member member,

@@ -47,4 +47,8 @@ public class Nft extends BaseTime {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
+    public void setStatusFalse() {
+        this.status = false;
+    }
+
 }
