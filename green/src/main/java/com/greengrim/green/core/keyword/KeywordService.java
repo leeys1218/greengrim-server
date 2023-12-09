@@ -44,4 +44,11 @@ public class KeywordService {
         return new keywordInfos(verb, noun, style);
     }
 
+    public List<String> getRandomKeywords() {
+        List<String> keywords = new ArrayList<>();
+        keywordRepository.findAll().forEach(
+            keyword -> keywords.add(keyword.getKeyword()));
+        return keywords;
+    }
+
 }
