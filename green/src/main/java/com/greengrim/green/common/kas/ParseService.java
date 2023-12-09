@@ -34,4 +34,8 @@ public class ParseService {
         String hex = bigInteger.multiply(gob).toString(16);     // 정수 곱하기 10의 16제곱 을 16진수로 표현
         return "0x" + hex;
     }
+
+    public static String priceDoubleToString(double price) {
+        return String.format("%.6f", Double.valueOf(price * 1000000).longValue() / 1000000f);
+    }
 }

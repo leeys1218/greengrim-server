@@ -46,6 +46,7 @@ public class RegisterMemberController {
      * [POST] 닉네임 중복 확인
      * /nick-name
      */
+    @Operation(summary = "닉네임 중복 확인")
     @PostMapping("/nick-name")
     public ResponseEntity<MemberResponseDto.CheckNickNameRes> checkNickName(
             @Valid @RequestBody MemberRequestDto.CheckNickNameReq checkNickNameReq) {

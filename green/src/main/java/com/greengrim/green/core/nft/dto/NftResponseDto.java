@@ -82,15 +82,48 @@ public class NftResponseDto {
     @Getter
     @Builder
     @AllArgsConstructor
-    public static class HomeNftInfo {
+    public static class NftAndMemberInfo {
         private NftSimpleInfo nftSimpleInfo;
         private MemberSimpleInfo memberSimpleInfo;
+
+        public NftAndMemberInfo(Nft nft) {
+            this.nftSimpleInfo = new NftSimpleInfo(nft);
+            this.memberSimpleInfo = new MemberSimpleInfo(nft.getMember());
+        }
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class HomeNftInfo {
+        private NftAndMemberInfo nftAndMemberInfo;
         private String price;
 
         public HomeNftInfo(Nft nft, String price) {
-            this.nftSimpleInfo = new NftSimpleInfo(nft);
-            this.memberSimpleInfo = new MemberSimpleInfo(nft.getMember());
+            this.nftAndMemberInfo = new NftAndMemberInfo(nft);
             this.price = price;
+        }
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class NftInfoBeforePurchase {
+        private NftAndMemberInfo nftAndMemberInfo;
+        private String price;
+        private String fee;
+        private String total;
+        private String balance;
+        private String balanceAfterPurchase;
+
+        public NftInfoBeforePurchase(Nft nft, String price, String fee, String total,
+                                     String balance, String balanceAfterPurchase) {
+            this.nftAndMemberInfo = new NftAndMemberInfo(nft);
+            this.price = price;
+            this.fee = fee;
+            this.total = total;
+            this.balance = balance;
+            this.balanceAfterPurchase = balanceAfterPurchase;
         }
     }
 
