@@ -1,12 +1,19 @@
 package com.greengrim.green.core.wallet.service;
 
+import static com.greengrim.green.common.kas.KasConstants.PURCHASE_FEE;
+
 import com.greengrim.green.common.exception.BaseException;
 import com.greengrim.green.common.exception.errorCode.WalletErrorCode;
 import com.greengrim.green.common.kas.KasService;
 import com.greengrim.green.common.password.BcryptService;
+import com.greengrim.green.core.market.Market;
 import com.greengrim.green.core.member.Member;
 import com.greengrim.green.core.member.Role;
 import com.greengrim.green.core.member.service.RegisterMemberService;
+import com.greengrim.green.core.nft.Nft;
+import com.greengrim.green.core.transaction.dto.TransactionRequestDto.PurchaseNftOnMarketTransactionDto;
+import com.greengrim.green.core.transaction.dto.TransactionRequestDto.TransactionSetDto;
+import com.greengrim.green.core.transaction.service.RegisterTransactionService;
 import com.greengrim.green.core.wallet.Wallet;
 import com.greengrim.green.core.wallet.dto.WalletRequestDto.CheckPassword;
 import com.greengrim.green.core.wallet.dto.WalletResponseDto.CheckPasswordInfo;
@@ -35,6 +42,7 @@ public class WalletService {
     private final WalletRepository walletRepository;
 
     private final RegisterMemberService registerMemberService;
+    private final RegisterTransactionService registerTransactionService;
     private final BcryptService bcryptService;
     private final KasService kasService;
 
@@ -118,9 +126,47 @@ public class WalletService {
         }
     }
 
-    private void checkWallet(Wallet wallet, String payPwd)
-            throws NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, InvalidKeySpecException, BadPaddingException, InvalidKeyException {
-        checkPayPassword(wallet, payPwd);
+    /**
+     * NFT 구매 처리하기
+     */
+    public void purchaseNftInMarket(Member buyer, String payPassword, Market market)
+            throws NoSuchPaddingException, IllegalBlockSizeException, IOException, ParseException, NoSuchAlgorithmException, InvalidKeySpecException, BadPaddingException, java.text.ParseException, InvalidKeyException, InterruptedException {
+        Member seller = market.getMember();
+        checkForDeal(buyer.getWallet(), payPassword, market.getPrice());
+        purchaseNftOnMarketFun(buyer, seller, market);
+    }
+
+    private void checkForDeal(Wallet buyerWallet, String payPassword, double price)
+            throws IOException, ParseException, InterruptedException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, InvalidKeySpecException, BadPaddingException, InvalidKeyException, java.text.ParseException {
+        checkWallet(buyerWallet, payPassword);
+        checkKlay(buyerWallet, price);
+    }
+
+    private void purchaseNftOnMarketFun(Member buyer, Member seller, Market market)
+            throws IOException, ParseException, InterruptedException, java.text.ParseException {
+        Nft nft = market.getNft();
+        Wallet buyerWallet = buyer.getWallet();
+        Wallet sellerWallet = seller.getWallet();
+
+        String sendFee = null;
+        if (PURCHASE_FEE != 0D) {
+            sendFee = kasService.sendKlayToFeeAccount(buyerWallet, PURCHASE_FEE);
+        }
+        String sendKlay = kasService.sendKlayToSeller(buyerWallet, sellerWallet,
+                market.getPrice() - PURCHASE_FEE);
+        String sendNft = kasService.sendNft(sellerWallet, buyerWallet, nft);
+        registerTransactionService.savePurchaseNftOnMarketTransaction(
+                new PurchaseNftOnMarketTransactionDto(buyer.getId(), seller.getId(),
+                        market.getPrice() - PURCHASE_FEE, nft,
+                        new TransactionSetDto(sendKlay, sendNft, sendFee))
+        );
+        nft.setMember(buyer);
+        nft.setMarket(null);
+        market.delete();
+    }
+
+    private void checkWallet(Wallet wallet, String payPassword) {
+        checkPayPassword(wallet, payPassword);
         useWallet(wallet);
     }
 

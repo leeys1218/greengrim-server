@@ -4,6 +4,7 @@ import com.greengrim.green.common.exception.BaseException;
 import com.greengrim.green.common.exception.ErrorCode;
 import com.greengrim.green.common.exception.errorCode.NftErrorCode;
 import com.greengrim.green.common.exception.errorCode.WalletErrorCode;
+import com.greengrim.green.core.nft.Nft;
 import com.greengrim.green.core.nft.dto.NftRequestDto.RegisterNft;
 import com.greengrim.green.core.wallet.Wallet;
 import java.io.IOException;
@@ -132,6 +133,22 @@ public class KasService {
     public String sendKlayToFeeAccount(Wallet sender, double coin)
             throws IOException, org.json.simple.parser.ParseException, InterruptedException, ParseException {
         return sendKlay(sender.getAddress(), kasProperties.getFeeAccount(), coin);
+    }
+
+    /**
+     * 구매자 지갑 -> 판매자 지갑 클레이 전송
+     */
+    public String sendKlayToSeller(Wallet sender, Wallet receiver, double coin)
+            throws IOException, org.json.simple.parser.ParseException, InterruptedException, ParseException {
+            return sendKlay(sender.getAddress(),receiver.getAddress(),coin);
+    }
+
+    /**
+     * 구매자 지갑 -> 판매자 지갑 NFT 전송
+     */
+    public String sendNft(Wallet sender, Wallet receiver, Nft nft)
+            throws IOException, org.json.simple.parser.ParseException, InterruptedException, ParseException {
+        return sendNftOutside(sender.getAddress(),receiver.getAddress(),nft.getNftId());
     }
 
     private String checkResponse(HttpResponse<String> response, String parameter,

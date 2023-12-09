@@ -68,4 +68,8 @@ public class Nft extends BaseTime {
         this.market = market;
     }
 
+    public void setMember(Member member) {
+        this.member = member;
+    }
+
 }

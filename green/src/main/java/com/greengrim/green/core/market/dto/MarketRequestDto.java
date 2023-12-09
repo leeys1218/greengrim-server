@@ -19,4 +19,14 @@ public class MarketRequestDto {
         @Positive(message = "잘못된 가격입니다.")
         private double price;
     }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UpdateMarket {
+        @NotBlank(message = "비밀번호가 일치하지 않습니다.")
+        private String payPassword;
+        @Positive(message = "잘못된 마켓 Id 입니다.")
+        private Long marketId;
+    }
 }

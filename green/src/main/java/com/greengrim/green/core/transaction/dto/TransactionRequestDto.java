@@ -25,4 +25,15 @@ public class TransactionRequestDto {
         private TransactionSetDto transactionSetDto;
     }
 
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PurchaseNftOnMarketTransactionDto {
+        private Long buyerId;
+        private Long sellerId;
+        private double coin;        // 수수료를 제외한 양
+        private Nft nft;
+        private TransactionSetDto transactionSetDto;
+    }
+
 }

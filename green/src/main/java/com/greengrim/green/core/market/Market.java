@@ -39,4 +39,7 @@ public class Market extends BaseTime {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
+    public void delete() {
+        this.status = false;
+    }
 }

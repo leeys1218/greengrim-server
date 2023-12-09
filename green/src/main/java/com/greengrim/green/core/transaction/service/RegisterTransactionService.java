@@ -5,6 +5,7 @@ import static com.greengrim.green.common.kas.KasConstants.MINTING_FEE;
 import com.greengrim.green.core.transaction.Transaction;
 import com.greengrim.green.core.transaction.TransactionType;
 import com.greengrim.green.core.transaction.dto.TransactionRequestDto.MintingTransactionDto;
+import com.greengrim.green.core.transaction.dto.TransactionRequestDto.PurchaseNftOnMarketTransactionDto;
 import com.greengrim.green.core.transaction.repository.TransactionRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,19 @@ public class RegisterTransactionService {
                 .nft(mintingTransactionDto.getNft())
                 .build();
         transaction.setTransactionSet(mintingTransactionDto.getTransactionSetDto());
+        save(transaction);
+    }
+
+    public void savePurchaseNftOnMarketTransaction(
+            PurchaseNftOnMarketTransactionDto purchaseNftOnMarketTransactionDto) {
+        Transaction transaction = Transaction.builder()
+                .type(TransactionType.DEAL)
+                .buyerId(purchaseNftOnMarketTransactionDto.getBuyerId())
+                .sellerId(purchaseNftOnMarketTransactionDto.getSellerId())
+                .payAmount(purchaseNftOnMarketTransactionDto.getCoin())
+                .nft(purchaseNftOnMarketTransactionDto.getNft())
+                .build();
+        transaction.setTransactionSet(purchaseNftOnMarketTransactionDto.getTransactionSetDto());
         save(transaction);
     }
 }
