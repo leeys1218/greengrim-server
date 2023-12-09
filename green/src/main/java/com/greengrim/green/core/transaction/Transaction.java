@@ -12,10 +12,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Builder
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Transaction extends BaseTime {
 
     @Id
@@ -28,19 +34,13 @@ public class Transaction extends BaseTime {
 
     @NotNull
     private Long buyerId;
-    @NotNull
     private Long sellerId;
 
-    @NotNull
     private Double payAmount;
-    @NotNull
     private Double payBackAmount;
 
-    @NotNull
     private String payTransaction;
-    @NotNull
     private String payBackTransaction;
-    @NotNull
     private String feeTransaction;
 
 

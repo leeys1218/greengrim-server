@@ -78,8 +78,8 @@ public class GetNftService {
         if(!nft.isMarketed()) {
             return "NOT SALE";
         } else {
-            // TODO: Market Entity 추가 이후에, 가격을 double -> String으로 변환하는 로직 추가
-            return "가격 여기에";
+            return String.format("%.6f", Double.valueOf(
+                    nft.getMarket().getPrice() * 1000000).longValue() / 1000000f);
         }
     }
 }
