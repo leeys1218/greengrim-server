@@ -23,37 +23,6 @@ public class KasService {
     private final ParseService parseService;
     private final KasProperties kasProperties;
 
-    private String checkResponse(HttpResponse<String> response, String parameter,
-                                 ErrorCode errorCode)
-            throws BaseException, ParseException, org.json.simple.parser.ParseException {
-        if (response.statusCode() != 200) {
-            throw new BaseException(errorCode);
-        }
-        JSONObject jsonObject = parseService.parseBody(response);
-        if (jsonObject.get(parameter) == null) {
-            throw new BaseException(errorCode);
-        }
-        return (String) jsonObject.get(parameter);
-    }
-
-    private String useKasApi(String query, String method, HttpRequest.BodyPublisher body,
-                             String parameter, ErrorCode errorCode)
-            throws IOException, InterruptedException, BaseException, ParseException, org.json.simple.parser.ParseException {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(java.net.URI.create(query))
-                .header("Content-Type", "application/json")
-                .header("x-chain-id", kasProperties.getVersion())
-                .header("Authorization", kasProperties.getAuthorization())
-                .method(method, body)
-                .build();
-        HttpResponse<String> response = HttpClient.newHttpClient()
-                .send(request, HttpResponse.BodyHandlers.ofString());
-        if (response.statusCode() != 200) {
-            System.out.println(response.body());
-        }
-        return checkResponse(response, parameter, errorCode);
-    }
-
     /**
      * 지갑 생성
      */
@@ -132,4 +101,77 @@ public class KasService {
         return useKasApi(url, "POST", body, "transactionHash", NftErrorCode.FAILED_CREATE_NFT);
     }
 
+    /**
+     * NFT 외부 전송
+     */
+    public String sendNftOutside(String sendAddress, String receiveAddress, String id)
+            throws IOException, org.json.simple.parser.ParseException, InterruptedException, ParseException {
+        String url = "https://kip17-api.klaytnapi.com/v2/contract/" + kasProperties.getNftContract()
+                + "/token/" + id;
+        HttpRequest.BodyPublisher body = HttpRequest.BodyPublishers.ofString(
+                "{\n  " +
+                        "\"sender\": \"" + sendAddress + "\",\n  " +
+                        "\"owner\": \"" + sendAddress + "\",\n  " +
+                        "\"to\": \"" + receiveAddress + "\"\n" +
+                        "}"
+        );
+        return useKasApi(url, "POST", body, "transactionHash", NftErrorCode.FAILED_SEND_NFT);
+    }
+
+    /**
+     * 클레이 외부 전송
+     */
+    public String sendKlayOutside(String sendAddress, String receiveAddress, double coin)
+            throws IOException, org.json.simple.parser.ParseException, InterruptedException, ParseException {
+        return sendKlay(sendAddress, receiveAddress, coin);
+    }
+
+    private String checkResponse(HttpResponse<String> response, String parameter,
+                                 ErrorCode errorCode)
+            throws BaseException, ParseException, org.json.simple.parser.ParseException {
+        if (response.statusCode() != 200) {
+            throw new BaseException(errorCode);
+        }
+        JSONObject jsonObject = parseService.parseBody(response);
+        if (jsonObject.get(parameter) == null) {
+            throw new BaseException(errorCode);
+        }
+        return (String) jsonObject.get(parameter);
+    }
+
+    private String useKasApi(String query, String method, HttpRequest.BodyPublisher body,
+                             String parameter, ErrorCode errorCode)
+            throws IOException, InterruptedException, BaseException, ParseException, org.json.simple.parser.ParseException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(java.net.URI.create(query))
+                .header("Content-Type", "application/json")
+                .header("x-chain-id", kasProperties.getVersion())
+                .header("Authorization", kasProperties.getAuthorization())
+                .method(method, body)
+                .build();
+        HttpResponse<String> response = HttpClient.newHttpClient()
+                .send(request, HttpResponse.BodyHandlers.ofString());
+        if (response.statusCode() != 200) {
+            System.out.println(response.body());
+        }
+        return checkResponse(response, parameter, errorCode);
+    }
+
+    private String sendKlay(String senderAddress, String receiverAddress, double coin)
+            throws IOException, org.json.simple.parser.ParseException, InterruptedException, ParseException {
+        String url = "https://wallet-api.klaytnapi.com/v2/tx/fd-user/value";
+        String hexPay = parseService.decimalToPeb(coin);
+        HttpRequest.BodyPublisher body = HttpRequest.BodyPublishers.ofString(
+                "{\n  " +
+                        "\"from\": \"" + senderAddress + "\",\n  " +
+                        "\"value\": \"" + hexPay + "\",\n  " +
+                        "\"to\": \"" + receiverAddress + "\",\n  " +
+                        "\"memo\": \"0x123\",\n  " +
+                        "\"nonce\": 0,\n  " +
+                        "\"gas\": 0,\n  " +
+                        "\"submit\": true,\n  " +
+                        "\"feePayer\": \"" + kasProperties.getFeePayerAccount() + "\"\n" +
+                        "}");
+        return useKasApi(url, "POST", body, "transactionHash", WalletErrorCode.FAILED_SEND_KLAY);
+    }
 }

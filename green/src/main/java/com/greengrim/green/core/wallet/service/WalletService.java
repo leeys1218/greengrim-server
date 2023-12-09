@@ -2,7 +2,7 @@ package com.greengrim.green.core.wallet.service;
 
 import com.greengrim.green.common.exception.BaseException;
 import com.greengrim.green.common.exception.errorCode.WalletErrorCode;
-import com.greengrim.green.core.wallet.kas.KasService;
+import com.greengrim.green.common.kas.KasService;
 import com.greengrim.green.common.password.BcryptService;
 import com.greengrim.green.core.member.Member;
 import com.greengrim.green.core.member.Role;
