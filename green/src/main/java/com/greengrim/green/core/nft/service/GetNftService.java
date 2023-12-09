@@ -1,5 +1,6 @@
 package com.greengrim.green.core.nft.service;
 
+import com.greengrim.green.common.entity.dto.PageResponseDto;
 import com.greengrim.green.common.exception.BaseException;
 import com.greengrim.green.common.exception.errorCode.NftErrorCode;
 import com.greengrim.green.core.member.Member;
@@ -45,6 +46,34 @@ public class GetNftService {
                 homeNftInfoList.add(new HomeNftInfo(nft, getPrice(nft))));
 
         return new HomeNfts(homeNftInfoList);
+    }
+
+    /**
+     * 핫 NFTS 더보기
+     * TODO: @param member 를 이용해 차단 목록에 있다면 보여주지 않기
+     */
+    public PageResponseDto<List<HomeNftInfo>> getMoreHotNfts(Member member, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Nft> nfts = nftRepository.findHomeNfts(pageable);
+        return makeNftsInfoList(nfts);
+    }
+
+    /**
+     * 핫 NFTS 더보기
+     * TODO: @param member 를 이용해 차단 목록에 있다면 보여주지 않기
+     */
+    public PageResponseDto<List<HomeNftInfo>> getMyHotNfts(Member member, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Nft> nfts = nftRepository.findMyNfts(member, pageable);
+        return makeNftsInfoList(nfts);
+    }
+
+    private PageResponseDto<List<HomeNftInfo>> makeNftsInfoList(Page<Nft> nfts) {
+        List<HomeNftInfo> homeNftInfos = new ArrayList<>();
+        nfts.forEach(nft ->
+                homeNftInfos.add(new HomeNftInfo(nft, getPrice(nft))));
+
+        return new PageResponseDto<>(nfts.getNumber(), nfts.hasNext(), homeNftInfos);
     }
 
     private String getPrice(Nft nft) {
