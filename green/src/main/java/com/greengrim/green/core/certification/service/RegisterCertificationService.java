@@ -67,7 +67,7 @@ public class RegisterCertificationService {
     public void successChallenge(Challenge challenge, Certification certification) {
         if(challenge.getGoalCount() == certification.getRound()) {
             // 키워드 획득
-            keywordService.register(certification.getMember().getId(), challenge.getKeyword());
+            keywordService.addMemberKeyword(challenge.getKeyword(), certification.getMember());
             // 챌린지 티켓 하나 감소
             challenge.minusTicketCurrentCount();
         }
