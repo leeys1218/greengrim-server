@@ -93,6 +93,16 @@ public class FcmService {
     send(message);
   }
 
+  public void sendGetPoint(Member member, String title, int point) {
+    Message message = Message.builder()
+        .putData("type", "POINT")
+        .putData("roomId", title + "(으)로 " + point + " 포인트를 획득했습니다.")
+        .setToken(member.getFcmToken())
+        .build();
+
+    send(message);
+  }
+
   public void send(Message message) {
     try {
       firebaseMessaging.getInstance().send(message);
