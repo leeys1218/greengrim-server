@@ -1,5 +1,9 @@
 package com.greengrim.green.common.kas;
 
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.util.IOUtils;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.greengrim.green.common.exception.BaseException;
 import com.greengrim.green.common.exception.ErrorCode;
 import com.greengrim.green.common.exception.errorCode.NftErrorCode;
@@ -7,22 +11,41 @@ import com.greengrim.green.common.exception.errorCode.WalletErrorCode;
 import com.greengrim.green.core.nft.Nft;
 import com.greengrim.green.core.nft.dto.NftRequestDto.RegisterNft;
 import com.greengrim.green.core.wallet.Wallet;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.file.Path;
 import java.text.ParseException;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.FileUtils;
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
 public class KasService {
 
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
+
     private final ParseService parseService;
     private final KasProperties kasProperties;
+
+    private final AmazonS3Client amazonS3Client;
+    private final RestTemplate restTemplate;
 
     /**
      * 지갑 생성
@@ -56,16 +79,37 @@ public class KasService {
      * TODO: 로직 정하기 1)프론트에서 에셋 생성 2)백에서 에셋 생성
      * 에셋 업로드
      */
-    public String uploadAsset(MultipartFile file)
+    public void uploadAsset()
             throws IOException, ParseException, org.json.simple.parser.ParseException, InterruptedException {
         String url = "https://metadata-api.klaytnapi.com/v1/metadata/asset";
         // TODO: from-data 로 전송하도록 바꾸기
-        HttpRequest.BodyPublisher body = HttpRequest.BodyPublishers.ofString(
-                "{\n  " +
-                        "\"file\": \"" + file + "\n" +
-                        "}"
-        );
-        return useKasApi(url, "POST", body, "uri", NftErrorCode.FAILED_CREATE_ASSET);
+
+        LinkedMultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        S3Object s3Object = amazonS3Client.getObject(bucket, "2023-12-10T09_29_19.652239.jpg");
+        InputStream inputStream = s3Object.getObjectContent();
+        byte[] imageBytes = IOUtils.toByteArray(inputStream);
+        inputStream.close();
+
+        File jpgFile = new File("path/to/save/image.jpg");
+        FileUtils.writeByteArrayToFile(jpgFile, imageBytes);
+        Resource resource = new FileSystemResource(jpgFile.getAbsolutePath());
+
+        body.add("file", resource);
+        System.out.println(jpgFile.getAbsolutePath());
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        headers.add("x-chain-id", kasProperties.getVersion());
+        headers.add("Authorization", kasProperties.getAuthorization());
+
+        HttpEntity<LinkedMultiValueMap<String, Object>> httpEntity
+            = new HttpEntity<>(body, headers);
+
+        ResponseEntity<JsonNode> postForEntity
+            = restTemplate.postForEntity(url, httpEntity, JsonNode.class);
+
+        System.out.println(postForEntity.getStatusCodeValue());
+        System.out.println(postForEntity.getBody());
+        System.out.println(postForEntity.getHeaders());
     }
 
     /**
@@ -73,6 +117,8 @@ public class KasService {
      */
     public String uploadMetadata(RegisterNft registerNft)
             throws IOException, org.json.simple.parser.ParseException, InterruptedException, ParseException {
+
+
         String url = "https://metadata-api.klaytnapi.com/v1/metadata";
         HttpRequest.BodyPublisher body = HttpRequest.BodyPublishers.ofString(
                 "{\n  " +
@@ -92,6 +138,9 @@ public class KasService {
             throws IOException, org.json.simple.parser.ParseException, InterruptedException, ParseException {
         String url = "https://kip17-api.klaytnapi.com/v2/contract/" + kasProperties.getNftContract()
                 + "/token";
+
+
+
         HttpRequest.BodyPublisher body = HttpRequest.BodyPublishers.ofString(
                 "{\n  " +
                         "\"to\": \"" + walletAddress + "\",\n  " +
