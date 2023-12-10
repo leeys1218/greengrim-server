@@ -79,7 +79,7 @@ public class S3Service {
         s3Client.deleteObject(new DeleteObjectRequest(bucket, fileName));
     }
 
-    private String parseFileName(String imgUrl) {
+    public String parseFileName(String imgUrl) {
         String[] st = imgUrl.split("/");
         return st[st.length - 1];
     }
