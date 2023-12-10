@@ -110,6 +110,7 @@ public class NftResponseDto {
     @AllArgsConstructor
     public static class NftInfoBeforePurchase {
         private NftAndMemberInfo nftAndMemberInfo;
+        private Long marketId;
         private String price;
         private String fee;
         private String total;
@@ -119,6 +120,7 @@ public class NftResponseDto {
         public NftInfoBeforePurchase(Nft nft, String price, String fee, String total,
                                      String balance, String balanceAfterPurchase) {
             this.nftAndMemberInfo = new NftAndMemberInfo(nft);
+            this.marketId = nft.getMarket().getId();
             this.price = price;
             this.fee = fee;
             this.total = total;
