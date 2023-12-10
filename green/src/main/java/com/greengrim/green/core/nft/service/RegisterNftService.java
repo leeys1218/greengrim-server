@@ -67,7 +67,7 @@ public class RegisterNftService {
         Wallet wallet = member.getWallet();
         // 비밀번호 맞는지 확인 및 지갑 사용 처리
         walletService.checkPayPassword(wallet, registerNft.getPassword());
-        walletService.useWallet(wallet);
+        //walletService.useWallet(wallet);
 
         // TODO: 수수료 납부 설정하기
         String sendFee = "";

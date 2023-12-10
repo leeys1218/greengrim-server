@@ -167,7 +167,7 @@ public class WalletService {
 
     private void checkWallet(Wallet wallet, String payPassword) {
         checkPayPassword(wallet, payPassword);
-        useWallet(wallet);
+        //useWallet(wallet);
     }
 
 }
