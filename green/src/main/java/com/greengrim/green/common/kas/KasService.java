@@ -4,6 +4,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.util.IOUtils;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.greengrim.green.common.exception.BaseException;
 import com.greengrim.green.common.exception.ErrorCode;
 import com.greengrim.green.common.exception.errorCode.NftErrorCode;
@@ -32,7 +33,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -76,16 +76,14 @@ public class KasService {
     }
 
     /**
-     * TODO: 로직 정하기 1)프론트에서 에셋 생성 2)백에서 에셋 생성
      * 에셋 업로드
      */
-    public void uploadAsset()
+    public String uploadAsset(String imgName)
             throws IOException, ParseException, org.json.simple.parser.ParseException, InterruptedException {
         String url = "https://metadata-api.klaytnapi.com/v1/metadata/asset";
-        // TODO: from-data 로 전송하도록 바꾸기
 
         LinkedMultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-        S3Object s3Object = amazonS3Client.getObject(bucket, "2023-12-10T09_29_19.652239.jpg");
+        S3Object s3Object = amazonS3Client.getObject(bucket, imgName);
         InputStream inputStream = s3Object.getObjectContent();
         byte[] imageBytes = IOUtils.toByteArray(inputStream);
         inputStream.close();
@@ -107,25 +105,30 @@ public class KasService {
         ResponseEntity<JsonNode> postForEntity
             = restTemplate.postForEntity(url, httpEntity, JsonNode.class);
 
-        System.out.println(postForEntity.getStatusCodeValue());
-        System.out.println(postForEntity.getBody());
-        System.out.println(postForEntity.getHeaders());
+        if (postForEntity.getBody().get("uri") == null) {
+            throw new BaseException(NftErrorCode.FAILED_CREATE_ASSET);
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        String uri = mapper.writeValueAsString(postForEntity.getBody().get("uri"));
+
+        // 이미지 삭제
+        FileUtils.deleteQuietly(jpgFile);
+        return uri.replace("\"", "");
     }
 
     /**
      * 메타 데이터 생성
      */
-    public String uploadMetadata(RegisterNft registerNft)
+    public String uploadMetadata(RegisterNft registerNft, String asset)
             throws IOException, org.json.simple.parser.ParseException, InterruptedException, ParseException {
-
-
         String url = "https://metadata-api.klaytnapi.com/v1/metadata";
         HttpRequest.BodyPublisher body = HttpRequest.BodyPublishers.ofString(
                 "{\n  " +
                         "\"metadata\": {\n    " +
                         "\"name\": \"" + registerNft.getTitle() + "\",\n    " +
                         "\"description\": \"" + registerNft.getDescription() + "\",\n    " +
-                        "\"image\": \"" + registerNft.getAsset() + "\"" +
+                        "\"image\": \"" + asset + "\"" +
                         "\n  }\n" +
                         "}");
         return useKasApi(url, "POST", body, "uri", NftErrorCode.FAILED_CREATE_METADATA);

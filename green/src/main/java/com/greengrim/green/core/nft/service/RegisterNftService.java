@@ -4,6 +4,7 @@ import static com.greengrim.green.common.kas.KasConstants.MINTING_FEE;
 
 import com.greengrim.green.common.exception.BaseException;
 import com.greengrim.green.common.exception.errorCode.GrimErrorCode;
+import com.greengrim.green.common.s3.S3Service;
 import com.greengrim.green.core.grim.Grim;
 import com.greengrim.green.core.grim.repository.GrimRepository;
 import com.greengrim.green.common.kas.KasProperties;
@@ -30,6 +31,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RegisterNftService {
 
+    private final S3Service s3Service;
     private final KasService kasService;
     private final KasProperties kasProperties;
     private final WalletService walletService;
@@ -73,8 +75,10 @@ public class RegisterNftService {
             kasService.sendKlayToFeeAccount(wallet, MINTING_FEE);
         }
 
-        // MetaData 업로드하고 imgUrl 받아오기
-        String imgUrl = kasService.uploadMetadata(registerNft);
+        // Asset 업로드하고 imgUrl 받아오기
+        String asset = kasService.uploadAsset(s3Service.parseFileName(grim.getImgUrl()));
+        // MetaData 업로드하고 받아오기
+        String imgUrl = kasService.uploadMetadata(registerNft, asset);
         // GreenGrim 토큰으로 발행된 NFT는 모두 순서를 정해서 번호를 해야함! 우리는 그냥 10진수로 하자
         String nftId = "0x" + Long.toHexString(nftManagerService.getNftIdAndPlusOne());
         // Minting 하고 txHash 받아오기
@@ -85,7 +89,7 @@ public class RegisterNftService {
                 nftId,
                 kasProperties.getNftContractAddress(),
                 txHash,
-                registerNft.getAsset(),
+                asset,
                 grim
         );
         grim.setNft(nft);

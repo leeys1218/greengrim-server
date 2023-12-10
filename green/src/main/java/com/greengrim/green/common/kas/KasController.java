@@ -15,6 +15,6 @@ public class KasController {
   @PostMapping("/asset")
   public void assetUpload()
       throws IOException, ParseException, org.json.simple.parser.ParseException, InterruptedException {
-    kasService.uploadAsset();
+      System.out.println(kasService.uploadAsset("2023-12-10T10_20_48.856876.jpg"));
   }
 }

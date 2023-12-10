@@ -19,7 +19,5 @@ public class NftRequestDto {
         private String title;
         @NotBlank(message = "설명은 빈 값일 수 없습니다.")
         private String description;
-        @NotBlank(message = "에셋은 빈 값일 수 없습니다.")
-        private String asset;
     }
 }
