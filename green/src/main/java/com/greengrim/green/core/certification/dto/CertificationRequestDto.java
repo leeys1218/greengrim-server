@@ -14,8 +14,6 @@ public class CertificationRequestDto {
     public static class RegisterCertification {
         @NotNull(message = "챌린지 id를 입력해주세요.")
         private Long challengeId;
-        @NotNull(message = "채팅방 id를 입력해주세요.")
-        private Long chatroomId;
         @NotNull(message = "인증 이미지를 첨부해주세요.")
         private String imgUrl;
         @Size(max = 200, message = "설명은 200자 이내여야합니다.")
