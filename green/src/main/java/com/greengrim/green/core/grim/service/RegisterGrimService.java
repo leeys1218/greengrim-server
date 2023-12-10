@@ -8,6 +8,7 @@ import com.greengrim.green.core.grim.dto.GrimRequestDto.RegisterGrimInfo;
 import com.greengrim.green.core.grim.dto.GrimResponseDto.GrimInfo;
 import com.greengrim.green.core.grim.repository.GrimRepository;
 import com.greengrim.green.core.member.Member;
+import com.greengrim.green.core.member.repository.MemberRepository;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -22,8 +23,9 @@ public class RegisterGrimService {
     private final WebClient webClient;
     private final GrimRepository grimRepository;
     private final FcmService fcmService;
+  private final MemberRepository memberRepository;
 
-    public void save(Grim grim) {
+  public void save(Grim grim) {
         grimRepository.save(grim);
     }
 
@@ -64,7 +66,7 @@ public class RegisterGrimService {
         resultMono.subscribe(
                 result -> {
                     System.out.println("Success: " + result);
-                    member.minusPoint(500);
+                    minusPoint(member);
                     String imgUrl = result.replace("\"", "");
                     fcmService.sendGrimGenerationSuccess(register(member, imgUrl), member.getFcmToken());
                 },
@@ -82,4 +84,8 @@ public class RegisterGrimService {
         return true;
     }
 
+    public void minusPoint(Member member) {
+        member.minusPoint(500);
+        memberRepository.save(member);
+    }
 }

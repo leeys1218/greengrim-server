@@ -43,4 +43,9 @@ public class UpdateMemberService  {
         // TODO: 삭제된 member와 관련된 모든 리소스 삭제
         memberRepository.delete(member);
     }
+
+    public void plusPoint(Member member) {
+        member.plusPoint(10);
+        memberRepository.save(member);
+    }
 }
