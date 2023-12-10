@@ -58,7 +58,7 @@ public class RegisterGrimService {
                         "width", 512,
                         "num_inference_steps", 50,
                         "safety_check", true,
-                        "seed", 1
+                        "seed", 7
                 ))
                 .retrieve()
                 .bodyToMono(String.class);
