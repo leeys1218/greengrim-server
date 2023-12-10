@@ -1,9 +1,11 @@
 package com.greengrim.green.core.certification.service;
 
+import com.greengrim.green.common.fcm.FcmService;
 import com.greengrim.green.core.certification.Certification;
 import com.greengrim.green.core.certification.dto.CertificationRequestDto.RegisterCertification;
 import com.greengrim.green.core.certification.dto.CertificationResponseDto.registerCertificationResponse;
 import com.greengrim.green.core.certification.repository.CertificationRepository;
+import com.greengrim.green.core.challenge.Category;
 import com.greengrim.green.core.challenge.Challenge;
 import com.greengrim.green.core.challenge.service.GetChallengeService;
 import com.greengrim.green.core.keyword.KeywordService;
@@ -21,6 +23,7 @@ public class RegisterCertificationService {
     private final GetChallengeService getChallengeService;
     private final KeywordService keywordService;
 
+    private final FcmService fcmService;
     private final MemberRepository memberRepository;
     private final CertificationRepository certificationRepository;
 
@@ -48,6 +51,10 @@ public class RegisterCertificationService {
         successCertification(member, challenge);
         // 챌린지 성공했으면 보상 제공
         successChallenge(challenge, certification);
+
+        Category category = certification.getChallenge().getCategory();
+        String fcmString = category.getName() + "인증 활동";
+        fcmService.sendGetPoint(member, fcmString, category.getPoint());
 
         return new registerCertificationResponse(certification);
     }

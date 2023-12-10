@@ -1,5 +1,6 @@
 package com.greengrim.green.core.member.service;
 
+import com.greengrim.green.common.fcm.FcmService;
 import com.greengrim.green.common.jwt.JwtTokenProvider;
 import com.greengrim.green.common.s3.S3Service;
 import com.greengrim.green.core.member.Member;
@@ -17,6 +18,8 @@ public class UpdateMemberService  {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberRepository memberRepository;
+
+    private final FcmService fcmService;
     private final S3Service s3Service;
 
     public MemberResponseDto.TokenInfo refreshAccessToken(Member member) {
@@ -46,6 +49,7 @@ public class UpdateMemberService  {
 
     public void plusPoint(Member member) {
         member.plusPoint(10);
+        fcmService.sendGetPoint(member, "미니게임", 10);
         memberRepository.save(member);
     }
 }
