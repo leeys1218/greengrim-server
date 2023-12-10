@@ -1,5 +1,6 @@
 package com.greengrim.green.core.certification.service;
 
+import com.greengrim.green.common.fcm.FcmService;
 import com.greengrim.green.core.certification.Certification;
 import com.greengrim.green.core.certification.dto.CertificationRequestDto.RegisterCertification;
 import com.greengrim.green.core.certification.dto.CertificationResponseDto.registerCertificationResponse;
@@ -20,6 +21,7 @@ public class RegisterCertificationService {
 
     private final GetChallengeService getChallengeService;
     private final KeywordService keywordService;
+    private final FcmService fcmService;
 
     private final MemberRepository memberRepository;
     private final CertificationRepository certificationRepository;
@@ -48,6 +50,7 @@ public class RegisterCertificationService {
         successCertification(member, challenge);
         // 챌린지 성공했으면 보상 제공
         successChallenge(challenge, certification);
+        fcmService.sendSuccessCertification(member, certification, registerCertification.getChatroomId());
 
         return new registerCertificationResponse(certification);
     }

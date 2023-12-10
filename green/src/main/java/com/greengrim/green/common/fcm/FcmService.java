@@ -6,6 +6,7 @@ import com.google.firebase.messaging.Message;
 import com.google.gson.Gson;
 import com.greengrim.green.common.exception.BaseException;
 import com.greengrim.green.common.exception.errorCode.ChattingErrorCode;
+import com.greengrim.green.core.certification.Certification;
 import com.greengrim.green.core.chat.ChatMessage;
 import com.greengrim.green.core.chatparticipant.Chatparticipant;
 import com.greengrim.green.core.chatparticipant.ChatparticipantService;
@@ -103,5 +104,17 @@ public class FcmService {
     Gson gson = new Gson();
     String fcmMessageJson = gson.toJson(message);
     System.out.println("FCM 메시지: " + fcmMessageJson);
+  }
+
+  public void sendSuccessCertification(Member member, Certification certification, Long chatroomId) {
+    Message message = Message.builder()
+        .putData("type", "CERT")
+        .putData("certId", String.valueOf(certification.getId()))
+        .putData("nickName", member.getNickName())
+        .putData("title", certification.getChallenge().getTitle())
+        .setTopic(String.valueOf(chatroomId))
+        .build();
+
+    send(message);
   }
 }
