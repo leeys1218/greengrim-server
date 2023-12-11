@@ -47,6 +47,7 @@ public class RegisterGrimService {
             throw new BaseException(GrimErrorCode.NOT_ENOUGH_POINT);
         }
 
+        int randomValue = (int) (Math.random() * 41) + 10;
         String prompt = registerGrimInfo.getStyle() + registerGrimInfo.getNoun() + registerGrimInfo.getVerb();
         Mono<String> resultMono = webClient.post()
                 .uri("/txt2img")
@@ -58,7 +59,7 @@ public class RegisterGrimService {
                         "width", 512,
                         "num_inference_steps", 50,
                         "safety_check", true,
-                        "seed", 7
+                        "seed", randomValue
                 ))
                 .retrieve()
                 .bodyToMono(String.class);
