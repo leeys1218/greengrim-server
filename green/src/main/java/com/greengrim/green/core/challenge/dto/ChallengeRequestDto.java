@@ -35,6 +35,6 @@ public class ChallengeRequestDto {
         @Max(100)
         private int capacity;           // 수용 가능 인원
         @NotNull
-        private Keyword keyword;         // 획득 키워드
+        private String keyword;         // 획득 키워드
     }
 }
