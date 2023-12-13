@@ -23,10 +23,12 @@ import com.greengrim.green.core.wallet.service.WalletService;
 import jakarta.transaction.Transactional;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 
 @Transactional
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class RegisterNftService {
@@ -75,14 +77,19 @@ public class RegisterNftService {
             kasService.sendKlayToFeeAccount(wallet, MINTING_FEE);
         }
 
+        log.info("=============================================");
         // Asset 업로드하고 imgUrl 받아오기
         String asset = kasService.uploadAsset(s3Service.parseFileName(grim.getImgUrl()));
+        log.info("asset: {} \n", asset);
         // MetaData 업로드하고 받아오기
         String imgUrl = kasService.uploadMetadata(registerNft, asset);
+        log.info("imgUrl: {} \n", imgUrl);
         // GreenGrim 토큰으로 발행된 NFT는 모두 순서를 정해서 번호를 해야함! 우리는 그냥 10진수로 하자
         String nftId = "0x" + Long.toHexString(nftManagerService.getNftIdAndPlusOne());
+        log.info("nftId: {} \n", nftId);
         // Minting 하고 txHash 받아오기
         String txHash = kasService.createNft(wallet.getAddress(), nftId, imgUrl);
+        log.info("txHash: {} \n", txHash);
         // NFT 객체 생성하기
         Nft nft = register(member,
                 registerNft,
@@ -92,12 +99,13 @@ public class RegisterNftService {
                 asset,
                 grim
         );
+        log.info("nft 객체 생성 완료!");
         grim.setNft(nft);
-
+        log.info("grimId {}에 nftId {} 할당 완료", grim.getId(), nft.getId());
         registerTransactionService.saveMintingTransaction(
                 new MintingTransactionDto(member.getId(), nft,
                         new TransactionSetDto("", txHash, sendFee)));
-
+        log.info("=============================================");
         return new NftId(nft.getId());
     }
 }
